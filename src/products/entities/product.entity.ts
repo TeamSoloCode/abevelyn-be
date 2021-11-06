@@ -1,5 +1,6 @@
 import { IsUUID, Max, Min } from 'class-validator';
 import { Color } from 'src/colors/entities/color.entity';
+import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { Material } from 'src/materials/entities/material.entity';
 import { ProductStatus } from 'src/product-status/entities/product-status.entity';
 import { Size } from 'src/sizes/entities/size.entity';
@@ -79,6 +80,10 @@ export class Product extends BaseEntity {
   @OneToOne((type) => Color)
   @JoinColumn({ name: 'productColorUuid' })
   color: Color;
+
+  @OneToOne((type) => Coupon, { nullable: true })
+  @JoinColumn({ name: 'couponUuid' })
+  coupon: Coupon;
 
   @OneToMany(
     () => ProductMaterial,

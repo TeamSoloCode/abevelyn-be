@@ -20,6 +20,7 @@ import { MaterialsModule } from './materials/materials.module';
 import { SizesModule } from './sizes/sizes.module';
 import { ProductStatusModule } from './product-status/product-status.module';
 import { RolesModule } from './roles/roles.module';
+import { CartItemModule } from './cart-item/cart-item.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { RolesModule } from './roles/roles.module';
     SizesModule,
     ProductStatusModule,
     RolesModule,
+    CartItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

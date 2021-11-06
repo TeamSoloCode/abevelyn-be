@@ -17,6 +17,12 @@ export class Coupon extends BaseEntity {
   @Column()
   code: string;
 
+  @Column('datetime')
+  applyDate: Date;
+
+  @Column('datetime')
+  expiredDate: Date;
+
   /**
    * -----------------------------------------------------
    */

@@ -1,11 +1,14 @@
 import { IsUUID } from 'class-validator';
+import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { ProductColection } from 'src/products/entities/product_collection.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -21,6 +24,10 @@ export class Collection extends BaseEntity {
 
   @Column('text')
   description: string;
+
+  @OneToOne((type) => Coupon, { nullable: true })
+  @JoinColumn({ name: 'couponUuid' })
+  coupon: Coupon;
 
   @OneToMany(
     (type) => ProductColection,

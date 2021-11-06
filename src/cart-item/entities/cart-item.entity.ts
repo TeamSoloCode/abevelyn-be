@@ -1,47 +1,33 @@
 import { IsUUID } from 'class-validator';
-import { Color } from 'src/colors/entities/color.entity';
+import { Cart } from 'src/carts/entities/cart.entity';
 import { Product } from 'src/products/entities/product.entity';
-import { User } from 'src/users/entities/user.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Review extends BaseEntity {
+export class CartItem extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
-
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'userUuid' })
-  owner: User;
 
   @OneToOne(() => Product)
   @JoinColumn({ name: 'productUuid' })
   product: Product;
 
-  @OneToOne(() => Review, { nullable: true })
-  @JoinColumn({ name: 'parentReviewUuid' })
-  parentReview: Review;
+  @Column('int', { default: 1 })
+  quantity: number;
 
-  @Column('varchar', { length: 512 })
-  message: string;
-
-  @Column('text', { nullable: true })
-  image: string;
-
-  @Column('text', { nullable: true })
-  image1: string;
-
-  @Column('text', { nullable: true })
-  image2: string;
+  @ManyToOne(() => Cart, (cart) => cart.cartItems)
+  cart: Cart;
 
   /**
    * -----------------------------------------------------
