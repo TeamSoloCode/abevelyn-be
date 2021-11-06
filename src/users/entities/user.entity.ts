@@ -10,6 +10,12 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
+export enum SignInType {
+  FACEBOOK = 'facebook',
+  GOOGLE = 'google',
+  REGISTER = 'register',
+}
+
 @Entity('user')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
@@ -79,6 +85,23 @@ export class User extends BaseEntity {
   }
   public set password(value: string) {
     this._password = value;
+  }
+
+  /**
+   * -----------------------------------------------------
+   */
+  private _signup_type: SignInType;
+
+  @Column('enum', {
+    enum: SignInType,
+    default: SignInType.REGISTER,
+    name: 'signup_type',
+  })
+  public get signup_type(): SignInType {
+    return this._signup_type;
+  }
+  public set signup_type(value: SignInType) {
+    this._signup_type = value;
   }
 
   /**

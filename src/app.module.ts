@@ -15,6 +15,10 @@ import { OrderStatusModule } from './order-status/order-status.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
+import { UserProfileModule } from './user-profile/user-profile.module';
+import { MaterialsModule } from './materials/materials.module';
+import { SizesModule } from './sizes/sizes.module';
+import { ProductStatusModule } from './product-status/product-status.module';
 
 @Module({
   imports: [
@@ -31,6 +35,10 @@ import { typeOrmConfig } from './config/typeorm.config';
     OrderStatusModule,
     ReviewsModule,
     TypeOrmModule.forRoot(typeOrmConfig),
+    UserProfileModule,
+    MaterialsModule,
+    SizesModule,
+    ProductStatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],
