@@ -5,10 +5,13 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { UserProfile } from 'src/user-profile/entities/user-profile.entity';
 
 export enum SignInType {
   FACEBOOK = 'facebook',
@@ -90,18 +93,18 @@ export class User extends BaseEntity {
   /**
    * -----------------------------------------------------
    */
-  private _signup_type: SignInType;
+  private _signupType: SignInType;
 
   @Column('enum', {
     enum: SignInType,
     default: SignInType.REGISTER,
-    name: 'signup_type',
+    name: 'signupType',
   })
-  public get signup_type(): SignInType {
-    return this._signup_type;
+  public get signupType(): SignInType {
+    return this._signupType;
   }
-  public set signup_type(value: SignInType) {
-    this._signup_type = value;
+  public set signupType(value: SignInType) {
+    this._signupType = value;
   }
 
   /**
@@ -117,6 +120,10 @@ export class User extends BaseEntity {
   public set salt(value: string) {
     this._salt = value;
   }
+
+  @OneToOne(() => UserProfile, { nullable: true })
+  @JoinColumn({ name: 'user_profile_uuid' })
+  userProdfile: UserProfile;
 
   /**
    * -----------------------------------------------------

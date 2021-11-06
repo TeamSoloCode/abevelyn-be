@@ -19,6 +19,7 @@ import { UserProfileModule } from './user-profile/user-profile.module';
 import { MaterialsModule } from './materials/materials.module';
 import { SizesModule } from './sizes/sizes.module';
 import { ProductStatusModule } from './product-status/product-status.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ProductStatusModule } from './product-status/product-status.module';
     MaterialsModule,
     SizesModule,
     ProductStatusModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
