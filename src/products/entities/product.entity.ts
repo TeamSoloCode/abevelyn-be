@@ -23,6 +23,24 @@ export class Product extends BaseEntity {
   @IsUUID()
   uuid: string;
 
+  @Column('varchar', { length: 512 })
+  name: string;
+
+  @Column('varchar', { name: 'nameFr', length: 512 })
+  nameInFrench: string;
+
+  @Column('varchar', { name: 'nameVn', length: 512 })
+  nameInVietnamese: string;
+
+  @Column('text')
+  description: string;
+
+  @Column('text', { name: 'descriptionFr' })
+  descriptionInFrench: string;
+
+  @Column('text', { name: 'descriptionVn' })
+  descriptionInVietnamese: string;
+
   @Column('double')
   @Min(0)
   price: number;
@@ -51,15 +69,15 @@ export class Product extends BaseEntity {
   image5: string;
 
   @OneToOne(() => ProductStatus)
-  @JoinColumn({ name: 'product_status_uuid' })
+  @JoinColumn({ name: 'productStatusUuid' })
   productStatus: ProductStatus;
 
   @OneToOne(() => Size)
-  @JoinColumn({ name: 'product_size_uuid' })
+  @JoinColumn({ name: 'productSizeUuid' })
   size: Size;
 
   @OneToOne((type) => Color)
-  @JoinColumn({ name: 'product_color_uuid' })
+  @JoinColumn({ name: 'productColorUuid' })
   color: Color;
 
   @OneToMany(

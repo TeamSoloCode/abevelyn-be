@@ -122,7 +122,7 @@ export class User extends BaseEntity {
   }
 
   @OneToOne(() => UserProfile, { nullable: true })
-  @JoinColumn({ name: 'user_profile_uuid' })
+  @JoinColumn({ name: 'userProfileUuid' })
   userProdfile: UserProfile;
 
   /**
