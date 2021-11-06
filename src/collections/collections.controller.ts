@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
@@ -8,6 +19,7 @@ export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
   @Post()
+  @UseGuards(AuthGuard(), AdminRoleGuard)
   create(@Body() createCollectionDto: CreateCollectionDto) {
     return this.collectionsService.create(createCollectionDto);
   }
@@ -23,7 +35,10 @@ export class CollectionsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCollectionDto: UpdateCollectionDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCollectionDto: UpdateCollectionDto,
+  ) {
     return this.collectionsService.update(+id, updateCollectionDto);
   }
 

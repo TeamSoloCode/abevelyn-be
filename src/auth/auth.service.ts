@@ -7,6 +7,7 @@ import { JwtPayload } from './jwt-payload.interface';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../users/repositories/user.repository';
 import { User } from 'src/users/entities/user.entity';
+import { UserRoles } from 'src/entity-enum';
 
 @Injectable()
 export class AuthService {
@@ -66,6 +67,16 @@ export class AuthService {
     } catch (err) {
       throw err;
     }
+  }
+
+  async isAdminRole(token: string): Promise<boolean> {
+    const { uuid } = this.jwtService.verify<JwtPayload>(token);
+
+    if (uuid) {
+      const user = await this.userRepository.findOne(uuid);
+      return user.role == UserRoles.ADMIN;
+    }
+    return false;
   }
 
   async isMatchStoragedToken(sentToken: string): Promise<boolean> {

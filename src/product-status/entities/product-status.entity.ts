@@ -17,8 +17,20 @@ export class ProductStatus extends BaseEntity {
   @Column('varchar', { length: 128 })
   name: string;
 
+  @Column('varchar', { length: 256, name: 'nameFr' })
+  nameInFrench: string;
+
+  @Column('varchar', { length: 256, name: 'nameVn' })
+  nameInVietnames: string;
+
   @Column('text')
   description: string;
+
+  @Column('text', { name: 'descriptionFr' })
+  descriptionInFrench: string;
+
+  @Column('text', { name: 'descriptionVn' })
+  descriptionInVietnames: string;
 
   /**
    * -----------------------------------------------------

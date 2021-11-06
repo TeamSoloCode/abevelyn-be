@@ -20,6 +20,18 @@ export class Size extends BaseEntity {
   @Column('text')
   description: string;
 
+  @Column('varchar', { length: 256, name: 'nameFr' })
+  nameInFrench: string;
+
+  @Column('varchar', { length: 256, name: 'nameVn' })
+  nameInVietnames: string;
+
+  @Column('text', { name: 'descriptionFr' })
+  descriptionInFrench: string;
+
+  @Column('text', { name: 'descriptionVn' })
+  descriptionInVietnames: string;
+
   /**
    * -----------------------------------------------------
    */

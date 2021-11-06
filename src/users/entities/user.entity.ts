@@ -12,12 +12,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserProfile } from 'src/user-profile/entities/user-profile.entity';
-
-export enum SignInType {
-  FACEBOOK = 'facebook',
-  GOOGLE = 'google',
-  REGISTER = 'register',
-}
+import { SignInType, UserRoles } from 'src/entity-enum';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -103,10 +98,27 @@ export class User extends BaseEntity {
   public get signupType(): SignInType {
     return this._signupType;
   }
+
   public set signupType(value: SignInType) {
     this._signupType = value;
   }
+  /**
+   * -----------------------------------------------------
+   */
+  private _role: UserRoles;
 
+  @Column('enum', {
+    enum: UserRoles,
+    default: UserRoles.USER,
+    name: 'role',
+  })
+  public get role(): UserRoles {
+    return this._role;
+  }
+
+  public set role(value: UserRoles) {
+    this._role = value;
+  }
   /**
    * -----------------------------------------------------
    */

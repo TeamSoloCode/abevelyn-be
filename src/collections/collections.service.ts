@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { CollectionRepository } from './repositories/collection.repository';
 
 @Injectable()
 export class CollectionsService {
-  create(createCollectionDto: CreateCollectionDto) {
-    return 'This action adds a new collection';
-  }
+  constructor(
+    @InjectRepository(CollectionRepository)
+    private readonly collectionRepository: CollectionRepository,
+  ) {}
+
+  create(createCollectionDto: CreateCollectionDto) {}
 
   findAll() {
     return `This action returns all collections`;
