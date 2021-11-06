@@ -13,9 +13,25 @@ import { CouponsModule } from './coupons/coupons.module';
 import { OrdersModule } from './orders/orders.module';
 import { OrderStatusModule } from './order-status/order-status.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from './config/typeorm.config';
 
 @Module({
-  imports: [CollectionsModule, ProductsModule, UsersModule, AuthModule, CurrencyModule, ColorsModule, FeedbacksModule, CartsModule, CouponsModule, OrdersModule, OrderStatusModule, ReviewsModule],
+  imports: [
+    CollectionsModule,
+    ProductsModule,
+    UsersModule,
+    AuthModule,
+    CurrencyModule,
+    ColorsModule,
+    FeedbacksModule,
+    CartsModule,
+    CouponsModule,
+    OrdersModule,
+    OrderStatusModule,
+    ReviewsModule,
+    TypeOrmModule.forRoot(typeOrmConfig),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
