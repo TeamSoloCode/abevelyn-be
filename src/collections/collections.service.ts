@@ -1,7 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from 'src/products/entities/product.entity';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { Collection } from './entities/collection.entity';
 import { CollectionRepository } from './repositories/collection.repository';
 
 @Injectable()
@@ -11,10 +17,22 @@ export class CollectionsService {
     private readonly collectionRepository: CollectionRepository,
   ) {}
 
-  create(createCollectionDto: CreateCollectionDto) {}
+  async create(createCollectionDto: CreateCollectionDto) {
+    try {
+      const product = new Collection(createCollectionDto);
+      return await this.collectionRepository.save(product);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        // duplicate user
+        throw new ConflictException(['Collection name is already exists!']);
+      } else {
+        throw new InternalServerErrorException(error.message);
+      }
+    }
+  }
 
   findAll() {
-    return `This action returns all collections`;
+    return this.collectionRepository.find();
   }
 
   findOne(id: number) {

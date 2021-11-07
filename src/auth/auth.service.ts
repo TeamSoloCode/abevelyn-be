@@ -74,7 +74,7 @@ export class AuthService {
 
     if (uuid) {
       const user = await this.userRepository.findOne(uuid);
-      return user.role == UserRoles.ADMIN;
+      return user.role == UserRoles.ADMIN || user.role == UserRoles.ROOT;
     }
     return false;
   }

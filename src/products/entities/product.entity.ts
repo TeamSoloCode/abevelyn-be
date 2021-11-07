@@ -15,11 +15,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CreateProductDto } from '../dto/create-product.dto';
 import { ProductColection } from './product_collection.entity';
 import { ProductMaterial } from './product_material.entity';
 
 @Entity()
 export class Product extends BaseEntity {
+  constructor(createProductDto: CreateProductDto) {
+    super();
+  }
+
   @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   @IsUUID()
   uuid: string;
@@ -28,19 +33,19 @@ export class Product extends BaseEntity {
   name: string;
 
   @Column('varchar', { name: 'nameFr', length: 512 })
-  nameInFrench: string;
+  nameInFrench?: string;
 
   @Column('varchar', { name: 'nameVn', length: 512 })
-  nameInVietnamese: string;
+  nameInVietnamese?: string;
 
   @Column('text')
-  description: string;
+  description?: string;
 
   @Column('text', { name: 'descriptionFr' })
-  descriptionInFrench: string;
+  descriptionInFrench?: string;
 
   @Column('text', { name: 'descriptionVn' })
-  descriptionInVietnamese: string;
+  descriptionInVietnamese?: string;
 
   @Column('double')
   @Min(0)
@@ -49,25 +54,25 @@ export class Product extends BaseEntity {
   @Column('double')
   @Max(1)
   @Min(0)
-  saleOf: number;
+  saleOf: number = 0;
 
   @Column('text')
   image: string;
 
   @Column('text', { nullable: true })
-  image1: string;
+  image1?: string;
 
   @Column('text', { nullable: true })
-  image2: string;
+  image2?: string;
 
   @Column('text', { nullable: true })
-  image3: string;
+  image3?: string;
 
   @Column('text', { nullable: true })
-  image4: string;
+  image4?: string;
 
   @Column('text', { nullable: true })
-  image5: string;
+  image5?: string;
 
   @OneToOne(() => ProductStatus)
   @JoinColumn({ name: 'productStatusUuid' })
@@ -83,7 +88,7 @@ export class Product extends BaseEntity {
 
   @OneToOne((type) => Coupon, { nullable: true })
   @JoinColumn({ name: 'couponUuid' })
-  coupon: Coupon;
+  coupon?: Coupon;
 
   @OneToMany(
     () => ProductMaterial,

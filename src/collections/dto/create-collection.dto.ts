@@ -1,10 +1,23 @@
-import { Max, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsIn,
+  IsNumber,
+  IsOptional,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateCollectionDto {
-  @Max(256)
-  @Min(10)
+  @MaxLength(256)
+  @MinLength(10)
   name: string;
 
-  @Min(10)
-  description: string;
+  @IsOptional()
+  @MinLength(10)
+  description?: string;
+
+  @IsOptional()
+  @IsIn([true, false])
+  available: boolean = true;
 }

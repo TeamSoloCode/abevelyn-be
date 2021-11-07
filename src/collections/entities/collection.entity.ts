@@ -12,34 +12,56 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CreateCollectionDto } from '../dto/create-collection.dto';
 
 @Entity()
 export class Collection extends BaseEntity {
+  constructor(createCollectionDto: CreateCollectionDto) {
+    super();
+
+    this.name = createCollectionDto?.name;
+    this.description = createCollectionDto?.description;
+    this.available = createCollectionDto?.available;
+  }
+
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
 
-  @Column('varchar', { length: 256 })
+  @Column('varchar', { length: 256, unique: true })
   name: string;
 
-  @Column('varchar', { length: 256, name: 'nameFr' })
-  nameInFrench: string;
+  @Column('varchar', {
+    length: 256,
+    name: 'nameFr',
+    unique: true,
+    nullable: true,
+  })
+  nameInFrench?: string;
 
-  @Column('varchar', { length: 256, name: 'nameVn' })
-  nameInVietnames: string;
+  @Column('varchar', {
+    length: 256,
+    name: 'nameVn',
+    unique: true,
+    nullable: true,
+  })
+  nameInVietnames?: string;
 
-  @Column('text')
-  description: string;
+  @Column('text', { nullable: true })
+  description?: string;
 
-  @Column('text', { name: 'descriptionFr' })
-  descriptionInFrench: string;
+  @Column('text', { name: 'descriptionFr', nullable: true })
+  descriptionInFrench?: string;
 
-  @Column('text', { name: 'descriptionVn' })
-  descriptionInVietnames: string;
+  @Column('text', { name: 'descriptionVn', nullable: true })
+  descriptionInVietnames?: string;
+
+  @Column('bit', { default: true })
+  available: boolean = true;
 
   @OneToOne((type) => Coupon, { nullable: true })
   @JoinColumn({ name: 'couponUuid' })
-  coupon: Coupon;
+  coupon?: Coupon;
 
   @OneToMany(
     (type) => ProductColection,
