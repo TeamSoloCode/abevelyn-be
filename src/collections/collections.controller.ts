@@ -27,26 +27,34 @@ export class CollectionsController {
     return this.collectionsService.create(createCollectionDto);
   }
 
-  @Get('/fetch_all_collection')
+  @Get('/fetch_all')
   findAll() {
     return this.collectionsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.collectionsService.findOne(+id);
+  @Get('/fetch_available')
+  findAvailableCollection() {
+    return this.collectionsService.findAvailableCollection();
   }
 
-  @Patch(':id')
+  @Get('/:id')
+  findOne(@Param('id') id: string) {
+    return this.collectionsService.findOne(id);
+  }
+
+  @Patch('/:id')
+  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UsePipes(ValidationPipe)
   update(
     @Param('id') id: string,
     @Body() updateCollectionDto: UpdateCollectionDto,
   ) {
-    return this.collectionsService.update(+id, updateCollectionDto);
+    return this.collectionsService.update(id, updateCollectionDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
+  @UseGuards(AuthGuard(), AdminRoleGuard)
   remove(@Param('id') id: string) {
-    return this.collectionsService.remove(+id);
+    return this.collectionsService.remove(id);
   }
 }

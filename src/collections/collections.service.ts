@@ -2,8 +2,10 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundError } from 'rxjs';
 import { Product } from 'src/products/entities/product.entity';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
@@ -31,19 +33,78 @@ export class CollectionsService {
     }
   }
 
-  findAll() {
-    return this.collectionRepository.find();
+  async findAll(): Promise<Collection[]> {
+    try {
+      return await this.collectionRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} collection`;
+  async findAvailableCollection(): Promise<Collection[]> {
+    try {
+      return await this.collectionRepository.find({
+        available: true,
+        deleted: false,
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  update(id: number, updateCollectionDto: UpdateCollectionDto) {
-    return `This action updates a #${id} collection`;
+  async findOne(id: string) {
+    try {
+      return await this.collectionRepository.findOne(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} collection`;
+  async update(id: string, updateCollectionDto: UpdateCollectionDto) {
+    try {
+      const collection = await this.collectionRepository.findOne(id);
+
+      if (!collection) {
+        throw new NotFoundException();
+      }
+
+      const {
+        available,
+        name,
+        nameInFrench,
+        nameInVietnames,
+        description,
+        descriptionInFrench,
+        descriptionInVietnames,
+      } = updateCollectionDto;
+
+      collection.available = available;
+      collection.name = name;
+      collection.nameInFrench = nameInFrench;
+      collection.nameInVietnames = nameInVietnames;
+      collection.description = description;
+      collection.descriptionInFrench = descriptionInFrench;
+      collection.descriptionInVietnames = descriptionInVietnames;
+
+      await this.collectionRepository.save(collection);
+      return await this.collectionRepository.findOne(collection.uuid);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async remove(id: string) {
+    try {
+      const collection = await this.collectionRepository.findOne(id);
+
+      if (!collection) {
+        throw new NotFoundException();
+      }
+      collection.deleted = true;
+      await this.collectionRepository.save(collection);
+      return await this.collectionRepository.findOne(collection.uuid);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }

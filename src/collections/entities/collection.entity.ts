@@ -59,6 +59,9 @@ export class Collection extends BaseEntity {
   @Column('bit', { default: true })
   available: boolean = true;
 
+  @Column('bit', { default: false })
+  deleted: boolean = false;
+
   @OneToOne((type) => Coupon, { nullable: true })
   @JoinColumn({ name: 'couponUuid' })
   coupon?: Coupon;
