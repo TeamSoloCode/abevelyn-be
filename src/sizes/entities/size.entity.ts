@@ -7,24 +7,29 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CreateSizeDto } from '../dto/create-size.dto';
 
 @Entity()
 export class Size extends BaseEntity {
+  constructor(name: string) {
+    super();
+    this.name = name;
+  }
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
 
-  @Column('varchar', { length: 128 })
+  @Column('varchar', { length: 256 })
   name: string;
 
-  @Column('text')
-  description: string;
-
-  @Column('varchar', { length: 256 })
+  @Column('varchar', { length: 256, nullable: true })
   nameInFrench: string;
 
-  @Column('varchar', { length: 256 })
+  @Column('varchar', { length: 256, nullable: true })
   nameInVietnames: string;
+
+  @Column('text', { nullable: true })
+  description: string;
 
   @Column('text', { nullable: true })
   descriptionInFrench: string;

@@ -16,12 +16,11 @@ import { CreateCollectionDto } from '../dto/create-collection.dto';
 
 @Entity()
 export class Collection extends BaseEntity {
-  constructor(createCollectionDto: CreateCollectionDto) {
+  constructor(name: string, discription?: string) {
     super();
 
-    this.name = createCollectionDto?.name;
-    this.description = createCollectionDto?.description;
-    this.available = createCollectionDto?.available;
+    this.name = name;
+    this.description = discription;
   }
 
   @PrimaryGeneratedColumn('uuid')

@@ -11,9 +11,9 @@ import { CreateProductStatusDto } from '../dto/create-product-status.dto';
 
 @Entity()
 export class ProductStatus extends BaseEntity {
-  constructor(createProductStatusDto: CreateProductStatusDto) {
+  constructor(name: string) {
     super();
-    this.name = createProductStatusDto?.name;
+    this.name = name;
   }
 
   @PrimaryGeneratedColumn('uuid')

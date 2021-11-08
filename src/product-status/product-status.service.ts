@@ -21,12 +21,12 @@ export class ProductStatusService {
     createProductStatusDto: CreateProductStatusDto,
   ): Promise<ProductStatus> {
     try {
-      const productStatus = new ProductStatus(createProductStatusDto);
+      const productStatus = new ProductStatus(createProductStatusDto.name);
       return await this.productStatusRepository.save(productStatus);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         // duplicate user
-        throw new ConflictException(['Status name is already exists!']);
+        throw new ConflictException(['Status name is already existed!']);
       } else {
         throw new InternalServerErrorException(error.message);
       }
@@ -62,11 +62,21 @@ export class ProductStatusService {
         throw new NotFoundException();
       }
 
-      const { name, nameInFrench, nameInVietnames } = updateProductStatusDto;
+      const {
+        name,
+        nameInFrench,
+        nameInVietnames,
+        description,
+        descriptionInFrench,
+        descriptionInVietnames,
+      } = updateProductStatusDto;
 
       color.name = name;
       color.nameInFrench = nameInFrench;
       color.nameInVietnames = nameInVietnames;
+      color.description = description;
+      color.descriptionInFrench = descriptionInFrench;
+      color.descriptionInVietnames = descriptionInVietnames;
 
       await this.productStatusRepository.save(color);
       return await this.productStatusRepository.findOne(color.uuid);

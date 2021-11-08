@@ -11,10 +11,10 @@ import { CreateColorDto } from '../dto/create-color.dto';
 
 @Entity()
 export class Color extends BaseEntity {
-  constructor(createColorDto: CreateColorDto) {
+  constructor(name: string, code: string) {
     super();
-    this.name = createColorDto?.name;
-    this.code = createColorDto?.code;
+    this.name = name;
+    this.code = code;
   }
 
   @PrimaryGeneratedColumn('uuid')

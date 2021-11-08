@@ -1,26 +1,87 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateSizeDto } from './dto/create-size.dto';
 import { UpdateSizeDto } from './dto/update-size.dto';
+import { Size } from './entities/size.entity';
+import { SizeRepository } from './repositories/size.repository';
 
 @Injectable()
 export class SizesService {
-  create(createSizeDto: CreateSizeDto) {
-    return 'This action adds a new size';
+  constructor(
+    @InjectRepository(SizeRepository)
+    private readonly sizeRepository: SizeRepository,
+  ) {}
+
+  async create(createSizeDto: CreateSizeDto): Promise<Size> {
+    try {
+      const size = new Size(createSizeDto.name);
+      return await this.sizeRepository.save(size);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        // duplicate user
+        throw new ConflictException(['Size name is already existed!']);
+      } else {
+        throw new InternalServerErrorException(error.message);
+      }
+    }
   }
 
-  findAll() {
-    return `This action returns all sizes`;
+  async findAll(): Promise<Size[]> {
+    try {
+      return await this.sizeRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} size`;
+  async findOne(id: string): Promise<Size> {
+    try {
+      const size = await this.sizeRepository.findOne(id);
+      if (!size) throw new NotFoundException();
+      return size;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  update(id: number, updateSizeDto: UpdateSizeDto) {
-    return `This action updates a #${id} size`;
+  async update(id: string, updateSizeDto: UpdateSizeDto): Promise<Size> {
+    try {
+      const size = await this.sizeRepository.findOne(id);
+
+      if (!size) {
+        throw new NotFoundException();
+      }
+
+      const { name, nameInFrench, nameInVietnames } = updateSizeDto;
+
+      size.name = name;
+      size.nameInFrench = nameInFrench;
+      size.nameInVietnames = nameInVietnames;
+
+      await this.sizeRepository.save(size);
+      return await this.sizeRepository.findOne(size.uuid);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} size`;
+  async remove(id: string): Promise<Size> {
+    try {
+      const size = await this.sizeRepository.findOne(id);
+
+      if (!size) {
+        throw new NotFoundException();
+      }
+
+      await this.sizeRepository.delete(id);
+      return size;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }

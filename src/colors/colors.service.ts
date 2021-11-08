@@ -19,12 +19,12 @@ export class ColorsService {
 
   async create(createColorDto: CreateColorDto) {
     try {
-      const product = new Color(createColorDto);
+      const product = new Color(createColorDto.name, createColorDto.code);
       return await this.colorRepository.save(product);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         // duplicate user
-        throw new ConflictException(['Color name is already exists!']);
+        throw new ConflictException(['Color name is already existed!']);
       } else {
         throw new InternalServerErrorException(error.message);
       }

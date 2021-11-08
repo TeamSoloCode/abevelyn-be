@@ -21,12 +21,15 @@ export class CollectionsService {
 
   async create(createCollectionDto: CreateCollectionDto): Promise<Collection> {
     try {
-      const product = new Collection(createCollectionDto);
+      const product = new Collection(
+        createCollectionDto.name,
+        createCollectionDto.description,
+      );
       return await this.collectionRepository.save(product);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         // duplicate user
-        throw new ConflictException(['Collection name is already exists!']);
+        throw new ConflictException(['Collection name is already existed!']);
       } else {
         throw new InternalServerErrorException(error.message);
       }

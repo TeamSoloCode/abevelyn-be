@@ -21,7 +21,7 @@ import { ProductMaterial } from './product_material.entity';
 
 @Entity()
 export class Product extends BaseEntity {
-  constructor(createProductDto: CreateProductDto) {
+  constructor() {
     super();
   }
 
@@ -74,15 +74,15 @@ export class Product extends BaseEntity {
   @Column('text', { nullable: true })
   image5?: string;
 
-  @OneToOne(() => ProductStatus, { nullable: true, onDelete: 'SET NULL' })
+  @OneToOne(() => ProductStatus, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'productStatusUuid' })
   productStatus: ProductStatus;
 
-  @OneToOne(() => Size, { nullable: true, onDelete: 'SET NULL' })
+  @OneToOne(() => Size, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'productSizeUuid' })
   size: Size;
 
-  @OneToOne((type) => Color, { nullable: true, onDelete: 'SET NULL' })
+  @OneToOne((type) => Color, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'productColorUuid' })
   color: Color;
 
