@@ -32,19 +32,19 @@ export class Product extends BaseEntity {
   @Column('varchar', { length: 512 })
   name: string;
 
-  @Column('varchar', { name: 'nameFr', length: 512 })
+  @Column('varchar', { name: 'nameFr', length: 512, nullable: true })
   nameInFrench?: string;
 
-  @Column('varchar', { name: 'nameVn', length: 512 })
+  @Column('varchar', { name: 'nameVn', length: 512, nullable: true })
   nameInVietnamese?: string;
 
   @Column('text')
   description?: string;
 
-  @Column('text', { name: 'descriptionFr' })
+  @Column('text', { name: 'descriptionFr', nullable: true })
   descriptionInFrench?: string;
 
-  @Column('text', { name: 'descriptionVn' })
+  @Column('text', { name: 'descriptionVn', nullable: true })
   descriptionInVietnamese?: string;
 
   @Column('double')
@@ -74,15 +74,15 @@ export class Product extends BaseEntity {
   @Column('text', { nullable: true })
   image5?: string;
 
-  @OneToOne(() => ProductStatus)
+  @OneToOne(() => ProductStatus, { nullable: true })
   @JoinColumn({ name: 'productStatusUuid' })
   productStatus: ProductStatus;
 
-  @OneToOne(() => Size)
+  @OneToOne(() => Size, { nullable: true })
   @JoinColumn({ name: 'productSizeUuid' })
   size: Size;
 
-  @OneToOne((type) => Color)
+  @OneToOne((type) => Color, { nullable: true })
   @JoinColumn({ name: 'productColorUuid' })
   color: Color;
 
@@ -93,12 +93,14 @@ export class Product extends BaseEntity {
   @OneToMany(
     () => ProductMaterial,
     (prodAndMaterial) => prodAndMaterial.product,
+    { nullable: true },
   )
   productMaterial: ProductMaterial;
 
   @OneToMany(
     () => ProductColection,
     (prodAndMaterial) => prodAndMaterial.product,
+    { nullable: true },
   )
   productColection: ProductColection;
 

@@ -19,7 +19,7 @@ export class CollectionsService {
     private readonly collectionRepository: CollectionRepository,
   ) {}
 
-  async create(createCollectionDto: CreateCollectionDto) {
+  async create(createCollectionDto: CreateCollectionDto): Promise<Collection> {
     try {
       const product = new Collection(createCollectionDto);
       return await this.collectionRepository.save(product);

@@ -21,6 +21,7 @@ import { SizesModule } from './sizes/sizes.module';
 import { ProductStatusModule } from './product-status/product-status.module';
 import { RolesModule } from './roles/roles.module';
 import { CartItemModule } from './cart-item/cart-item.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { CartItemModule } from './cart-item/cart-item.module';
     ProductStatusModule,
     RolesModule,
     CartItemModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

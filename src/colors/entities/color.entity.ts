@@ -4,19 +4,31 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CreateColorDto } from '../dto/create-color.dto';
 
 @Entity()
 export class Color extends BaseEntity {
+  constructor(createColorDto: CreateColorDto) {
+    super();
+    this.name = createColorDto?.name;
+    this.code = createColorDto?.code;
+  }
+
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
 
-  @Column('varchar', { length: 128 })
+  @Column('varchar', { length: 128, unique: true })
   name: string;
+
+  @Column('varchar', { length: 128, nullable: true })
+  nameInFrench?: string;
+
+  @Column('varchar', { length: 128, nullable: true })
+  nameInVietnames?: string;
 
   @Column('varchar', { length: 128 })
   code: string;

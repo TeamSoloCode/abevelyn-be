@@ -13,5 +13,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     migrationsDir: 'migration',
   },
   synchronize: true,
-  logging: ['error'],
+  logging: ['error', 'query'],
 };

@@ -27,7 +27,7 @@ export class CollectionsController {
     return this.collectionsService.create(createCollectionDto);
   }
 
-  @Get('/fetch_all')
+  @Get()
   findAll() {
     return this.collectionsService.findAll();
   }
