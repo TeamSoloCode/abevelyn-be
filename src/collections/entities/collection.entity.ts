@@ -41,7 +41,6 @@ export class Collection extends BaseEntity {
 
   @Column('varchar', {
     length: 256,
-    name: 'nameVn',
     unique: true,
     nullable: true,
   })
@@ -50,10 +49,10 @@ export class Collection extends BaseEntity {
   @Column('text', { nullable: true })
   description?: string;
 
-  @Column('text', { name: 'descriptionFr', nullable: true })
+  @Column('text', { nullable: true })
   descriptionInFrench?: string;
 
-  @Column('text', { name: 'descriptionVn', nullable: true })
+  @Column('text', { nullable: true })
   descriptionInVietnames?: string;
 
   @Column('bit', { default: true })

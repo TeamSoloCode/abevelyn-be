@@ -20,7 +20,7 @@ import { UpdateColorDto } from './dto/update-color.dto';
 export class ColorsController {
   constructor(private readonly colorsService: ColorsService) {}
 
-  @Post('/create')
+  @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
   create(@Body() createColorDto: CreateColorDto) {
@@ -39,6 +39,7 @@ export class ColorsController {
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UsePipes(ValidationPipe)
   update(@Param('id') id: string, @Body() updateColorDto: UpdateColorDto) {
     return this.colorsService.update(id, updateColorDto);
   }

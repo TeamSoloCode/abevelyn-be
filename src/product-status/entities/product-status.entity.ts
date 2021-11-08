@@ -7,29 +7,35 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CreateProductStatusDto } from '../dto/create-product-status.dto';
 
 @Entity()
 export class ProductStatus extends BaseEntity {
+  constructor(createProductStatusDto: CreateProductStatusDto) {
+    super();
+    this.name = createProductStatusDto?.name;
+  }
+
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
 
-  @Column('varchar', { length: 128 })
+  @Column('varchar', { length: 256, unique: true })
   name: string;
 
-  @Column('varchar', { length: 256, name: 'nameFr' })
-  nameInFrench: string;
+  @Column('varchar', { length: 256, nullable: true })
+  nameInFrench?: string;
 
-  @Column('varchar', { length: 256, name: 'nameVn' })
-  nameInVietnames: string;
+  @Column('varchar', { length: 256, nullable: true })
+  nameInVietnames?: string;
 
-  @Column('text')
-  description: string;
+  @Column('text', { nullable: true })
+  description?: string;
 
-  @Column('text', { name: 'descriptionFr' })
+  @Column('text', { nullable: true })
   descriptionInFrench: string;
 
-  @Column('text', { name: 'descriptionVn' })
+  @Column('text', { nullable: true })
   descriptionInVietnames: string;
 
   /**

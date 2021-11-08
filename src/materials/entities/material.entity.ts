@@ -22,19 +22,19 @@ export class Material extends BaseEntity {
   @Column('varchar', { length: 256 })
   name: string;
 
-  @Column('varchar', { length: 256, name: 'nameFr' })
+  @Column('varchar', { length: 256 })
   nameInFrench: string;
 
-  @Column('varchar', { length: 256, name: 'nameVn' })
+  @Column('varchar', { length: 256 })
   nameInVietnames: string;
 
   @Column('text')
   description: string;
 
-  @Column('text', { name: 'descriptionFr' })
+  @Column('text', { nullable: true })
   descriptionInFrench: string;
 
-  @Column('text', { name: 'descriptionVn' })
+  @Column('text', { nullable: true })
   descriptionInVietnames: string;
 
   @OneToMany(

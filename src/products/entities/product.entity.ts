@@ -32,19 +32,19 @@ export class Product extends BaseEntity {
   @Column('varchar', { length: 512 })
   name: string;
 
-  @Column('varchar', { name: 'nameFr', length: 512, nullable: true })
+  @Column('varchar', { length: 512, nullable: true })
   nameInFrench?: string;
 
-  @Column('varchar', { name: 'nameVn', length: 512, nullable: true })
+  @Column('varchar', { length: 512, nullable: true })
   nameInVietnamese?: string;
 
   @Column('text')
   description?: string;
 
-  @Column('text', { name: 'descriptionFr', nullable: true })
+  @Column('text', { nullable: true })
   descriptionInFrench?: string;
 
-  @Column('text', { name: 'descriptionVn', nullable: true })
+  @Column('text', { nullable: true })
   descriptionInVietnamese?: string;
 
   @Column('double')
@@ -74,19 +74,19 @@ export class Product extends BaseEntity {
   @Column('text', { nullable: true })
   image5?: string;
 
-  @OneToOne(() => ProductStatus, { nullable: true })
+  @OneToOne(() => ProductStatus, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'productStatusUuid' })
   productStatus: ProductStatus;
 
-  @OneToOne(() => Size, { nullable: true })
+  @OneToOne(() => Size, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'productSizeUuid' })
   size: Size;
 
-  @OneToOne((type) => Color, { nullable: true })
+  @OneToOne((type) => Color, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'productColorUuid' })
   color: Color;
 
-  @OneToOne((type) => Coupon, { nullable: true })
+  @OneToOne((type) => Coupon, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'couponUuid' })
   coupon?: Coupon;
 

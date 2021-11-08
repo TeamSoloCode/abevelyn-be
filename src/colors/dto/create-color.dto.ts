@@ -7,7 +7,7 @@ export class CreateColorDto {
 
   @IsOptional()
   @MaxLength(128)
-  @MinLength(10)
+  @MinLength(3)
   nameInFrench?: string;
 
   @IsOptional()

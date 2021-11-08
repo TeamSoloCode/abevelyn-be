@@ -20,7 +20,7 @@ import { UpdateCollectionDto } from './dto/update-collection.dto';
 export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
-  @Post('/create')
+  @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
   create(@Body() createCollectionDto: CreateCollectionDto) {
