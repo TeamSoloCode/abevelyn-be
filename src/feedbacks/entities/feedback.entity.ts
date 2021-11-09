@@ -5,8 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,8 +16,7 @@ export class Feedback extends BaseEntity {
   @IsUUID()
   uuid: string;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'userUuid' })
+  @ManyToOne(() => User, (owner) => owner.feedbacks)
   owner: User;
 
   @Column('varchar', { length: 512 })

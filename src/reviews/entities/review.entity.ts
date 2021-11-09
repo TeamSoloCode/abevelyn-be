@@ -7,8 +7,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,16 +18,13 @@ export class Review extends BaseEntity {
   @IsUUID()
   uuid: string;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'userUuid' })
+  @ManyToOne(() => User, (review) => review.reviews)
   owner: User;
 
-  @OneToOne(() => Product)
-  @JoinColumn({ name: 'productUuid' })
+  @ManyToOne(() => Product, (product) => product.reviews)
   product: Product;
 
-  @OneToOne(() => Review, { nullable: true })
-  @JoinColumn({ name: 'parentReviewUuid' })
+  @ManyToOne(() => Review, (review) => review.parentReview, { nullable: true })
   parentReview: Review;
 
   @Column('varchar', { length: 512 })

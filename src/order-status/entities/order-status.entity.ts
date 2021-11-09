@@ -1,9 +1,11 @@
 import { IsUUID } from 'class-validator';
+import { Order } from 'src/orders/entities/order.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,6 +18,9 @@ export class OrderStatus extends BaseEntity {
 
   @Column('varchar', { length: 128 })
   name: string;
+
+  @OneToMany(() => Order, (order) => order.status)
+  orders: Order[];
 
   /**
    * -----------------------------------------------------

@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -18,16 +19,14 @@ export class Order extends BaseEntity {
   @IsUUID()
   uuid: string;
 
-  @OneToOne(() => OrderStatus, { eager: true })
-  @JoinColumn({ name: 'orderStatusUUid' })
+  @ManyToOne(() => OrderStatus, (status) => status.orders, { eager: true })
   status: OrderStatus;
 
   @OneToOne(() => Cart)
   @JoinColumn({ name: 'cartUUid' })
   cart: Cart;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'ownerUUid' })
+  @ManyToOne(() => User, (user) => user.orders)
   owner: User;
 
   /**

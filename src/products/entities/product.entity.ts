@@ -1,17 +1,19 @@
 import { IsUUID, Max, Min } from 'class-validator';
+import { CartItem } from 'src/cart-item/entities/cart-item.entity';
+import { Collection } from 'src/collections/entities/collection.entity';
 import { Color } from 'src/colors/entities/color.entity';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { Material } from 'src/materials/entities/material.entity';
 import { ProductStatus } from 'src/product-status/entities/product-status.entity';
+import { Review } from 'src/reviews/entities/review.entity';
 import { Size } from 'src/sizes/entities/size.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -21,8 +23,23 @@ import { ProductMaterial } from './product_material.entity';
 
 @Entity()
 export class Product extends BaseEntity {
-  constructor() {
+  constructor(
+    name: string,
+    image: string,
+    description: string,
+    price: number,
+    color: Color,
+    status: ProductStatus,
+    size: Size,
+  ) {
     super();
+    this.name = name;
+    this.image = image;
+    this.description = description;
+    this.price = price;
+    this.color = color;
+    this.productStatus = status;
+    this.size = size;
   }
 
   @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
@@ -74,20 +91,24 @@ export class Product extends BaseEntity {
   @Column('text', { nullable: true })
   image5?: string;
 
-  @OneToOne(() => ProductStatus, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'productStatusUuid' })
+  @ManyToOne(() => ProductStatus, (status) => status.product, {
+    onDelete: 'SET NULL',
+  })
   productStatus: ProductStatus;
 
-  @OneToOne(() => Size, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'productSizeUuid' })
+  @ManyToOne(() => Size, (size) => size.product, { onDelete: 'SET NULL' })
   size: Size;
 
-  @OneToOne((type) => Color, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'productColorUuid' })
+  @ManyToOne((type) => Color, (color) => color.product, {
+    onDelete: 'SET NULL',
+  })
   color: Color;
 
-  @OneToOne((type) => Coupon, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'couponUuid' })
+  @ManyToOne((type) => Coupon, (coupon) => coupon.product, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  // @JoinColumn({ name: 'couponUuid' })
   coupon?: Coupon;
 
   @OneToMany(
@@ -103,6 +124,14 @@ export class Product extends BaseEntity {
     { nullable: true },
   )
   productColection: ProductColection;
+
+  @OneToMany(() => Review, (review) => review.product, { onDelete: 'SET NULL' })
+  reviews: Review[];
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product, {
+    onDelete: 'SET NULL',
+  })
+  cartItems: CartItem[];
 
   /**
    * -----------------------------------------------------

@@ -6,9 +6,8 @@ import {
   BaseEntity,
   CreateDateColumn,
   Entity,
-  JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,8 +18,7 @@ export class Cart extends BaseEntity {
   @IsUUID()
   uuid: string;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'ownerUuid' })
+  @ManyToOne(() => User, (owner) => owner.carts)
   owner: User;
 
   @OneToMany(() => CartItem, (item) => item.cart, {

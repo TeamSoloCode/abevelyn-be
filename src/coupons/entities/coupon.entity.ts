@@ -1,9 +1,12 @@
 import { IsUUID } from 'class-validator';
+import { Collection } from 'src/collections/entities/collection.entity';
+import { Product } from 'src/products/entities/product.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -22,6 +25,12 @@ export class Coupon extends BaseEntity {
 
   @Column('datetime')
   expiredDate: Date;
+
+  @OneToMany(() => Product, (product) => product.coupon)
+  product: Product[];
+
+  @OneToMany(() => Collection, (collection) => collection.coupon)
+  collections: Collection[];
 
   /**
    * -----------------------------------------------------

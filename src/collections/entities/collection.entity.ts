@@ -7,8 +7,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -60,8 +60,9 @@ export class Collection extends BaseEntity {
   @Column('bit', { default: false })
   deleted: boolean = false;
 
-  @OneToOne((type) => Coupon, { nullable: true })
-  @JoinColumn({ name: 'couponUuid' })
+  @ManyToOne((type) => Coupon, (coupon) => coupon.collections, {
+    nullable: true,
+  })
   coupon?: Coupon;
 
   @OneToMany(

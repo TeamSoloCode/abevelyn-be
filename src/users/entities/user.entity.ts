@@ -6,6 +6,7 @@ import {
   Entity,
   Index,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,6 +14,10 @@ import {
 import * as bcrypt from 'bcrypt';
 import { UserProfile } from 'src/user-profile/entities/user-profile.entity';
 import { SignInType, UserRoles } from 'src/entity-enum';
+import { Cart } from 'src/carts/entities/cart.entity';
+import { Review } from 'src/reviews/entities/review.entity';
+import { Feedback } from 'src/feedbacks/entities/feedback.entity';
+import { Order } from 'src/orders/entities/order.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -136,6 +141,24 @@ export class User extends BaseEntity {
   @OneToOne(() => UserProfile, { nullable: true })
   @JoinColumn({ name: 'userProfileUuid' })
   userProdfile: UserProfile;
+
+  /**
+   * -----------------------------------------------------
+   */
+
+  @OneToMany(() => Cart, (cart) => cart.owner, { onDelete: 'SET NULL' })
+  carts: Cart[];
+
+  @OneToMany(() => Review, (review) => review.owner, { onDelete: 'SET NULL' })
+  reviews: Review[];
+
+  @OneToMany(() => Feedback, (feedback) => feedback.owner, {
+    onDelete: 'SET NULL',
+  })
+  feedbacks: Feedback[];
+
+  @OneToMany(() => Order, (order) => order.owner, { onDelete: 'SET NULL' })
+  orders: Order[];
 
   /**
    * -----------------------------------------------------

@@ -21,24 +21,28 @@ export class CreateProductDto {
   colorId: string;
 
   @IsUUID()
-  productStatusId: string;
+  statusId: string;
 
   @IsUUID()
   sizeId: string;
 
+  @IsString()
+  image: string;
+
+  @MinLength(10)
+  description: string;
+
+  @IsOptional()
+  @IsUUID()
+  materialId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  colectionId?: string;
+
   @IsOptional()
   @IsUUID()
   couponId?: string;
-
-  @IsUUID()
-  productMaterialId: string;
-
-  @IsOptional()
-  @IsUUID()
-  productColectionId?: string;
-
-  @IsString()
-  image: string;
 
   @IsOptional()
   @IsString()
@@ -74,10 +78,6 @@ export class CreateProductDto {
   @MaxLength(512)
   @MinLength(10)
   nameInVietnames?: string;
-
-  @IsOptional()
-  @MinLength(10)
-  description?: string;
 
   @IsOptional()
   @MinLength(10)

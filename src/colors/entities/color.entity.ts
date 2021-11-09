@@ -1,9 +1,11 @@
 import { IsUUID } from 'class-validator';
+import { Product } from 'src/products/entities/product.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -32,6 +34,9 @@ export class Color extends BaseEntity {
 
   @Column('varchar', { length: 128 })
   code: string;
+
+  @OneToMany(() => Product, (product) => product.color)
+  product: Product[];
 
   /**
    * -----------------------------------------------------

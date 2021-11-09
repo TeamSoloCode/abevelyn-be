@@ -1,9 +1,11 @@
 import { IsUUID } from 'class-validator';
+import { Product } from 'src/products/entities/product.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -37,6 +39,9 @@ export class ProductStatus extends BaseEntity {
 
   @Column('text', { nullable: true })
   descriptionInVietnames: string;
+
+  @OneToMany(() => Product, (product) => product.productStatus)
+  product: Product[];
 
   /**
    * -----------------------------------------------------
