@@ -37,7 +37,7 @@ export class AuthController {
   }
 
   @Post('/verify_token')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), MatchStoredTokenGuard)
   test(@GetUser() user: User) {
     return { result: 'Authorized' };
   }

@@ -6,13 +6,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CreateCollectionDto } from '../dto/create-collection.dto';
 
 @Entity()
 export class Collection extends BaseEntity {
@@ -32,7 +30,6 @@ export class Collection extends BaseEntity {
 
   @Column('varchar', {
     length: 256,
-    name: 'nameFr',
     unique: true,
     nullable: true,
   })
