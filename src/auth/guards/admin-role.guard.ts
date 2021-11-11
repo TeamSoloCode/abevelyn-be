@@ -5,6 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { UserRoles } from 'src/entity-enum';
 import { AuthService } from '../auth.service';
 
 @Injectable()
@@ -18,9 +19,21 @@ export class AdminRoleGuard implements CanActivate {
 
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '');
-        const authorized = await this.authService.isAdminRole(token);
-        if (authorized) return true;
-        throw new UnauthorizedException('You are not admin to do this action');
+        const user = await this.authService.fetchUserByToken(token);
+        const isAdmin =
+          user.role == UserRoles.ADMIN || user.role == UserRoles.ROOT;
+        const isMatchStoredToken = user.token == token;
+        if (isAdmin && isMatchStoredToken) return true;
+
+        if (isAdmin) {
+          throw new UnauthorizedException(
+            'You are not an admin to do this action',
+          );
+        } else {
+          throw new UnauthorizedException(
+            'Your token is expired! Please sign in again.',
+          );
+        }
       }
       return false;
     } catch (err) {

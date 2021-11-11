@@ -15,14 +15,13 @@ import { CreateProductStatusDto } from './dto/create-product-status.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { MatchStoredTokenGuard } from 'src/auth/guards/match-token.guard';
 
 @Controller('product-status')
 export class ProductStatusController {
   constructor(private readonly productStatusService: ProductStatusService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), MatchStoredTokenGuard, AdminRoleGuard)
+  @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
   create(@Body() createProductStatusDto: CreateProductStatusDto) {
     return this.productStatusService.create(createProductStatusDto);
@@ -39,7 +38,7 @@ export class ProductStatusController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard(), MatchStoredTokenGuard, AdminRoleGuard)
+  @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
   update(
     @Param('id') id: string,
@@ -49,7 +48,7 @@ export class ProductStatusController {
   }
 
   @Delete('/:id')
-  @UseGuards(AuthGuard(), MatchStoredTokenGuard, AdminRoleGuard)
+  @UseGuards(AuthGuard(), AdminRoleGuard)
   remove(@Param('id') id: string) {
     return this.productStatusService.remove(id);
   }
