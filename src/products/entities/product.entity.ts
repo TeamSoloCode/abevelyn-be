@@ -108,7 +108,6 @@ export class Product extends BaseEntity {
     nullable: true,
     onDelete: 'SET NULL',
   })
-  // @JoinColumn({ name: 'couponUuid' })
   coupon?: Coupon;
 
   @OneToMany(

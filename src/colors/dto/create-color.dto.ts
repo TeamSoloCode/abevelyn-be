@@ -5,16 +5,6 @@ export class CreateColorDto {
   @MinLength(3)
   name: string;
 
-  @IsOptional()
-  @MaxLength(128)
-  @MinLength(3)
-  nameInFrench?: string;
-
-  @IsOptional()
-  @MaxLength(128)
-  @MinLength(3)
-  nameInVietnames?: string;
-
   @IsString()
   code: string;
 }

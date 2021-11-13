@@ -95,10 +95,12 @@ export class AuthService {
     return Date.now() >= result.exp * 1000;
   }
 
-  async isValidToken(sentToken: string): Promise<boolean> {
-    return (
-      (await this.isMatchStoragedToken(sentToken)) &&
-      this.isTokenExpired(sentToken)
-    );
+  async fetchUserByToken(token: string): Promise<User> {
+    const { uuid } = this.jwtService.verify<JwtPayload>(token);
+    try {
+      return await this.userRepository.findOne(uuid);
+    } catch (err) {
+      throw err;
+    }
   }
 }
