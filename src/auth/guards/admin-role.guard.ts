@@ -10,7 +10,7 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class AdminRoleGuard implements CanActivate {
-  constructor(@Inject(AuthService) private readonly authService: AuthService) {}
+  constructor(@Inject(AuthService) private readonly authService: AuthService){}
 
   async canActivate(context: ExecutionContext) {
     try {
@@ -20,12 +20,13 @@ export class AdminRoleGuard implements CanActivate {
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '');
         const user = await this.authService.fetchUserByToken(token);
+
         const isAdmin =
-          user.role == UserRoles.ADMIN || user.role == UserRoles.ROOT;
+          user.role == UserRoles.ADMIN || (user.role == UserRoles.ROOT);
         const isMatchStoredToken = user.token == token;
         if (isAdmin && isMatchStoredToken) return true;
 
-        if (isAdmin) {
+        if (!isAdmin) {
           throw new UnauthorizedException(
             'You are not an admin to do this action',
           );

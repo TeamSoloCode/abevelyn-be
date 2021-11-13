@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { RootRoleGuard } from 'src/auth/guards/root-role.guard';
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
@@ -21,7 +22,7 @@ export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(AuthGuard(), AdminRoleGuard, RootRoleGuard)
   @UsePipes(ValidationPipe)
   create(@Body() createCollectionDto: CreateCollectionDto) {
     return this.collectionsService.create(createCollectionDto);
