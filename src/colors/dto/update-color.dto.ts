@@ -5,11 +5,9 @@ import { CreateColorDto } from './create-color.dto';
 export class UpdateColorDto extends PartialType(CreateColorDto) {
   @IsOptional()
   @MaxLength(128)
-  @MinLength(3)
   nameInFrench?: string;
 
   @IsOptional()
   @MaxLength(128)
-  @MinLength(3)
   nameInVietnames?: string;
 }
