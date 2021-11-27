@@ -2,27 +2,24 @@ import { IsUUID, Max, Min } from 'class-validator';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { Color } from 'src/colors/entities/color.entity';
+import { RootEntity } from 'src/common/root-entity.entity';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { Material } from 'src/materials/entities/material.entity';
 import { ProductStatus } from 'src/product-status/entities/product-status.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Size } from 'src/sizes/entities/size.entity';
 import {
-  BaseEntity,
   Column,
-  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
-import { CreateProductDto } from '../dto/create-product.dto';
 import { ProductColection } from './product_collection.entity';
 import { ProductMaterial } from './product_material.entity';
 
 @Entity()
-export class Product extends BaseEntity {
+export class Product extends RootEntity {
   constructor(
     name: string,
     image: string,
@@ -92,21 +89,21 @@ export class Product extends BaseEntity {
   image5?: string;
 
   @ManyToOne(() => ProductStatus, (status) => status.product, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   productStatus: ProductStatus;
 
-  @ManyToOne(() => Size, (size) => size.product, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Size, (size) => size.product, { onDelete: 'CASCADE' })
   size: Size;
 
   @ManyToOne((type) => Color, (color) => color.product, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   color: Color;
 
   @ManyToOne((type) => Coupon, (coupon) => coupon.product, {
     nullable: true,
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   coupon?: Coupon;
 
@@ -124,46 +121,11 @@ export class Product extends BaseEntity {
   )
   productColection: ProductColection;
 
-  @OneToMany(() => Review, (review) => review.product, { onDelete: 'SET NULL' })
+  @OneToMany(() => Review, (review) => review.product, { onDelete: 'CASCADE' })
   reviews: Review[];
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.product, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   cartItems: CartItem[];
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _createdAt: Date;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  public set createdAt(value: Date) {
-    this._createdAt = value;
-  }
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _updatedAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  public set updatedAt(value: Date) {
-    this._updatedAt = value;
-  }
 }

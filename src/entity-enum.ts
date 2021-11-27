@@ -9,3 +9,9 @@ export enum UserRoles {
   ADMIN = 'admin',
   USER = 'user',
 }
+
+export enum LanguageCode {
+  VIETNAMESE = 'vn',
+  FRENCH = 'fr',
+  ENGLISH = 'en',
+}

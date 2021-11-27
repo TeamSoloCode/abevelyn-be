@@ -11,8 +11,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetLanguageOnHeader } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { LanguageCode } from 'src/entity-enum';
+import { ApiResponse } from 'src/utils';
 import { CollectionsService } from './collections.service';
+import { CollectionResponseDto } from './dto/collection-client-response.dto';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 
@@ -23,38 +27,73 @@ export class CollectionsController {
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  create(@Body() createCollectionDto: CreateCollectionDto) {
-    return this.collectionsService.create(createCollectionDto);
+  async create(
+    @Body() createCollectionDto: CreateCollectionDto,
+    @GetLanguageOnHeader() language: LanguageCode,
+  ): Promise<CollectionResponseDto> {
+    const collection = await this.collectionsService.create(
+      createCollectionDto,
+    );
+    const res = new CollectionResponseDto(collection, language);
+    return res;
   }
 
   @Get()
-  findAll() {
-    return this.collectionsService.findAll();
+  async findAll(
+    @GetLanguageOnHeader() language: LanguageCode,
+  ): Promise<CollectionResponseDto[]> {
+    const collections = await this.collectionsService.findAll();
+    const res = collections.map(
+      (collection) => new CollectionResponseDto(collection, language),
+    );
+    return res;
   }
 
   @Get('/fetch_available')
-  findAvailableCollection() {
-    return this.collectionsService.findAvailableCollection();
+  async findAvailableCollection(
+    @GetLanguageOnHeader() language: LanguageCode,
+  ): Promise<ApiResponse<CollectionResponseDto[]>> {
+    const collections = await this.collectionsService.findAvailableCollection();
+    const res = collections.map(
+      (collection) => new CollectionResponseDto(collection, language),
+    );
+    return new ApiResponse(res);
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string) {
-    return this.collectionsService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @GetLanguageOnHeader() language: LanguageCode,
+  ): Promise<ApiResponse<CollectionResponseDto>> {
+    const collection = await this.collectionsService.findOne(id);
+    const res = new CollectionResponseDto(collection, language);
+    return new ApiResponse(res);
   }
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCollectionDto: UpdateCollectionDto,
-  ) {
-    return this.collectionsService.update(id, updateCollectionDto);
+    @GetLanguageOnHeader() language: LanguageCode,
+  ): Promise<ApiResponse<CollectionResponseDto>> {
+    const collection = await this.collectionsService.update(
+      id,
+      updateCollectionDto,
+    );
+    const res = new CollectionResponseDto(collection, language);
+    return new ApiResponse(res);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  remove(@Param('id') id: string) {
-    return this.collectionsService.remove(id);
+  async remove(
+    @Param('id') id: string,
+    @GetLanguageOnHeader() language: LanguageCode,
+  ): Promise<ApiResponse<CollectionResponseDto>> {
+    const collection = await this.collectionsService.remove(id);
+    const res = new CollectionResponseDto(collection, language);
+    return new ApiResponse(res);
   }
 }

@@ -23,7 +23,7 @@ export class CollectionsService {
     try {
       const product = new Collection(
         createCollectionDto.name,
-        createCollectionDto.description,
+        createCollectionDto.available,
       );
       return await this.collectionRepository.save(product);
     } catch (error) {

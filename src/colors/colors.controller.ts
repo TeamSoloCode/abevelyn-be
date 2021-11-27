@@ -11,8 +11,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetLanguageOnHeader } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { LanguageCode } from 'src/entity-enum';
+import { ApiResponse } from 'src/utils';
 import { ColorsService } from './colors.service';
+import { ColorClientResponseDto } from './dto/color-client-res.dto';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 
@@ -28,8 +32,15 @@ export class ColorsController {
   }
 
   @Get()
-  findAll() {
-    return this.colorsService.findAll();
+  async findAll(
+    @GetLanguageOnHeader() language: LanguageCode,
+  ): Promise<ApiResponse<ColorClientResponseDto[]>> {
+    const colors = await this.colorsService.findAll();
+    const res = colors.map(
+      (color) => new ColorClientResponseDto(color, language),
+    );
+
+    return new ApiResponse(res);
   }
 
   @Get('/:id')

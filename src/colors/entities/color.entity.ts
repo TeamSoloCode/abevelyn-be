@@ -1,18 +1,10 @@
 import { IsUUID } from 'class-validator';
+import { RootEntity } from 'src/common/root-entity.entity';
 import { Product } from 'src/products/entities/product.entity';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { CreateColorDto } from '../dto/create-color.dto';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Color extends BaseEntity {
+export class Color extends RootEntity {
   constructor(name: string, code: string) {
     super();
     this.name = name;
@@ -37,39 +29,4 @@ export class Color extends BaseEntity {
 
   @OneToMany(() => Product, (product) => product.color)
   product: Product[];
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _createdAt: Date;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  public set createdAt(value: Date) {
-    this._createdAt = value;
-  }
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _updatedAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  public set updatedAt(value: Date) {
-    this._updatedAt = value;
-  }
 }

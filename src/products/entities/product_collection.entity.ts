@@ -2,7 +2,7 @@ import { Collection } from 'src/collections/entities/collection.entity';
 import { BaseEntity, Entity, ManyToOne } from 'typeorm';
 import { Product } from './product.entity';
 
-@Entity('product_collection')
+@Entity('m2m_product_collection')
 export class ProductColection extends BaseEntity {
   @ManyToOne((type) => Product, (prod) => prod.productColection, {
     primary: true,

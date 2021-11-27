@@ -25,3 +25,15 @@ export const deleteUnusedImage = (
     unlink(filePath, callback);
   }
 };
+
+export class ApiResponse<T> {
+  constructor(data: T, message?: string, errorCode?: string) {
+    this.code = errorCode;
+    this.data = data;
+    this.message = message;
+  }
+
+  code: string;
+  data: T;
+  message: string;
+}

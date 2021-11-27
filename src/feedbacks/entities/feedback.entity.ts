@@ -1,4 +1,5 @@
 import { IsUUID, Max } from 'class-validator';
+import { RootEntity } from 'src/common/root-entity.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   BaseEntity,
@@ -11,7 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Feedback extends BaseEntity {
+export class Feedback extends RootEntity {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
@@ -31,39 +32,4 @@ export class Feedback extends BaseEntity {
 
   @Column('text', { nullable: true })
   image2: string;
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _createdAt: Date;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  public set createdAt(value: Date) {
-    this._createdAt = value;
-  }
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _updatedAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  public set updatedAt(value: Date) {
-    this._updatedAt = value;
-  }
 }

@@ -1,19 +1,12 @@
 import { IsUUID } from 'class-validator';
 import { Color } from 'src/colors/entities/color.entity';
+import { RootEntity } from 'src/common/root-entity.entity';
 import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Review extends BaseEntity {
+export class Review extends RootEntity {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
@@ -38,39 +31,4 @@ export class Review extends BaseEntity {
 
   @Column('text', { nullable: true })
   image2: string;
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _createdAt: Date;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  public set createdAt(value: Date) {
-    this._createdAt = value;
-  }
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _updatedAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  public set updatedAt(value: Date) {
-    this._updatedAt = value;
-  }
 }
