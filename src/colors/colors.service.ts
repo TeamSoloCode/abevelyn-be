@@ -79,8 +79,9 @@ export class ColorsService {
         throw new NotFoundException();
       }
 
-      await this.colorRepository.delete(id);
-      return color;
+      color.deleted = true;
+      await this.colorRepository.save(color);
+      return this.colorRepository.findOne(id);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

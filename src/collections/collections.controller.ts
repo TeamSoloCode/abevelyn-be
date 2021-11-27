@@ -11,7 +11,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetLanguageOnHeader } from 'src/auth/decorators/get-language.decorator';
+import {
+  GetHeaderInfo,
+  HeaderInfo,
+} from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { LanguageCode } from 'src/entity-enum';
 import { ApiResponse } from 'src/utils';
@@ -29,33 +32,36 @@ export class CollectionsController {
   @UsePipes(ValidationPipe)
   async create(
     @Body() createCollectionDto: CreateCollectionDto,
-    @GetLanguageOnHeader() language: LanguageCode,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<CollectionResponseDto> {
     const collection = await this.collectionsService.create(
       createCollectionDto,
     );
-    const res = new CollectionResponseDto(collection, language);
+    const res = new CollectionResponseDto(collection, headerInfo.language);
     return res;
   }
 
   @Get()
+  @UseGuards(AuthGuard(), AdminRoleGuard)
   async findAll(
-    @GetLanguageOnHeader() language: LanguageCode,
-  ): Promise<CollectionResponseDto[]> {
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<CollectionResponseDto[]>> {
     const collections = await this.collectionsService.findAll();
     const res = collections.map(
-      (collection) => new CollectionResponseDto(collection, language),
+      (collection) =>
+        new CollectionResponseDto(collection, headerInfo.language),
     );
-    return res;
+    return new ApiResponse(res);
   }
 
   @Get('/fetch_available')
   async findAvailableCollection(
-    @GetLanguageOnHeader() language: LanguageCode,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiResponse<CollectionResponseDto[]>> {
     const collections = await this.collectionsService.findAvailableCollection();
     const res = collections.map(
-      (collection) => new CollectionResponseDto(collection, language),
+      (collection) =>
+        new CollectionResponseDto(collection, headerInfo.language),
     );
     return new ApiResponse(res);
   }
@@ -63,10 +69,10 @@ export class CollectionsController {
   @Get('/:id')
   async findOne(
     @Param('id') id: string,
-    @GetLanguageOnHeader() language: LanguageCode,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiResponse<CollectionResponseDto>> {
     const collection = await this.collectionsService.findOne(id);
-    const res = new CollectionResponseDto(collection, language);
+    const res = new CollectionResponseDto(collection, headerInfo.language);
     return new ApiResponse(res);
   }
 
@@ -76,13 +82,13 @@ export class CollectionsController {
   async update(
     @Param('id') id: string,
     @Body() updateCollectionDto: UpdateCollectionDto,
-    @GetLanguageOnHeader() language: LanguageCode,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiResponse<CollectionResponseDto>> {
     const collection = await this.collectionsService.update(
       id,
       updateCollectionDto,
     );
-    const res = new CollectionResponseDto(collection, language);
+    const res = new CollectionResponseDto(collection, headerInfo.language);
     return new ApiResponse(res);
   }
 
@@ -90,10 +96,10 @@ export class CollectionsController {
   @UseGuards(AuthGuard(), AdminRoleGuard)
   async remove(
     @Param('id') id: string,
-    @GetLanguageOnHeader() language: LanguageCode,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiResponse<CollectionResponseDto>> {
     const collection = await this.collectionsService.remove(id);
-    const res = new CollectionResponseDto(collection, language);
+    const res = new CollectionResponseDto(collection, headerInfo.language);
     return new ApiResponse(res);
   }
 }

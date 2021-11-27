@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
 import { Color } from 'src/colors/entities/color.entity';
-import { RootEntity } from 'src/common/root-entity.entity';
+import { RootEntity } from 'src/root-entity.entity';
 import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';

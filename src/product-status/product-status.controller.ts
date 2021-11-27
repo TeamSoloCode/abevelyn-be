@@ -15,41 +15,90 @@ import { CreateProductStatusDto } from './dto/create-product-status.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { ApiResponse } from 'src/utils';
+import { ProductStatusClientResponseDto } from './dto/client-product-status-res.dto';
+import {
+  GetHeaderInfo,
+  HeaderInfo,
+} from 'src/auth/decorators/get-language.decorator';
 
-@Controller('product-status')
+@Controller('product_status')
 export class ProductStatusController {
   constructor(private readonly productStatusService: ProductStatusService) {}
 
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  create(@Body() createProductStatusDto: CreateProductStatusDto) {
-    return this.productStatusService.create(createProductStatusDto);
+  async create(
+    @Body() createProductStatusDto: CreateProductStatusDto,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+    const productStatus = await this.productStatusService.create(
+      createProductStatusDto,
+    );
+    const res = new ProductStatusClientResponseDto(
+      productStatus,
+      headerInfo.language,
+    );
+    return new ApiResponse(res);
   }
 
   @Get()
-  findAll() {
-    return this.productStatusService.findAll();
+  @UseGuards(AuthGuard(), AdminRoleGuard)
+  async findAll(
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ProductStatusClientResponseDto[]>> {
+    const productStatus = await this.productStatusService.findAll();
+    const res = productStatus.map(
+      (status) =>
+        new ProductStatusClientResponseDto(status, headerInfo.language),
+    );
+    return new ApiResponse(res);
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string) {
-    return this.productStatusService.findOne(id);
+  async findOne(
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+    @Param('id') id: string,
+  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+    const productStatus = await this.productStatusService.findOne(id);
+    const res = new ProductStatusClientResponseDto(
+      productStatus,
+      headerInfo.language,
+    );
+    return new ApiResponse(res);
   }
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  update(
+  async update(
     @Param('id') id: string,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
     @Body() updateProductStatusDto: UpdateProductStatusDto,
-  ) {
-    return this.productStatusService.update(id, updateProductStatusDto);
+  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+    const productStatus = await this.productStatusService.update(
+      id,
+      updateProductStatusDto,
+    );
+    const res = new ProductStatusClientResponseDto(
+      productStatus,
+      headerInfo.language,
+    );
+    return new ApiResponse(res);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  remove(@Param('id') id: string) {
-    return this.productStatusService.remove(id);
+  async remove(
+    @Param('id') id: string,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+    const productStatus = await this.productStatusService.remove(id);
+    const res = new ProductStatusClientResponseDto(
+      productStatus,
+      headerInfo.language,
+    );
+    return new ApiResponse(res);
   }
 }

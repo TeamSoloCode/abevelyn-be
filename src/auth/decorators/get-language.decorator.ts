@@ -1,10 +1,17 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { LanguageCode } from 'src/entity-enum';
 import { User } from '../../users/entities/user.entity';
 
-export const GetLanguageOnHeader = createParamDecorator(
-  (data, ctx: ExecutionContext): User => {
+export class HeaderInfo {
+  language: LanguageCode;
+  locale?: string;
+}
+
+export const GetHeaderInfo = createParamDecorator(
+  (data, ctx: ExecutionContext): HeaderInfo => {
     const request = ctx.switchToHttp().getRequest();
-    const language = request.get('Selected-Languge');
-    return language;
+    const language = request.get('language');
+    const locale = request.get('locale');
+    return { language, locale };
   },
 );

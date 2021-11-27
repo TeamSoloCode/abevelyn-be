@@ -93,8 +93,9 @@ export class ProductStatusService {
         throw new NotFoundException();
       }
 
-      await this.productStatusRepository.delete(id);
-      return productStatus;
+      productStatus.deleted = true;
+      await this.productStatusRepository.save(productStatus);
+      return this.productStatusRepository.findOne(id);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

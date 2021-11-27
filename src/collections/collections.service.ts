@@ -38,7 +38,9 @@ export class CollectionsService {
 
   async findAll(): Promise<Collection[]> {
     try {
-      return await this.collectionRepository.find();
+      return await this.collectionRepository.find({
+        order: { createdAt: 'DESC' },
+      });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

@@ -1,5 +1,5 @@
 import { IsUUID } from 'class-validator';
-import { RootEntity } from 'src/common/root-entity.entity';
+import { RootEntity } from 'src/root-entity.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 

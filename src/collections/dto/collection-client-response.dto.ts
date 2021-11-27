@@ -26,11 +26,9 @@ export class CollectionResponseDto {
 
     Object.assign(this, collection);
 
-    this.available = available;
     this.uuid = uuid;
     this.updatedAt = updatedAt;
     this.createdAt = createdAt;
-    this.deleted = deleted;
     this.coupon = coupon;
     this.productCollection = productCollection;
 
@@ -55,8 +53,6 @@ export class CollectionResponseDto {
   createdAt: Date;
   name: string;
   description: string;
-  available: boolean;
-  deleted: boolean;
   coupon: Coupon;
   productCollection: ProductColection[];
 }

@@ -1,5 +1,5 @@
 import { IsUUID } from 'class-validator';
-import { RootEntity } from 'src/common/root-entity.entity';
+import { RootEntity } from 'src/root-entity.entity';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { ProductColection } from 'src/products/entities/product_collection.entity';
 import {

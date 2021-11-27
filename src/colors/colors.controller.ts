@@ -11,7 +11,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetLanguageOnHeader } from 'src/auth/decorators/get-language.decorator';
+import {
+  GetHeaderInfo,
+  HeaderInfo,
+} from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { LanguageCode } from 'src/entity-enum';
 import { ApiResponse } from 'src/utils';
@@ -27,37 +30,58 @@ export class ColorsController {
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  create(@Body() createColorDto: CreateColorDto) {
-    return this.colorsService.create(createColorDto);
+  async create(
+    @Body() createColorDto: CreateColorDto,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ColorClientResponseDto>> {
+    const color = await this.colorsService.create(createColorDto);
+    const result = new ColorClientResponseDto(color, headerInfo.language);
+    return new ApiResponse(result);
   }
 
   @Get()
   async findAll(
-    @GetLanguageOnHeader() language: LanguageCode,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiResponse<ColorClientResponseDto[]>> {
     const colors = await this.colorsService.findAll();
     const res = colors.map(
-      (color) => new ColorClientResponseDto(color, language),
+      (color) => new ColorClientResponseDto(color, headerInfo.language),
     );
 
     return new ApiResponse(res);
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string) {
-    return this.colorsService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ColorClientResponseDto>> {
+    const color = await this.colorsService.findOne(id);
+    const result = new ColorClientResponseDto(color, headerInfo.language);
+    return new ApiResponse(result);
   }
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  update(@Param('id') id: string, @Body() updateColorDto: UpdateColorDto) {
-    return this.colorsService.update(id, updateColorDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateColorDto: UpdateColorDto,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ColorClientResponseDto>> {
+    const color = await this.colorsService.update(id, updateColorDto);
+    const result = new ColorClientResponseDto(color, headerInfo.language);
+    return new ApiResponse(result);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  remove(@Param('id') id: string) {
-    return this.colorsService.remove(id);
+  async remove(
+    @Param('id') id: string,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ColorClientResponseDto>> {
+    const color = await this.colorsService.remove(id);
+    const result = new ColorClientResponseDto(color, headerInfo.language);
+    return new ApiResponse(result);
   }
 }

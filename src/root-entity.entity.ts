@@ -14,13 +14,27 @@ export class RootEntity extends BaseEntity {
 
   @Column('bit', {
     default: true,
-    transformer: { from: (v: Buffer) => !!v?.readInt8(0), to: (v) => v },
+    transformer: {
+      from: (v: Buffer) => {
+        if (v instanceof Buffer) {
+          return !!v?.readInt8(0);
+        }
+      },
+      to: (v) => v,
+    },
   })
   available: boolean = true;
 
   @Column('bit', {
     default: false,
-    transformer: { from: (v: Buffer) => !!v?.readInt8(0), to: (v) => v },
+    transformer: {
+      from: (v: Buffer) => {
+        if (v instanceof Buffer) {
+          return !!v?.readInt8(0);
+        }
+      },
+      to: (v) => v,
+    },
   })
   deleted: boolean = false;
   /**

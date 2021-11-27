@@ -2,7 +2,7 @@ import { IsUUID, Max, Min } from 'class-validator';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { Color } from 'src/colors/entities/color.entity';
-import { RootEntity } from 'src/common/root-entity.entity';
+import { RootEntity } from 'src/root-entity.entity';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { Material } from 'src/materials/entities/material.entity';
 import { ProductStatus } from 'src/product-status/entities/product-status.entity';
@@ -112,14 +112,14 @@ export class Product extends RootEntity {
     (prodAndMaterial) => prodAndMaterial.product,
     { nullable: true },
   )
-  productMaterial: ProductMaterial;
+  productMaterial?: ProductMaterial;
 
   @OneToMany(
     () => ProductColection,
     (prodAndMaterial) => prodAndMaterial.product,
     { nullable: true },
   )
-  productColection: ProductColection;
+  productColection?: ProductColection;
 
   @OneToMany(() => Review, (review) => review.product, { onDelete: 'CASCADE' })
   reviews: Review[];
