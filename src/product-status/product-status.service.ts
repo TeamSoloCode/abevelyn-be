@@ -36,7 +36,8 @@ export class ProductStatusService {
   async findAll(): Promise<ProductStatus[]> {
     try {
       return await this.productStatusRepository.find({
-        order: { createdAt: 'DESC' },
+        where: { deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
       });
     } catch (error) {
       throw new InternalServerErrorException(error.message);

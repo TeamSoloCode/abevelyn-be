@@ -19,7 +19,7 @@ import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { LanguageCode } from 'src/entity-enum';
 import { ApiResponse } from 'src/utils';
 import { CollectionsService } from './collections.service';
-import { CollectionResponseDto } from './dto/collection-client-response.dto';
+import { AdminCollectionResponseDto } from './dto/admin-collection-res.dto';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 
@@ -33,11 +33,11 @@ export class CollectionsController {
   async create(
     @Body() createCollectionDto: CreateCollectionDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<CollectionResponseDto>> {
+  ): Promise<ApiResponse<AdminCollectionResponseDto>> {
     const collection = await this.collectionsService.create(
       createCollectionDto,
     );
-    const res = new CollectionResponseDto(collection, headerInfo.language);
+    const res = new AdminCollectionResponseDto(collection, headerInfo.language);
     return new ApiResponse(res);
   }
 
@@ -45,11 +45,11 @@ export class CollectionsController {
   @UseGuards(AuthGuard(), AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<CollectionResponseDto[]>> {
+  ): Promise<ApiResponse<AdminCollectionResponseDto[]>> {
     const collections = await this.collectionsService.findAll();
     const res = collections.map(
       (collection) =>
-        new CollectionResponseDto(collection, headerInfo.language),
+        new AdminCollectionResponseDto(collection, headerInfo.language),
     );
     return new ApiResponse(res);
   }
@@ -57,11 +57,11 @@ export class CollectionsController {
   @Get('/fetch_available')
   async findAvailableCollection(
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<CollectionResponseDto[]>> {
+  ): Promise<ApiResponse<AdminCollectionResponseDto[]>> {
     const collections = await this.collectionsService.findAvailableCollection();
     const res = collections.map(
       (collection) =>
-        new CollectionResponseDto(collection, headerInfo.language),
+        new AdminCollectionResponseDto(collection, headerInfo.language),
     );
     return new ApiResponse(res);
   }
@@ -70,9 +70,9 @@ export class CollectionsController {
   async findOne(
     @Param('id') id: string,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<CollectionResponseDto>> {
+  ): Promise<ApiResponse<AdminCollectionResponseDto>> {
     const collection = await this.collectionsService.findOne(id);
-    const res = new CollectionResponseDto(collection, headerInfo.language);
+    const res = new AdminCollectionResponseDto(collection, headerInfo.language);
     return new ApiResponse(res);
   }
 
@@ -83,12 +83,12 @@ export class CollectionsController {
     @Param('id') id: string,
     @Body() updateCollectionDto: UpdateCollectionDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<CollectionResponseDto>> {
+  ): Promise<ApiResponse<AdminCollectionResponseDto>> {
     const collection = await this.collectionsService.update(
       id,
       updateCollectionDto,
     );
-    const res = new CollectionResponseDto(collection, headerInfo.language);
+    const res = new AdminCollectionResponseDto(collection, headerInfo.language);
     return new ApiResponse(res, 'Update collection successful!');
   }
 
@@ -97,9 +97,9 @@ export class CollectionsController {
   async remove(
     @Param('id') id: string,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<CollectionResponseDto>> {
+  ): Promise<ApiResponse<AdminCollectionResponseDto>> {
     const collection = await this.collectionsService.remove(id);
-    const res = new CollectionResponseDto(collection, headerInfo.language);
+    const res = new AdminCollectionResponseDto(collection, headerInfo.language);
     return new ApiResponse(res);
   }
 }

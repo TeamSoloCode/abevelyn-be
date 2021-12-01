@@ -43,13 +43,13 @@ export class Product extends RootEntity {
   @IsUUID()
   uuid: string;
 
-  @Column('varchar', { length: 512 })
+  @Column('varchar', { length: 512, unique: true })
   name: string;
 
-  @Column('varchar', { length: 512, nullable: true })
+  @Column('varchar', { length: 512, nullable: true, unique: true })
   nameInFrench?: string;
 
-  @Column('varchar', { length: 512, nullable: true })
+  @Column('varchar', { length: 512, nullable: true, unique: true })
   nameInVietnamese?: string;
 
   @Column('text')
@@ -90,20 +90,26 @@ export class Product extends RootEntity {
 
   @ManyToOne(() => ProductStatus, (status) => status.product, {
     onDelete: 'SET NULL',
+    eager: true,
   })
   productStatus: ProductStatus;
 
-  @ManyToOne(() => Size, (size) => size.product, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Size, (size) => size.product, {
+    onDelete: 'SET NULL',
+    eager: true,
+  })
   size: Size;
 
   @ManyToOne((type) => Color, (color) => color.product, {
     onDelete: 'SET NULL',
+    eager: true,
   })
   color: Color;
 
   @ManyToOne((type) => Coupon, (coupon) => coupon.product, {
     nullable: true,
     onDelete: 'SET NULL',
+    eager: true,
   })
   coupon?: Coupon;
 

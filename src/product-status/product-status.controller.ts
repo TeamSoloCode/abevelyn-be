@@ -16,7 +16,7 @@ import { UpdateProductStatusDto } from './dto/update-product-status.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ApiResponse } from 'src/utils';
-import { ProductStatusClientResponseDto } from './dto/client-product-status-res.dto';
+import { AdminProductStatusResponseDto } from './dto/admin-product-status-res.dto';
 import {
   GetHeaderInfo,
   HeaderInfo,
@@ -32,11 +32,11 @@ export class ProductStatusController {
   async create(
     @Body() createProductStatusDto: CreateProductStatusDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+  ): Promise<ApiResponse<AdminProductStatusResponseDto>> {
     const productStatus = await this.productStatusService.create(
       createProductStatusDto,
     );
-    const res = new ProductStatusClientResponseDto(
+    const res = new AdminProductStatusResponseDto(
       productStatus,
       headerInfo.language,
     );
@@ -47,11 +47,11 @@ export class ProductStatusController {
   @UseGuards(AuthGuard(), AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<ProductStatusClientResponseDto[]>> {
+  ): Promise<ApiResponse<AdminProductStatusResponseDto[]>> {
     const productStatus = await this.productStatusService.findAll();
     const res = productStatus.map(
       (status) =>
-        new ProductStatusClientResponseDto(status, headerInfo.language),
+        new AdminProductStatusResponseDto(status, headerInfo.language),
     );
     return new ApiResponse(res);
   }
@@ -59,11 +59,11 @@ export class ProductStatusController {
   @Get('/fetch_available')
   async findAvailableCollection(
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<ProductStatusClientResponseDto[]>> {
+  ): Promise<ApiResponse<AdminProductStatusResponseDto[]>> {
     const productStatus = await this.productStatusService.findAvailable();
     const res = productStatus.map(
       (status) =>
-        new ProductStatusClientResponseDto(status, headerInfo.language),
+        new AdminProductStatusResponseDto(status, headerInfo.language),
     );
     return new ApiResponse(res);
   }
@@ -72,9 +72,9 @@ export class ProductStatusController {
   async findOne(
     @GetHeaderInfo() headerInfo: HeaderInfo,
     @Param('id') id: string,
-  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+  ): Promise<ApiResponse<AdminProductStatusResponseDto>> {
     const productStatus = await this.productStatusService.findOne(id);
-    const res = new ProductStatusClientResponseDto(
+    const res = new AdminProductStatusResponseDto(
       productStatus,
       headerInfo.language,
     );
@@ -88,12 +88,12 @@ export class ProductStatusController {
     @Param('id') id: string,
     @GetHeaderInfo() headerInfo: HeaderInfo,
     @Body() updateProductStatusDto: UpdateProductStatusDto,
-  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+  ): Promise<ApiResponse<AdminProductStatusResponseDto>> {
     const productStatus = await this.productStatusService.update(
       id,
       updateProductStatusDto,
     );
-    const res = new ProductStatusClientResponseDto(
+    const res = new AdminProductStatusResponseDto(
       productStatus,
       headerInfo.language,
     );
@@ -105,9 +105,9 @@ export class ProductStatusController {
   async remove(
     @Param('id') id: string,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<ProductStatusClientResponseDto>> {
+  ): Promise<ApiResponse<AdminProductStatusResponseDto>> {
     const productStatus = await this.productStatusService.remove(id);
-    const res = new ProductStatusClientResponseDto(
+    const res = new AdminProductStatusResponseDto(
       productStatus,
       headerInfo.language,
     );

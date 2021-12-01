@@ -1,17 +1,22 @@
 import { LanguageCode } from 'src/entity-enum';
-import { ProductStatus } from '../entities/product-status.entity';
+import { Color } from '../entities/color.entity';
 
-export class ProductStatusClientResponseDto {
-  constructor(
-    productStatus: ProductStatus,
-    language: LanguageCode = LanguageCode.ENGLISH,
-  ) {
-    const { uuid, updatedAt, createdAt, name, nameInFrench, nameInVietnames } =
-      productStatus;
+export class AdminColorResponseDto {
+  constructor(color: Color, language: LanguageCode = LanguageCode.ENGLISH) {
+    const {
+      uuid,
+      updatedAt,
+      createdAt,
+      name,
+      nameInFrench,
+      nameInVietnames,
+      code,
+    } = color;
 
-    Object.assign(this, productStatus);
+    Object.assign(this, color);
 
     this.uuid = uuid;
+    this.code = code;
     this.updatedAt = updatedAt;
     this.createdAt = createdAt;
 

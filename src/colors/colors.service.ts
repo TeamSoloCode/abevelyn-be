@@ -33,7 +33,10 @@ export class ColorsService {
 
   async findAll(): Promise<Color[]> {
     try {
-      return await this.colorRepository.find({ order: { createdAt: 'DESC' } });
+      return await this.colorRepository.find({
+        where: { deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
+      });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

@@ -39,7 +39,8 @@ export class CollectionsService {
   async findAll(): Promise<Collection[]> {
     try {
       return await this.collectionRepository.find({
-        order: { createdAt: 'DESC' },
+        where: { deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
       });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
@@ -49,8 +50,8 @@ export class CollectionsService {
   async findAvailableCollection(): Promise<Collection[]> {
     try {
       return await this.collectionRepository.find({
-        available: true,
-        deleted: false,
+        where: { available: true, deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
       });
     } catch (error) {
       throw new InternalServerErrorException(error.message);

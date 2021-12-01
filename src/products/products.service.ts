@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -32,10 +33,13 @@ export class ProductsService {
     try {
       const { colorId, sizeId, statusId, name, price, image, description } =
         createProductDto;
+
       const color = await this.colorRepository.findOne(colorId);
       if (!color) throw new NotFoundException('Color is not found');
+
       const size = await this.sizeRepository.findOne(sizeId);
       if (!size) throw new NotFoundException('Size is not found');
+
       const status = await this.productStatusRepository.findOne(statusId);
       if (!status) throw new NotFoundException('Status is not found');
 
@@ -51,12 +55,35 @@ export class ProductsService {
 
       return await this.productRepository.save(product);
     } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        // duplicate user
+        throw new ConflictException('Product name is already existed!');
+      } else {
+        throw new InternalServerErrorException(error.message);
+      }
+    }
+  }
+
+  async findAvailable(): Promise<Product[]> {
+    try {
+      return this.productRepository.find({
+        where: { available: true, deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
+      });
+    } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(): Promise<Product[]> {
+    try {
+      return await this.productRepository.find({
+        where: { deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   findOne(id: number) {
