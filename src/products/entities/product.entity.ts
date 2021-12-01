@@ -15,8 +15,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ProductColection } from './product_collection.entity';
-import { ProductMaterial } from './product_material.entity';
+import { M2MProductColection } from './product_collection.entity';
+import { M2MProductMaterial } from './product_material.entity';
 
 @Entity()
 export class Product extends RootEntity {
@@ -89,43 +89,43 @@ export class Product extends RootEntity {
   image5?: string;
 
   @ManyToOne(() => ProductStatus, (status) => status.product, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   productStatus: ProductStatus;
 
-  @ManyToOne(() => Size, (size) => size.product, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Size, (size) => size.product, { onDelete: 'SET NULL' })
   size: Size;
 
   @ManyToOne((type) => Color, (color) => color.product, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   color: Color;
 
   @ManyToOne((type) => Coupon, (coupon) => coupon.product, {
     nullable: true,
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   coupon?: Coupon;
 
   @OneToMany(
-    () => ProductMaterial,
+    () => M2MProductMaterial,
     (prodAndMaterial) => prodAndMaterial.product,
     { nullable: true },
   )
-  productMaterial?: ProductMaterial;
+  productMaterial?: M2MProductMaterial;
 
   @OneToMany(
-    () => ProductColection,
+    () => M2MProductColection,
     (prodAndMaterial) => prodAndMaterial.product,
     { nullable: true },
   )
-  productColection?: ProductColection;
+  productColection?: M2MProductColection;
 
-  @OneToMany(() => Review, (review) => review.product, { onDelete: 'CASCADE' })
+  @OneToMany(() => Review, (review) => review.product, { onDelete: 'SET NULL' })
   reviews: Review[];
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.product, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   cartItems: CartItem[];
 }

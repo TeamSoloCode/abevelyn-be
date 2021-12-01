@@ -1,7 +1,7 @@
 import { IsUUID } from 'class-validator';
 import { RootEntity } from 'src/root-entity.entity';
 import { Product } from 'src/products/entities/product.entity';
-import { ProductMaterial } from 'src/products/entities/product_material.entity';
+import { M2MProductMaterial } from 'src/products/entities/product_material.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -29,8 +29,8 @@ export class Material extends RootEntity {
   descriptionInVietnames: string;
 
   @OneToMany(
-    () => ProductMaterial,
+    () => M2MProductMaterial,
     (prodAndMaterial) => prodAndMaterial.material,
   )
-  productMaterial: ProductMaterial;
+  productMaterial: M2MProductMaterial;
 }

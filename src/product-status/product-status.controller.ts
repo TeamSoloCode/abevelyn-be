@@ -56,6 +56,18 @@ export class ProductStatusController {
     return new ApiResponse(res);
   }
 
+  @Get('/fetch_available')
+  async findAvailableCollection(
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ProductStatusClientResponseDto[]>> {
+    const productStatus = await this.productStatusService.findAvailable();
+    const res = productStatus.map(
+      (status) =>
+        new ProductStatusClientResponseDto(status, headerInfo.language),
+    );
+    return new ApiResponse(res);
+  }
+
   @Get('/:id')
   async findOne(
     @GetHeaderInfo() headerInfo: HeaderInfo,

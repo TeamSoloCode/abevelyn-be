@@ -33,12 +33,12 @@ export class CollectionsController {
   async create(
     @Body() createCollectionDto: CreateCollectionDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<CollectionResponseDto> {
+  ): Promise<ApiResponse<CollectionResponseDto>> {
     const collection = await this.collectionsService.create(
       createCollectionDto,
     );
     const res = new CollectionResponseDto(collection, headerInfo.language);
-    return res;
+    return new ApiResponse(res);
   }
 
   @Get()
@@ -89,7 +89,7 @@ export class CollectionsController {
       updateCollectionDto,
     );
     const res = new CollectionResponseDto(collection, headerInfo.language);
-    return new ApiResponse(res);
+    return new ApiResponse(res, 'Update collection successful!');
   }
 
   @Delete('/:id')

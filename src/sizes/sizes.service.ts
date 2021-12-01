@@ -39,6 +39,17 @@ export class SizesService {
     }
   }
 
+  async findAvailable(): Promise<Size[]> {
+    try {
+      return await this.sizeRepository.find({
+        where: { available: true, deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   async findOne(id: string): Promise<Size> {
     try {
       const size = await this.sizeRepository.findOne(id);
@@ -57,11 +68,23 @@ export class SizesService {
         throw new NotFoundException();
       }
 
-      const { name, nameInFrench, nameInVietnames } = updateSizeDto;
+      const {
+        name,
+        nameInFrench,
+        nameInVietnames,
+        description,
+        descriptionInFrench,
+        descriptionInVietnames,
+        available,
+      } = updateSizeDto;
 
       size.name = name;
       size.nameInFrench = nameInFrench;
       size.nameInVietnames = nameInVietnames;
+      size.description = description;
+      size.descriptionInFrench = descriptionInFrench;
+      size.descriptionInVietnames = descriptionInVietnames;
+      size.available = available;
 
       await this.sizeRepository.save(size);
       return await this.sizeRepository.findOne(size.uuid);
@@ -78,8 +101,9 @@ export class SizesService {
         throw new NotFoundException();
       }
 
-      await this.sizeRepository.delete(id);
-      return size;
+      size.deleted = true;
+      await this.sizeRepository.save(size);
+      return this.sizeRepository.findOne(id);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

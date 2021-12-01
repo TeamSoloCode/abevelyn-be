@@ -1,13 +1,8 @@
-import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { LanguageCode } from 'src/entity-enum';
-import { M2MProductColection } from 'src/products/entities/product_collection.entity';
-import { Collection } from '../entities/collection.entity';
+import { Size } from '../entities/size.entity';
 
-export class CollectionResponseDto {
-  constructor(
-    collection: Collection,
-    language: LanguageCode = LanguageCode.ENGLISH,
-  ) {
+export class ClientSizeResponseDto {
+  constructor(size: Size, language: LanguageCode) {
     const {
       available,
       uuid,
@@ -20,16 +15,12 @@ export class CollectionResponseDto {
       descriptionInFrench,
       descriptionInVietnames,
       deleted,
-      coupon,
-      productCollection,
-    } = collection;
+    } = size;
 
-    Object.assign(this, collection);
+    Object.assign(this, size);
 
     this.updatedAt = updatedAt;
     this.createdAt = createdAt;
-    this.coupon = coupon;
-    this.productCollection = productCollection;
 
     switch (language) {
       case LanguageCode.ENGLISH:
@@ -47,11 +38,8 @@ export class CollectionResponseDto {
     }
   }
 
-  uuid: string;
-  updatedAt: Date;
-  createdAt: Date;
   name: string;
   description: string;
-  coupon: Coupon;
-  productCollection: M2MProductColection[];
+  updatedAt: Date;
+  createdAt: Date;
 }

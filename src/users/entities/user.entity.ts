@@ -149,15 +149,15 @@ export class User extends BaseEntity {
   @OneToMany(() => Cart, (cart) => cart.owner, { onDelete: 'CASCADE' })
   carts: Cart[];
 
-  @OneToMany(() => Review, (review) => review.owner, { onDelete: 'CASCADE' })
+  @OneToMany(() => Review, (review) => review.owner, { onDelete: 'SET NULL' })
   reviews: Review[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.owner, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   feedbacks: Feedback[];
 
-  @OneToMany(() => Order, (order) => order.owner, { onDelete: 'CASCADE' })
+  @OneToMany(() => Order, (order) => order.owner, { onDelete: 'SET NULL' })
   orders: Order[];
 
   /**

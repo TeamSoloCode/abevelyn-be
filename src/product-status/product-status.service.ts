@@ -35,7 +35,20 @@ export class ProductStatusService {
 
   async findAll(): Promise<ProductStatus[]> {
     try {
-      return await this.productStatusRepository.find();
+      return await this.productStatusRepository.find({
+        order: { createdAt: 'DESC' },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async findAvailable(): Promise<ProductStatus[]> {
+    try {
+      return await this.productStatusRepository.find({
+        where: { available: true, deleted: false },
+        order: { sequence: 'DESC', createdAt: 'DESC' },
+      });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

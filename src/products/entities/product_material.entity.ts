@@ -3,7 +3,7 @@ import { BaseEntity, Entity, ManyToOne } from 'typeorm';
 import { Product } from './product.entity';
 
 @Entity('m2m_product_material')
-export class ProductMaterial extends BaseEntity {
+export class M2MProductMaterial extends BaseEntity {
   @ManyToOne((type) => Product, (prod) => prod.productMaterial, {
     primary: true,
     eager: true,

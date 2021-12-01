@@ -15,6 +15,12 @@ import { CreateSizeDto } from './dto/create-size.dto';
 import { UpdateSizeDto } from './dto/update-size.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import {
+  GetHeaderInfo,
+  HeaderInfo,
+} from 'src/auth/decorators/get-language.decorator';
+import { ClientSizeResponseDto } from './dto/client-size-res.dto';
+import { ApiResponse } from 'src/utils';
 
 @Controller('sizes')
 export class SizesController {
@@ -23,31 +29,70 @@ export class SizesController {
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  create(@Body() createSizeDto: CreateSizeDto) {
-    return this.sizesService.create(createSizeDto);
+  async create(
+    @Body() createSizeDto: CreateSizeDto,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ClientSizeResponseDto>> {
+    const size = await this.sizesService.create(createSizeDto);
+    const res = new ClientSizeResponseDto(size, headerInfo.language);
+    return new ApiResponse(res);
   }
 
   @Get()
-  findAll() {
-    return this.sizesService.findAll();
+  @UseGuards(AuthGuard(), AdminRoleGuard)
+  async findAll(
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ClientSizeResponseDto[]>> {
+    const sizes = await this.sizesService.findAll();
+    const res = sizes.map(
+      (size) => new ClientSizeResponseDto(size, headerInfo.language),
+    );
+    return new ApiResponse(res);
+  }
+
+  @Get('/fetch_available')
+  async findAvailableCollection(
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ClientSizeResponseDto[]>> {
+    const sizes = await this.sizesService.findAvailable();
+    const res = sizes.map(
+      (size) => new ClientSizeResponseDto(size, headerInfo.language),
+    );
+    return new ApiResponse(res);
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string) {
-    return this.sizesService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ClientSizeResponseDto>> {
+    const size = await this.sizesService.findOne(id);
+    const res = new ClientSizeResponseDto(size, headerInfo.language);
+    return new ApiResponse(res);
   }
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  update(@Param('id') id: string, @Body() updateSizeDto: UpdateSizeDto) {
-    return this.sizesService.update(id, updateSizeDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateSizeDto: UpdateSizeDto,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ClientSizeResponseDto>> {
+    const size = await this.sizesService.update(id, updateSizeDto);
+    const res = new ClientSizeResponseDto(size, headerInfo.language);
+    return new ApiResponse(res, 'Update successful!');
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
-  remove(@Param('id') id: string) {
-    return this.sizesService.remove(id);
+  async remove(
+    @Param('id') id: string,
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<ClientSizeResponseDto>> {
+    const size = await this.sizesService.remove(id);
+    const res = new ClientSizeResponseDto(size, headerInfo.language);
+    return new ApiResponse(res);
   }
 }
