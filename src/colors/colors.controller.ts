@@ -51,6 +51,17 @@ export class ColorsController {
     return new ApiResponse(res);
   }
 
+  @Get('/fetch_available')
+  async findAvailable(
+    @GetHeaderInfo() headerInfo: HeaderInfo,
+  ): Promise<ApiResponse<AdminColorResponseDto[]>> {
+    const colors = await this.colorsService.findAvailable();
+    const res = colors.map(
+      (color) => new AdminColorResponseDto(color, headerInfo.language),
+    );
+    return new ApiResponse(res);
+  }
+
   @Get('/:id')
   async findOne(
     @Param('id') id: string,

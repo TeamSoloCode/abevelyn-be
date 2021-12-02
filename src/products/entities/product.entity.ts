@@ -46,6 +46,9 @@ export class Product extends RootEntity {
   @Column('varchar', { length: 512, unique: true })
   name: string;
 
+  @Column('int', { default: 1 })
+  quantity: number;
+
   @Column('varchar', { length: 512, nullable: true, unique: true })
   nameInFrench?: string;
 
