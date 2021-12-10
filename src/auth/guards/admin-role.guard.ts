@@ -25,7 +25,7 @@ export class AdminRoleGuard implements CanActivate {
         const isMatchStoredToken = user.token == token;
         if (isAdmin && isMatchStoredToken) return true;
 
-        if (isAdmin) {
+        if (!isAdmin) {
           throw new UnauthorizedException(
             'You are not an admin to do this action',
           );

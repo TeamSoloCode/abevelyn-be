@@ -7,6 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { UserRoles } from 'src/entity-enum';
 import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { GetUser } from './decorators/get-user.decorator';
@@ -28,6 +29,13 @@ export class AuthController {
   @Post('/signin')
   async signin(@Body(ValidationPipe) authCredentials: SignInCredentialDto) {
     return this.authService.signIn(authCredentials);
+  }
+
+  @Post('/admin_signin')
+  async admin_signin(
+    @Body(ValidationPipe) authCredentials: SignInCredentialDto,
+  ) {
+    return this.authService.signIn(authCredentials, UserRoles.ADMIN);
   }
 
   @Post('/logout')

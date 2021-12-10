@@ -31,6 +31,7 @@ export class AuthService {
 
   async signIn(
     authCrendentialsDto: SignInCredentialDto,
+    as: UserRoles = UserRoles.USER,
   ): Promise<{ accessToken: string; username: string }> {
     try {
       const user = await this.userRepository.validatePassword(
@@ -38,6 +39,10 @@ export class AuthService {
       );
       if (!user?.username)
         throw new UnauthorizedException(['Invalid username or password']);
+
+      if (as !== UserRoles.USER && user.role !== as) {
+        throw new UnauthorizedException(['You are not ADMIN to login']);
+      }
 
       const payload: JwtPayload = {
         uuid: user.uuid,

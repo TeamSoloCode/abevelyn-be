@@ -40,6 +40,7 @@ export class ColorsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard(), AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiResponse<AdminColorResponseDto[]>> {
