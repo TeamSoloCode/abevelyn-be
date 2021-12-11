@@ -9,6 +9,9 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  UseInterceptors,
+  UploadedFiles,
+  UploadedFile,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -18,10 +21,18 @@ import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ApiResponse } from 'src/utils';
 import { Product } from './entities/product.entity';
 import { AdminProductResponseDto } from './dto/admin-product-res.dto';
+import { diskStorage, Express } from 'multer';
+import { join } from 'path';
+import { deleteUnusedImage, editFileName, imageFileFilter } from '../utils';
+
 import {
   GetHeaderInfo,
   HeaderInfo,
 } from 'src/auth/decorators/get-language.decorator';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
@@ -30,11 +41,26 @@ export class ProductsController {
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UsePipes(ValidationPipe)
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          editFileName(req, file, callback, 'product');
+        },
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
   async create(
     @Body() createProductDto: CreateProductDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
+    @UploadedFile() image: Express.Multer.File,
   ): Promise<ApiResponse<AdminProductResponseDto>> {
-    const product = await this.productsService.create(createProductDto);
+    const product = await this.productsService.create({
+      ...createProductDto,
+      image: image.filename,
+    });
     const res = new AdminProductResponseDto(product, headerInfo.language);
     return new ApiResponse(res, 'Create product successfull');
   }

@@ -23,7 +23,7 @@ import { deleteUnusedImage, editFileName, imageFileFilter } from '../utils';
 @Controller('file')
 export class FileController {
   @Get('*')
-  @UseGuards(AuthGuard())
+  // @UseGuards(AuthGuard())
   getFile(
     @Req() req: Request,
     @Response({ passthrough: true }) res,

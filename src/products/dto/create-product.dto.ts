@@ -1,20 +1,24 @@
 import {
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
   IsUUID,
   MaxLength,
   Min,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
+
+import _ from 'lodash';
+import { isNumeric } from 'src/utils';
 
 export class CreateProductDto {
   @MaxLength(512)
   @MinLength(10)
   name: string;
 
-  @IsNumber()
-  @Min(0)
+  @ValidateIf((o) => isNumeric(o.price))
   price: number;
 
   @IsUUID()
@@ -26,7 +30,6 @@ export class CreateProductDto {
   @IsUUID()
   sizeId: string;
 
-  @IsString()
   image: string;
 
   @MinLength(10)

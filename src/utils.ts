@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { existsSync, unlink } from 'fs';
 import { parse, extname, join } from 'path';
 import { v1 } from 'uuid';
@@ -10,10 +11,16 @@ export const imageFileFilter = (req, file, callback) => {
   callback(null, true);
 };
 
-export const editFileName = (req, file, callback) => {
+export const editFileName = (
+  req: Request,
+  file,
+  callback,
+  category: string,
+) => {
+  console.log('abcd 1', req.body);
   const fileExtName = extname(file.originalname);
 
-  callback(null, `${Date.now()}_${v1()}${fileExtName}`);
+  callback(null, `${category}_${Date.now()}_${v1()}${fileExtName}`);
 };
 
 export const deleteUnusedImage = (
@@ -36,4 +43,8 @@ export class ApiResponse<T> {
   code: string;
   data: T;
   message: string;
+}
+
+export function isNumeric(x) {
+  return (typeof x === 'number' || typeof x === 'string') && !isNaN(Number(x));
 }
