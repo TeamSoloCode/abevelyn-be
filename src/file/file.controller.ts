@@ -29,7 +29,6 @@ export class FileController {
     @Response({ passthrough: true }) res,
   ): StreamableFile {
     const fileName = req.url.split('/')[2];
-    console.log('abcd getFile', req.url);
     if (!existsSync(join(process.cwd(), `/uploads/${fileName}`))) {
       throw new NotFoundException();
     }

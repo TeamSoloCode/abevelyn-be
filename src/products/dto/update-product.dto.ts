@@ -24,23 +24,18 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   couponId?: string;
 
   @IsOptional()
-  @IsString()
   image1?: string;
 
   @IsOptional()
-  @IsString()
   image2?: string;
 
   @IsOptional()
-  @IsString()
   image3?: string;
 
   @IsOptional()
-  @IsString()
   image4?: string;
 
   @IsOptional()
-  @IsString()
   image5?: string;
 
   @IsOptional()

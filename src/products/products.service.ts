@@ -86,12 +86,65 @@ export class ProductsService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string): Promise<Product> {
+    try {
+      const product = await this.productRepository.findOne(id);
+      if (!product) throw new NotFoundException();
+      return product;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
+  async update(
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
+    try {
+      const product = await this.productRepository.findOne(id);
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+      if (!product) {
+        throw new NotFoundException();
+      }
+
+      const {
+        name,
+        nameInFrench,
+        nameInVietnames,
+        description,
+        descriptionInFrench,
+        descriptionInVietnames,
+        colorId,
+        sizeId,
+        statusId,
+        image,
+        image1,
+        image2,
+        image3,
+        image4,
+        image5,
+      } = updateProductDto;
+
+      product.name = name;
+      product.nameInFrench = nameInFrench;
+      product.nameInVietnamese = nameInVietnames;
+      product.description = description;
+      product.descriptionInFrench = descriptionInFrench;
+      product.descriptionInVietnamese = descriptionInVietnames;
+      product.color.uuid = colorId;
+      product.size.uuid = sizeId;
+      product.productStatus.uuid = statusId;
+      product.image = image;
+      product.image1 = image1;
+      product.image2 = image2;
+      product.image3 = image3;
+      product.image4 = image4;
+      product.image5 = image5;
+
+      await this.productRepository.save(product);
+      return await this.productRepository.findOne(product.uuid);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   remove(id: number) {
