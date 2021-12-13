@@ -12,6 +12,7 @@ import {
   UseInterceptors,
   UploadedFiles,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -33,6 +34,8 @@ import {
   FileFieldsInterceptor,
   FileInterceptor,
 } from '@nestjs/platform-express';
+import { FetchDataQuery } from 'src/fetch-data-query';
+import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
 
 @Controller('products')
 export class ProductsController {
@@ -80,8 +83,10 @@ export class ProductsController {
   @Get('/fetch_available')
   async findAvailableCollection(
     @GetHeaderInfo() headerInfo: HeaderInfo,
+    @Query(ValidationPipe, FetchDataQueryValidationPipe)
+    query: FetchDataQuery,
   ): Promise<ApiResponse<AdminProductResponseDto[]>> {
-    const productStatus = await this.productsService.findAvailable();
+    const productStatus = await this.productsService.findAvailable(query);
     const res = productStatus.map(
       (status) => new AdminProductResponseDto(status, headerInfo.language),
     );
@@ -136,7 +141,6 @@ export class ProductsController {
       image5?: Express.Multer.File[];
     },
   ): Promise<ApiResponse<AdminProductResponseDto>> {
-    console.log('##########', files);
     const product = await this.productsService.update(id, {
       ...updateProductDto,
       image: files.image?.[0]?.filename,

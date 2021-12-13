@@ -44,7 +44,6 @@ export class ColorsService {
 
   async findAvailable(): Promise<Color[]> {
     try {
-      console.log('abcd', "rock n' roll");
       return await this.colorRepository.find({
         where: { available: true, deleted: false },
         order: { sequence: 'DESC', createdAt: 'DESC' },

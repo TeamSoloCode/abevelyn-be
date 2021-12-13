@@ -7,8 +7,16 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { ColorRepository } from 'src/colors/repositories/color.repository';
+import { FetchDataQuery } from 'src/fetch-data-query';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
 import { SizeRepository } from 'src/sizes/repositories/size.repository';
+import {
+  CondArrayType,
+  generateConditions,
+  generateOrderFromObject,
+  OrderArrayType,
+} from 'src/utils';
+import { LessThan } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -64,14 +72,31 @@ export class ProductsService {
     }
   }
 
-  async findAvailable(): Promise<Product[]> {
+  async findAvailable(query: FetchDataQuery): Promise<Product[]> {
+    const defaultCondition = {
+      available: true,
+      deleted: false,
+    };
+
+    const defaultOrder = { sequence: 'DESC', createdAt: 'DESC' };
+
+    const conditions = query.cond
+      ? generateConditions(<CondArrayType>query.cond, defaultCondition)
+      : defaultCondition;
+
+    const orders = query.order
+      ? generateOrderFromObject(<OrderArrayType>query.order, defaultOrder)
+      : defaultOrder;
+
     try {
       return this.productRepository.find({
-        where: { available: true, deleted: false },
-        order: { sequence: 'DESC', createdAt: 'DESC' },
+        where: conditions,
+        order: <any>orders,
+        take: query.limit,
+        skip: query.offset,
       });
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -106,39 +131,9 @@ export class ProductsService {
         throw new NotFoundException();
       }
 
-      const {
-        name,
-        nameInFrench,
-        nameInVietnames,
-        description,
-        descriptionInFrench,
-        descriptionInVietnames,
-        colorId,
-        sizeId,
-        statusId,
-        image,
-        image1,
-        image2,
-        image3,
-        image4,
-        image5,
-      } = updateProductDto;
-
-      product.name = name;
-      product.nameInFrench = nameInFrench;
-      product.nameInVietnamese = nameInVietnames;
-      product.description = description;
-      product.descriptionInFrench = descriptionInFrench;
-      product.descriptionInVietnamese = descriptionInVietnames;
-      product.color.uuid = colorId;
-      product.size.uuid = sizeId;
-      product.productStatus.uuid = statusId;
-      product.image = image;
-      product.image1 = image1;
-      product.image2 = image2;
-      product.image3 = image3;
-      product.image4 = image4;
-      product.image5 = image5;
+      Object.entries(updateProductDto).forEach(([key, value]) => {
+        product[key] = value;
+      });
 
       await this.productRepository.save(product);
       return await this.productRepository.findOne(product.uuid);

@@ -7,7 +7,9 @@ import {
   MaxLength,
   Min,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
+import { isNumeric } from 'src/utils';
 import { CreateProductDto } from './create-product.dto';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
@@ -42,6 +44,10 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   @IsNumber()
   @Min(0)
   saleOf?: number = 0;
+
+  @IsOptional()
+  @ValidateIf((o) => isNumeric(o.price))
+  quantity: number;
 
   @IsOptional()
   @MaxLength(512)
