@@ -1,6 +1,6 @@
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { LanguageCode } from 'src/entity-enum';
-import { M2MProductColection } from 'src/products/entities/product_collection.entity';
+import { Product } from 'src/products/entities/product.entity';
 import { Collection } from '../entities/collection.entity';
 
 export class AdminCollectionResponseDto {
@@ -21,7 +21,6 @@ export class AdminCollectionResponseDto {
       descriptionInVietnames,
       deleted,
       coupon,
-      productCollection,
     } = collection;
 
     Object.assign(this, collection);
@@ -29,7 +28,6 @@ export class AdminCollectionResponseDto {
     this.updatedAt = updatedAt;
     this.createdAt = createdAt;
     this.coupon = coupon;
-    this.productCollection = productCollection;
 
     switch (language) {
       case LanguageCode.ENGLISH:
@@ -53,5 +51,5 @@ export class AdminCollectionResponseDto {
   name: string;
   description: string;
   coupon: Coupon;
-  productCollection: M2MProductColection[];
+  products: Product[];
 }

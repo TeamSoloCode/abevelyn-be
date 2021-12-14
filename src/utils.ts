@@ -47,11 +47,6 @@ export function isNumeric(x) {
   return (typeof x === 'number' || typeof x === 'string') && !isNaN(Number(x));
 }
 
-const abcd: CondArrayType = [
-  ['price', '=', 123],
-  ['a.b.c', '>', 99],
-];
-
 type ConditionOperator = '>' | '<' | '=' | '!=';
 type CondItemType = [string, ConditionOperator, any];
 type CondJoinType = 'or';

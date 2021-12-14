@@ -1,14 +1,14 @@
 import { IsUUID } from 'class-validator';
 import { RootEntity } from 'src/root-entity.entity';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
-import { M2MProductColection } from 'src/products/entities/product_collection.entity';
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Product } from 'src/products/entities/product.entity';
 
 @Entity()
 export class Collection extends RootEntity {
@@ -56,9 +56,6 @@ export class Collection extends RootEntity {
   })
   coupon?: Coupon;
 
-  @OneToMany(
-    (type) => M2MProductColection,
-    (productCollection) => productCollection.collection,
-  )
-  productCollection: M2MProductColection[];
+  @ManyToMany((type) => Product, (prod) => prod.collections)
+  products: Product[];
 }

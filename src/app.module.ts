@@ -22,6 +22,7 @@ import { ProductStatusModule } from './product-status/product-status.module';
 import { RolesModule } from './roles/roles.module';
 import { CartItemModule } from './cart-item/cart-item.module';
 import { FileModule } from './file/file.module';
+import { GoogleStrategy } from './auth/strategies/google.strategy';
 
 @Module({
   imports: [
@@ -47,6 +48,6 @@ import { FileModule } from './file/file.module';
     FileModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleStrategy],
 })
 export class AppModule {}

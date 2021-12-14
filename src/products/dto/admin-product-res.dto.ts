@@ -1,3 +1,4 @@
+import { Collection } from 'src/collections/entities/collection.entity';
 import { AdminColorResponseDto } from 'src/colors/dto/admin-client-res.dto';
 import { LanguageCode } from 'src/entity-enum';
 import { AdminProductStatusResponseDto } from 'src/product-status/dto/admin-product-status-res.dto';
@@ -61,4 +62,5 @@ export class AdminProductResponseDto {
   size: AdminSizeResponseDto;
   productStatus: AdminProductStatusResponseDto;
   color: AdminColorResponseDto;
+  collections: Collection[];
 }

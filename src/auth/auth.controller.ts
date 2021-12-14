@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Post,
+  Res,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -15,6 +16,7 @@ import { SignInCredentialDto } from './dto/signin-credential.dto';
 import { SignUpCredentialDto } from './dto/signup-credential.dto';
 import { MatchStoredTokenGuard } from './guards/match-token.guard';
 import { SignUpValidationPipe } from './pipes/signup.pipe';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -27,8 +29,22 @@ export class AuthController {
   }
 
   @Post('/signin')
-  async signin(@Body(ValidationPipe) authCredentials: SignInCredentialDto) {
-    return this.authService.signIn(authCredentials);
+  async signin(
+    @Res({ passthrough: true }) response: Response,
+    @Body(ValidationPipe) authCredentials: SignInCredentialDto,
+  ) {
+    const { accessToken, username } = await this.authService.signIn(
+      authCredentials,
+    );
+    response.cookie('username', username, {
+      sameSite: 'strict',
+      httpOnly: true,
+    });
+    response.cookie('token', accessToken, {
+      sameSite: 'strict',
+      httpOnly: true,
+    });
+    return { username, accessToken };
   }
 
   @Post('/admin_signin')

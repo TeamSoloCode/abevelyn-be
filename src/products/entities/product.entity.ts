@@ -11,11 +11,12 @@ import { Size } from 'src/sizes/entities/size.entity';
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { M2MProductColection } from './product_collection.entity';
 import { M2MProductMaterial } from './product_material.entity';
 
 @Entity()
@@ -123,13 +124,6 @@ export class Product extends RootEntity {
   )
   productMaterial?: M2MProductMaterial;
 
-  @OneToMany(
-    () => M2MProductColection,
-    (prodAndMaterial) => prodAndMaterial.product,
-    { nullable: true },
-  )
-  productColection?: M2MProductColection;
-
   @OneToMany(() => Review, (review) => review.product, { onDelete: 'SET NULL' })
   reviews: Review[];
 
@@ -137,4 +131,10 @@ export class Product extends RootEntity {
     onDelete: 'SET NULL',
   })
   cartItems: CartItem[];
+
+  @ManyToMany((type) => Collection, (col) => col.products, {
+    eager: true,
+  })
+  @JoinTable()
+  collections: Collection[];
 }

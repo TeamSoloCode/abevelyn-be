@@ -9,7 +9,10 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  Req,
+  Res,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import {
   GetHeaderInfo,
@@ -42,8 +45,15 @@ export class ColorsController {
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   async findAll(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
     @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiResponse<AdminColorResponseDto[]>> {
+    response.cookie('test', 'abcde' + Date.now(), {
+      expires: new Date(new Date().getTime() + 30 * 1000),
+      sameSite: 'strict',
+      httpOnly: true,
+    });
     const colors = await this.colorsService.findAll();
     const res = colors.map(
       (color) => new AdminColorResponseDto(color, headerInfo.language),

@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Collection } from 'src/collections/entities/collection.entity';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { ColorRepository } from 'src/colors/repositories/color.repository';
 import { FetchDataQuery } from 'src/fetch-data-query';
@@ -135,9 +136,23 @@ export class ProductsService {
         product[key] = value;
       });
 
+      const { sizeId, colorId, statusId } = updateProductDto;
+
+      product.color.uuid = colorId;
+      product.size.uuid = sizeId;
+      product.productStatus.uuid = statusId;
+
+      if (updateProductDto.colectionId) {
+        const collection = await this.collectionRepository.findOne(
+          updateProductDto.colectionId,
+        );
+        product.collections = [...product.collections, collection];
+      }
+
       await this.productRepository.save(product);
-      return await this.productRepository.findOne(product.uuid);
+      return await this.productRepository.findOne({ uuid: product.uuid });
     } catch (error) {
+      console.log('abcd', error);
       throw new InternalServerErrorException(error.message);
     }
   }
