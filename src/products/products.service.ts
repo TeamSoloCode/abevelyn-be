@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import _, { isNil } from 'lodash';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { ColorRepository } from 'src/colors/repositories/color.repository';
 import { FetchDataQuery } from 'src/fetch-data-query';
@@ -106,8 +107,13 @@ export class ProductsService {
         });
       }
 
-      queryBuilder.offset(query.offset);
-      queryBuilder.take(query.limit);
+      if (!isNil(query.offset)) {
+        queryBuilder.offset(query.offset);
+      }
+
+      if (!isNil(query.limit)) {
+        queryBuilder.take(query.limit);
+      }
 
       return queryBuilder.getMany();
     } catch (error) {
