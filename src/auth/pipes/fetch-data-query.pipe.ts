@@ -5,7 +5,10 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { FetchDataQuery } from 'src/fetch-data-query';
-import { isNumeric } from 'src/utils';
+import {
+  generateConditionToSQLQuery,
+  generateOrderToSQLQuery,
+} from 'src/utils';
 
 @Injectable()
 export class FetchDataQueryValidationPipe
@@ -23,8 +26,18 @@ export class FetchDataQueryValidationPipe
 
     result.limit = Number(value.limit);
     result.offset = Number(value.offset);
-    result.cond = value.cond ? JSON.parse(value.cond) : undefined;
-    result.order = value.order ? JSON.parse(value.order) : undefined;
+    result.cond = undefined;
+    result.order = undefined;
+    const conditionAsObject = value.cond ? JSON.parse(value.cond) : undefined;
+    const orderByAsObject = value.order ? JSON.parse(value.order) : undefined;
+
+    if (conditionAsObject) {
+      result.cond = generateConditionToSQLQuery(conditionAsObject);
+    }
+
+    if (orderByAsObject) {
+      result.order = generateOrderToSQLQuery(orderByAsObject);
+    }
 
     return result;
   }

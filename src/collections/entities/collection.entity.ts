@@ -6,11 +6,12 @@ import {
   Entity,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
 
-@Entity()
+@Entity('collection')
 export class Collection extends RootEntity {
   constructor(name: string, available: boolean = true) {
     super();

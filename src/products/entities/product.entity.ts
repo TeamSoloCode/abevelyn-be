@@ -19,7 +19,7 @@ import {
 } from 'typeorm';
 import { M2MProductMaterial } from './product_material.entity';
 
-@Entity()
+@Entity('product')
 export class Product extends RootEntity {
   constructor(
     name: string,
@@ -132,9 +132,7 @@ export class Product extends RootEntity {
   })
   cartItems: CartItem[];
 
-  @ManyToMany((type) => Collection, (col) => col.products, {
-    eager: true,
-  })
+  @ManyToMany((type) => Collection, (col) => col.products, { eager: true })
   @JoinTable()
   collections: Collection[];
 }

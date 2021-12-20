@@ -21,10 +21,7 @@ export class CollectionsService {
 
   async create(createCollectionDto: CreateCollectionDto): Promise<Collection> {
     try {
-      const product = new Collection(
-        createCollectionDto.name,
-        createCollectionDto.available,
-      );
+      const product = new Collection(createCollectionDto.name);
       return await this.collectionRepository.save(product);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {

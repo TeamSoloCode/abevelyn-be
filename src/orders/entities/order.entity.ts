@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('order')
 export class Order extends RootEntity {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
@@ -21,7 +21,7 @@ export class Order extends RootEntity {
   status: OrderStatus;
 
   @OneToOne(() => Cart)
-  @JoinColumn({ name: 'cartUUid' })
+  @JoinColumn({ name: 'cartUuid' })
   cart: Cart;
 
   @ManyToOne(() => User, (user) => user.orders)

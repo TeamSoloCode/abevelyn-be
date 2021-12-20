@@ -5,19 +5,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Collection } from 'src/collections/entities/collection.entity';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { ColorRepository } from 'src/colors/repositories/color.repository';
 import { FetchDataQuery } from 'src/fetch-data-query';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
 import { SizeRepository } from 'src/sizes/repositories/size.repository';
-import {
-  CondArrayType,
-  generateConditions,
-  generateOrderFromObject,
-  OrderArrayType,
-} from 'src/utils';
-import { LessThan } from 'typeorm';
+import { OrderArrayType } from 'src/utils';
+import { In } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -74,28 +68,48 @@ export class ProductsService {
   }
 
   async findAvailable(query: FetchDataQuery): Promise<Product[]> {
-    const defaultCondition = {
-      available: true,
-      deleted: false,
-    };
-
-    const defaultOrder = { sequence: 'DESC', createdAt: 'DESC' };
-
-    const conditions = query.cond
-      ? generateConditions(<CondArrayType>query.cond, defaultCondition)
-      : defaultCondition;
-
-    const orders = query.order
-      ? generateOrderFromObject(<OrderArrayType>query.order, defaultOrder)
-      : defaultOrder;
+    const defaultOrder: OrderArrayType = [
+      ['product.sequence', 'DESC'],
+      ['product.createdAt', 'DESC'],
+    ];
+    const defaultCondition =
+      'product.available = true AND product.deleted = false';
 
     try {
-      return this.productRepository.find({
-        where: conditions,
-        order: <any>orders,
-        take: query.limit,
-        skip: query.offset,
-      });
+      const queryBuilder = this.productRepository
+        .createQueryBuilder('product')
+        .leftJoinAndSelect(
+          'product.size',
+          'size',
+          'size.uuid = product.sizeUuid',
+        )
+        .leftJoinAndSelect(
+          'product.color',
+          'color',
+          'color.uuid = product.colorUuid',
+        )
+        .leftJoinAndSelect(
+          'product.productStatus',
+          'productStatus',
+          'productStatus.uuid = product.productStatusUuid',
+        )
+        .leftJoinAndSelect('product.collections', 'collections');
+
+      queryBuilder.where(defaultCondition);
+      if (query.cond) {
+        queryBuilder.andWhere(query.cond);
+      }
+
+      if (query.order) {
+        [...query.order, ...defaultOrder].forEach(([field, orderBy]) => {
+          queryBuilder.addOrderBy(field, orderBy);
+        });
+      }
+
+      queryBuilder.offset(query.offset);
+      queryBuilder.take(query.limit);
+
+      return queryBuilder.getMany();
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -104,7 +118,7 @@ export class ProductsService {
   async findAll(): Promise<Product[]> {
     try {
       return await this.productRepository.find({
-        where: { deleted: false },
+        where: '',
         order: { sequence: 'DESC', createdAt: 'DESC' },
       });
     } catch (error) {
@@ -121,6 +135,7 @@ export class ProductsService {
       throw new InternalServerErrorException(error.message);
     }
   }
+
   async update(
     id: string,
     updateProductDto: UpdateProductDto,
@@ -142,11 +157,20 @@ export class ProductsService {
       product.size.uuid = sizeId;
       product.productStatus.uuid = statusId;
 
-      if (updateProductDto.colectionId) {
-        const collection = await this.collectionRepository.findOne(
-          updateProductDto.colectionId,
-        );
-        product.collections = [...product.collections, collection];
+      if (updateProductDto.colectionIds) {
+        const collections = await this.collectionRepository.find({
+          where: {
+            uuid: In(
+              typeof updateProductDto.colectionIds == 'string'
+                ? updateProductDto.colectionIds.split(',')
+                : updateProductDto.colectionIds,
+            ),
+          },
+        });
+
+        product.collections = collections;
+      } else {
+        product.collections = [];
       }
 
       await this.productRepository.save(product);

@@ -2,7 +2,6 @@ import { PartialType } from '@nestjs/mapped-types';
 import {
   IsNumber,
   IsOptional,
-  IsString,
   IsUUID,
   MaxLength,
   Min,
@@ -18,12 +17,11 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   materialId?: string;
 
   @IsOptional()
-  @IsUUID()
-  colectionId?: string;
+  colectionIds?: string | string[];
 
   @IsOptional()
   @IsUUID()
-  couponId?: string;
+  couponId?: string | string[];
 
   @IsOptional()
   image1?: string;

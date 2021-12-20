@@ -48,9 +48,9 @@ export function isNumeric(x) {
 }
 
 type ConditionOperator = '>' | '<' | '=' | '!=';
-type CondItemType = [string, ConditionOperator, any];
-type CondJoinType = 'or';
-export type CondArrayType = Array<CondItemType | CondJoinType>;
+type ConditionItemType = [string, ConditionOperator, any];
+type CondJoinType = 'or' | 'in' | 'OR' | 'IN';
+export type ConditionArrayType = Array<ConditionItemType | CondJoinType>;
 export type OrderArrayType = Array<[string, 'DESC' | 'ASC']>;
 
 const queryFunctionsMapper: { [key in ConditionOperator]: Function } = {
@@ -84,7 +84,7 @@ const gen = (
   }
 };
 
-const generateCondFromArray = (conds: CondArrayType) => {
+const generateCondFromArray = (conds: ConditionArrayType) => {
   return conds.reduce((prevCond, currentCond, index) => {
     const res: any = {};
     if (currentCond instanceof Array) {
@@ -104,7 +104,7 @@ const generateCondFromArray = (conds: CondArrayType) => {
         }
       }
     } else {
-      if (currentCond != 'or') {
+      if (currentCond != 'OR') {
         throw new Error("Condition join operator only support 'or'");
       }
       res[currentCond] = true;
@@ -115,7 +115,7 @@ const generateCondFromArray = (conds: CondArrayType) => {
 };
 
 export const generateConditions = (
-  conds: CondArrayType,
+  conds: ConditionArrayType,
   defaultCondition: object = {},
 ) => {
   const conditionAsObject = generateCondFromArray(conds);
@@ -147,4 +147,113 @@ export const generateOrderFromObject = <T>(
   });
 
   return { ...res, ...defaultOrder };
+};
+
+function computeConditions(
+  cond: ConditionItemType | ConditionArrayType | string,
+) {
+  if (typeof cond === 'string') {
+    switch (cond.toLocaleLowerCase()) {
+      case 'or':
+        return ' OR ';
+      default:
+        throw `Join operator ${cond} is not supported`;
+    }
+  } else if (
+    cond instanceof Array &&
+    cond.length === 3 &&
+    typeof cond[0] === 'string'
+  ) {
+    const [field, operator, value] = cond;
+    let sqlValue = value;
+    let sqlOperator = operator;
+
+    if (typeof sqlValue == 'string') {
+      sqlValue = ` '${sqlValue}' `;
+    }
+
+    switch (operator) {
+      case 'in':
+        sqlOperator = 'IN';
+        if (!(sqlValue instanceof Array)) {
+          throw "'in' operator need a value as an array";
+        } else {
+          const updatedValue = sqlValue.map((value) => {
+            if (typeof value == 'string') {
+              return `'${value}'`;
+            }
+            return value;
+          });
+          sqlValue = `( ${updatedValue} )`;
+        }
+        break;
+      case '=':
+      case '>':
+      case '<':
+      case '>=':
+      case '<=':
+      case '!=':
+        break;
+      default:
+        throw `Operator ${sqlOperator} is not supported`;
+    }
+
+    return ` ${field} ${sqlOperator} ${sqlValue} `;
+  } else if (
+    cond instanceof Array &&
+    cond[0] instanceof Array &&
+    cond[0].length === 3
+  ) {
+    const condLength = cond[0].length;
+    let res = '';
+    cond.forEach((childCond, index) => {
+      if (
+        typeof childCond !== 'string' &&
+        index > 0 &&
+        index <= condLength - 1
+      ) {
+        res += ' AND ';
+      }
+      res += computeConditions(childCond);
+    });
+    return '( ' + res + ' )';
+  } else {
+    throw 'Invalid conditions query';
+  }
+}
+
+export const generateConditionToSQLQuery = (conds: ConditionArrayType) => {
+  let where = '';
+
+  conds.forEach((cond, index) => {
+    if (index == 0 && !(cond instanceof Array) && cond?.length !== 3) {
+      throw 'Conditions have to begin with an array with 3 items';
+    }
+    if (typeof cond !== 'string' && index > 0 && index < cond.length - 1) {
+      where += ' AND ';
+    }
+    where += computeConditions(cond);
+  });
+
+  return where;
+};
+
+export const generateOrderToSQLQuery = (
+  orders: OrderArrayType,
+): OrderArrayType => {
+  return orders.map(([field, orderBy]) => {
+    let order: 'ASC' | 'DESC' = 'ASC';
+    switch (orderBy.toLocaleLowerCase()) {
+      case 'asc':
+        order = 'ASC';
+        break;
+      case 'desc':
+        order = 'DESC';
+        break;
+      default:
+        throw `Orderby ${orderBy} is not supported`;
+    }
+
+    return [field, order];
+  });
 };
