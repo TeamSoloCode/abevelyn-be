@@ -24,8 +24,8 @@ export class FetchDataQueryValidationPipe
   ) {
     const result: FetchDataQuery = {};
 
-    result.limit = Number(value.limit);
-    result.offset = Number(value.offset);
+    result.limit = value.limit ? Number(value.limit) : undefined;
+    result.offset = value.offset ? Number(value.offset) : undefined;
     result.cond = undefined;
     result.order = undefined;
     const conditionAsObject = value.cond ? JSON.parse(value.cond) : undefined;

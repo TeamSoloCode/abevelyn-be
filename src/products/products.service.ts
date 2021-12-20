@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -107,13 +108,12 @@ export class ProductsService {
         });
       }
 
-      if (!isNil(query.offset)) {
-        queryBuilder.offset(query.offset);
+      if (query.offset && !query.limit) {
+        throw new HttpException("You must use 'limit' with 'offset'", 502);
       }
 
-      if (!isNil(query.limit)) {
-        queryBuilder.take(query.limit);
-      }
+      queryBuilder.offset(query.offset);
+      queryBuilder.limit(query.limit);
 
       return queryBuilder.getMany();
     } catch (error) {
