@@ -7,6 +7,7 @@ import {
 import { FetchDataQuery } from 'src/fetch-data-query';
 import {
   generateConditionToSQLQuery,
+  generateOrderFromObject,
   generateOrderToSQLQuery,
 } from 'src/utils';
 
@@ -36,7 +37,7 @@ export class FetchDataQueryValidationPipe
     }
 
     if (orderByAsObject) {
-      result.order = generateOrderToSQLQuery(orderByAsObject);
+      result.order = generateOrderFromObject(orderByAsObject);
     }
 
     return result;

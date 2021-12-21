@@ -70,52 +70,36 @@ export class ProductsService {
   }
 
   async findAvailable(query: FetchDataQuery): Promise<Product[]> {
-    const defaultOrder: OrderArrayType = [
+    const defaultOrder1: OrderArrayType = [
       ['product.sequence', 'DESC'],
       ['product.createdAt', 'DESC'],
     ];
+
+    const defaultOrder = {
+      createdAt: 'DESC',
+      sequence: 'DESC',
+    };
     const defaultCondition =
       'product.available = true AND product.deleted = false';
 
+    const whereClause = query.cond
+      ? `(${query.cond}) AND (${defaultCondition})`
+      : defaultCondition;
+
     try {
-      const queryBuilder = this.productRepository
-        .createQueryBuilder('product')
-        .leftJoinAndSelect(
-          'product.size',
-          'size',
-          'size.uuid = product.sizeUuid',
-        )
-        .leftJoinAndSelect(
-          'product.color',
-          'color',
-          'color.uuid = product.colorUuid',
-        )
-        .leftJoinAndSelect(
-          'product.productStatus',
-          'productStatus',
-          'productStatus.uuid = product.productStatusUuid',
-        )
-        .leftJoinAndSelect('product.collections', 'collections');
-
-      queryBuilder.where(defaultCondition);
-      if (query.cond) {
-        queryBuilder.andWhere(query.cond);
-      }
-
-      if (query.order) {
-        [...query.order, ...defaultOrder].forEach(([field, orderBy]) => {
-          queryBuilder.addOrderBy(field, orderBy);
-        });
-      }
-
-      if (query.offset && !query.limit) {
-        throw new HttpException("You must use 'limit' with 'offset'", 502);
-      }
-
-      queryBuilder.offset(query.offset);
-      queryBuilder.limit(query.limit);
-
-      return queryBuilder.getMany();
+      return await this.productRepository.find({
+        relations: ['collections'],
+        join: {
+          alias: 'product',
+          leftJoinAndSelect: {
+            collections: 'product.collections',
+          },
+        },
+        order: { ...query.order, sequence: 'DESC', createdAt: 'DESC' },
+        where: whereClause,
+        skip: query.offset,
+        take: query.limit,
+      });
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

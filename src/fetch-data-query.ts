@@ -1,5 +1,4 @@
 import { IsJSON, IsNumber, IsNumberString, IsOptional } from 'class-validator';
-import { OrderArrayType } from './utils';
 
 export class FetchDataQuery {
   @IsOptional()
@@ -12,7 +11,7 @@ export class FetchDataQuery {
 
   @IsOptional()
   @IsJSON()
-  order?: OrderArrayType;
+  order?: object;
 
   @IsOptional()
   @IsJSON()

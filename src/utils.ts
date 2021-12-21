@@ -137,16 +137,13 @@ export const generateConditions = (
   return res;
 };
 
-export const generateOrderFromObject = <T>(
-  orderObj: OrderArrayType,
-  defaultOrder: object,
-) => {
+export const generateOrderFromObject = <T>(orderObj: OrderArrayType) => {
   let res = {};
   orderObj.forEach(([key, value]) => {
     res = { ...res, [key]: value.toUpperCase() };
   });
 
-  return { ...res, ...defaultOrder };
+  return res;
 };
 
 function computeConditions(
