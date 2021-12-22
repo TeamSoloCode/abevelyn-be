@@ -34,7 +34,7 @@ import {
   FileFieldsInterceptor,
   FileInterceptor,
 } from '@nestjs/platform-express';
-import { FetchDataQuery } from 'src/fetch-data-query';
+import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
 
 @Controller('products')

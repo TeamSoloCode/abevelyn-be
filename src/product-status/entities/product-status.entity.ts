@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
 import { Product } from 'src/products/entities/product.entity';
-import { RootEntity } from 'src/root-entity.entity';
+import { RootEntity } from 'src/common/root-entity.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

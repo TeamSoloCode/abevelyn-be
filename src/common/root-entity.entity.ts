@@ -1,3 +1,4 @@
+import { Exclude, Expose } from 'class-transformer';
 import {
   BaseEntity,
   Column,
@@ -40,6 +41,7 @@ export class RootEntity extends BaseEntity {
   /**
    * -----------------------------------------------------
    */
+  @Expose({ toPlainOnly: true, name: 'createdAt' })
   private _createdAt: Date;
 
   @CreateDateColumn({
@@ -57,6 +59,7 @@ export class RootEntity extends BaseEntity {
   /**
    * -----------------------------------------------------
    */
+  @Expose({ toPlainOnly: true, name: 'updatedAt' })
   private _updatedAt: Date;
 
   @UpdateDateColumn({

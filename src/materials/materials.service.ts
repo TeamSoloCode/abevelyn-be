@@ -12,15 +12,19 @@ export class MaterialsService {
     return `This action returns all materials`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} material`;
   }
 
-  update(id: number, updateMaterialDto: UpdateMaterialDto) {
+  update(id: string, updateMaterialDto: UpdateMaterialDto) {
     return `This action updates a #${id} material`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} material`;
+  }
+
+  abcd() {
+    return `This action removes a  abcd`;
   }
 }

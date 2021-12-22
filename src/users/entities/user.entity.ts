@@ -13,7 +13,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserProfile } from 'src/user-profile/entities/user-profile.entity';
-import { SignInType, UserRoles } from 'src/entity-enum';
+import { SignInType, UserRoles } from 'src/common/entity-enum';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Feedback } from 'src/feedbacks/entities/feedback.entity';

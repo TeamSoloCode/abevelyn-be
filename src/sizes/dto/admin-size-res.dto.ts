@@ -1,4 +1,4 @@
-import { LanguageCode } from 'src/entity-enum';
+import { LanguageCode } from 'src/common/entity-enum';
 import { Size } from '../entities/size.entity';
 
 export class AdminSizeResponseDto {

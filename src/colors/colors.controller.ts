@@ -11,6 +11,9 @@ import {
   ValidationPipe,
   Req,
   Res,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  SerializeOptions,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
@@ -19,12 +22,14 @@ import {
   HeaderInfo,
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { LanguageCode } from 'src/entity-enum';
+import { LanguageCode } from 'src/common/entity-enum';
 import { ApiResponse } from 'src/utils';
 import { ColorsService } from './colors.service';
-import { AdminColorResponseDto } from './dto/admin-client-res.dto';
+import { ColorDataResponseDto } from './dto/color-data-res.dto';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
+import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { Color } from './entities/color.entity';
 
 @Controller('colors')
 export class ColorsController {
@@ -32,78 +37,56 @@ export class ColorsController {
 
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
   @UsePipes(ValidationPipe)
   async create(
     @Body() createColorDto: CreateColorDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminColorResponseDto>> {
-    const color = await this.colorsService.create(createColorDto);
-    const result = new AdminColorResponseDto(color, headerInfo.language);
-    return new ApiResponse(result);
+  ): Promise<Color> {
+    return this.colorsService.create(createColorDto);
   }
 
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  async findAll(
-    @Req() request: Request,
-    @Res({ passthrough: true }) response: Response,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminColorResponseDto[]>> {
-    response.cookie('test', 'abcde' + Date.now(), {
-      expires: new Date(new Date().getTime() + 30 * 1000),
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-    const colors = await this.colorsService.findAll();
-    const res = colors.map(
-      (color) => new AdminColorResponseDto(color, headerInfo.language),
-    );
-
-    return new ApiResponse(res);
+  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  async findAll(): // @Req() request: Request,
+  // @Res({ passthrough: true }) response: Response,
+  Promise<Color[]> {
+    // response.cookie('test', 'abcde' + Date.now(), {
+    //   expires: new Date(new Date().getTime() + 30 * 1000),
+    //   sameSite: 'strict',
+    //   httpOnly: true,
+    // });
+    return this.colorsService.findAll();
   }
 
   @Get('/fetch_available')
-  async findAvailable(
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminColorResponseDto[]>> {
-    const colors = await this.colorsService.findAvailable();
-    const res = colors.map(
-      (color) => new AdminColorResponseDto(color, headerInfo.language),
-    );
-    return new ApiResponse(res);
+  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  async findAvailable(): Promise<Color[]> {
+    return this.colorsService.findAvailable();
   }
 
   @Get('/:id')
-  async findOne(
-    @Param('id') id: string,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminColorResponseDto>> {
-    const color = await this.colorsService.findOne(id);
-    const result = new AdminColorResponseDto(color, headerInfo.language);
-    return new ApiResponse(result);
+  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  async findOne(@Param('id') id: string): Promise<Color> {
+    return this.colorsService.findOne(id);
   }
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
   @UsePipes(ValidationPipe)
   async update(
     @Param('id') id: string,
     @Body() updateColorDto: UpdateColorDto,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminColorResponseDto>> {
-    const color = await this.colorsService.update(id, updateColorDto);
-    const result = new AdminColorResponseDto(color, headerInfo.language);
-    return new ApiResponse(result);
+  ): Promise<Color> {
+    return this.colorsService.update(id, updateColorDto);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  async remove(
-    @Param('id') id: string,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminColorResponseDto>> {
-    const color = await this.colorsService.remove(id);
-    const result = new AdminColorResponseDto(color, headerInfo.language);
-    return new ApiResponse(result);
+  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  async remove(@Param('id') id: string): Promise<Color> {
+    return this.colorsService.remove(id);
   }
 }

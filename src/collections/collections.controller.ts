@@ -16,7 +16,7 @@ import {
   HeaderInfo,
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { LanguageCode } from 'src/entity-enum';
+import { LanguageCode } from 'src/common/entity-enum';
 import { ApiResponse } from 'src/utils';
 import { CollectionsService } from './collections.service';
 import { AdminCollectionResponseDto } from './dto/admin-collection-res.dto';

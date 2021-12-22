@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import _, { isNil } from 'lodash';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { ColorRepository } from 'src/colors/repositories/color.repository';
-import { FetchDataQuery } from 'src/fetch-data-query';
+import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
 import { SizeRepository } from 'src/sizes/repositories/size.repository';
 import { OrderArrayType } from 'src/utils';
@@ -70,15 +70,6 @@ export class ProductsService {
   }
 
   async findAvailable(query: FetchDataQuery): Promise<Product[]> {
-    const defaultOrder1: OrderArrayType = [
-      ['product.sequence', 'DESC'],
-      ['product.createdAt', 'DESC'],
-    ];
-
-    const defaultOrder = {
-      createdAt: 'DESC',
-      sequence: 'DESC',
-    };
     const defaultCondition =
       'product.available = true AND product.deleted = false';
 

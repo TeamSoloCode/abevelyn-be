@@ -1,6 +1,6 @@
 import { Collection } from 'src/collections/entities/collection.entity';
-import { AdminColorResponseDto } from 'src/colors/dto/admin-client-res.dto';
-import { LanguageCode } from 'src/entity-enum';
+import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
+import { LanguageCode } from 'src/common/entity-enum';
 import { AdminProductStatusResponseDto } from 'src/product-status/dto/admin-product-status-res.dto';
 import { AdminSizeResponseDto } from 'src/sizes/dto/admin-size-res.dto';
 import { Product } from '../entities/product.entity';
@@ -31,7 +31,7 @@ export class AdminProductResponseDto {
     this.createdAt = createdAt;
 
     this.size = new AdminSizeResponseDto(size, language);
-    this.color = new AdminColorResponseDto(color, language);
+    this.color = ColorDataResponseDto.create(color, language);
     this.productStatus = new AdminProductStatusResponseDto(
       productStatus,
       language,
@@ -61,6 +61,6 @@ export class AdminProductResponseDto {
 
   size: AdminSizeResponseDto;
   productStatus: AdminProductStatusResponseDto;
-  color: AdminColorResponseDto;
+  color: Record<string, any>;
   collections: Collection[];
 }

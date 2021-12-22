@@ -1,5 +1,5 @@
 import { Coupon } from 'src/coupons/entities/coupon.entity';
-import { LanguageCode } from 'src/entity-enum';
+import { LanguageCode } from 'src/common/entity-enum';
 import { Product } from 'src/products/entities/product.entity';
 import { Collection } from '../entities/collection.entity';
 

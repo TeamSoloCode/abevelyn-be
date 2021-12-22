@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MaterialsService } from './materials.service';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
+import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 
 @Controller('materials')
 export class MaterialsController {
@@ -13,22 +23,26 @@ export class MaterialsController {
   }
 
   @Get()
+  // @UseInterceptors(ResponseDataInterceptor)
   findAll() {
     return this.materialsService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.materialsService.findOne(+id);
+    return this.materialsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMaterialDto: UpdateMaterialDto) {
-    return this.materialsService.update(+id, updateMaterialDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateMaterialDto: UpdateMaterialDto,
+  ) {
+    return this.materialsService.update(id, updateMaterialDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.materialsService.remove(+id);
+    return this.materialsService.remove(id);
   }
 }

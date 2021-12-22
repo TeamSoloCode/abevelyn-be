@@ -1,1 +1,3 @@
-export class CreateMaterialDto {}
+export class CreateMaterialDto {
+  abcd: string;
+}

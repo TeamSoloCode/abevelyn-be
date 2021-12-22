@@ -4,7 +4,7 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { FetchDataQuery } from 'src/fetch-data-query';
+import { FetchDataQuery } from 'src/common/fetch-data-query';
 import {
   generateConditionToSQLQuery,
   generateOrderFromObject,
