@@ -3,15 +3,23 @@ import {
   Exclude,
   Expose,
   serialize,
+  Transform,
+  TransformClassToPlain,
   Type,
 } from 'class-transformer';
+import CommonDataResponse from 'src/common/common-data-response.dto';
 import { LanguageCode, UserRoles } from 'src/common/entity-enum';
 import { Color } from '../entities/color.entity';
 
-export class ColorDataResponseDto {
+export class ColorDataResponseDto extends CommonDataResponse<
+  Partial<ColorDataResponseDto>
+> {
+  constructor() {
+    super();
+  }
+
   uuid: string;
   code: string;
-
   createdAt: Date;
 
   @Expose({ groups: [UserRoles.ADMIN] })
@@ -38,23 +46,20 @@ export class ColorDataResponseDto {
     }
   }
 
-  private _language: LanguageCode;
-
-  static create(
-    color: Color,
+  create(
+    color: ColorDataResponseDto,
     language: LanguageCode = LanguageCode.ENGLISH,
-    locale?: string,
-    dataResponseRole?: UserRoles,
-  ) {
+    locale: string,
+    dataResponseRole: UserRoles,
+  ): ColorDataResponseDto {
     const obj: ColorDataResponseDto = Object.create(
       ColorDataResponseDto.prototype,
     );
 
     Object.assign(obj, classToPlain(color));
-
     obj._language = language;
 
-    return classToPlain(obj, {
+    return <ColorDataResponseDto>classToPlain(obj, {
       excludePrefixes: ['_'],
       groups: [dataResponseRole],
     });

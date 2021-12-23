@@ -5,33 +5,27 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
 import { ApiResponse } from 'src/utils';
+import CommonDataResponse from '../common-data-response.dto';
 import { LanguageCode, UserRoles } from '../entity-enum';
 
 @Injectable()
 export class ResponseDataInterceptor<T, M>
   implements NestInterceptor<T, ApiResponse<M | M[]>>
 {
-  constructor(
-    transferData: (
-      data: T,
-      language?: LanguageCode,
-      locale?: string,
-      dataResponseRole?: UserRoles,
-    ) => M,
-  ) {
-    this.transferData = transferData;
+  constructor(responseDto: CommonDataResponse<M>) {
+    this.transferData = responseDto.create;
   }
 
   private transferData: (
     data: T,
-    language?: LanguageCode,
-    locale?: string,
-    dataResponseRole?: UserRoles,
+    language: LanguageCode,
+    locale: string,
+    dataResponseRole: UserRoles,
   ) => M;
 
   intercept(
@@ -39,6 +33,7 @@ export class ResponseDataInterceptor<T, M>
     next: CallHandler,
   ): Observable<ApiResponse<M | M[]>> {
     const request: Request = context.switchToHttp().getRequest();
+    const response = context.switchToHttp().getResponse();
 
     // TODO: Put the url into env
     const dataResponseRole =
@@ -61,10 +56,7 @@ export class ResponseDataInterceptor<T, M>
           res = this.transferData(value, language, locale, dataResponseRole);
         }
 
-        return new ApiResponse(
-          res,
-          'TODO: need to find the way to import message',
-        );
+        return new ApiResponse(res, 'Action Successful!');
       }),
     );
   }

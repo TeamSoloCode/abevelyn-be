@@ -14,8 +14,10 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   SerializeOptions,
+  Next,
+  Response,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import {
   GetHeaderInfo,
@@ -37,7 +39,7 @@ export class ColorsController {
 
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   @UsePipes(ValidationPipe)
   async create(
     @Body() createColorDto: CreateColorDto,
@@ -48,7 +50,7 @@ export class ColorsController {
 
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   async findAll(): // @Req() request: Request,
   // @Res({ passthrough: true }) response: Response,
   Promise<Color[]> {
@@ -61,20 +63,20 @@ export class ColorsController {
   }
 
   @Get('/fetch_available')
-  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   async findAvailable(): Promise<Color[]> {
     return this.colorsService.findAvailable();
   }
 
   @Get('/:id')
-  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   async findOne(@Param('id') id: string): Promise<Color> {
     return this.colorsService.findOne(id);
   }
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   @UsePipes(ValidationPipe)
   async update(
     @Param('id') id: string,
@@ -85,7 +87,7 @@ export class ColorsController {
 
   @Delete('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(ColorDataResponseDto.create))
+  @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   async remove(@Param('id') id: string): Promise<Color> {
     return this.colorsService.remove(id);
   }

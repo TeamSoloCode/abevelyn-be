@@ -21,7 +21,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ApiResponse } from 'src/utils';
 import { Product } from './entities/product.entity';
-import { AdminProductResponseDto } from './dto/admin-product-res.dto';
+import { ProductDataResponseDto } from './dto/product-data-res.dto';
 import { diskStorage, Express } from 'multer';
 import { join } from 'path';
 import { deleteUnusedImage, editFileName, imageFileFilter } from '../utils';
@@ -36,6 +36,7 @@ import {
 } from '@nestjs/platform-express';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
+import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 
 @Controller('products')
 export class ProductsController {
@@ -43,6 +44,7 @@ export class ProductsController {
 
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileInterceptor('image', {
@@ -57,54 +59,39 @@ export class ProductsController {
   )
   async create(
     @Body() createProductDto: CreateProductDto,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
     @UploadedFile() image: Express.Multer.File,
-  ): Promise<ApiResponse<AdminProductResponseDto>> {
-    const product = await this.productsService.create({
+  ): Promise<Product> {
+    return this.productsService.create({
       ...createProductDto,
       image: image.filename,
     });
-    const res = new AdminProductResponseDto(product, headerInfo.language);
-    return new ApiResponse(res, 'Create product successfull');
   }
 
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  async findAll(
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminProductResponseDto[]>> {
-    const products = await this.productsService.findAll();
-    const res = products.map(
-      (product) => new AdminProductResponseDto(product, headerInfo.language),
-    );
-    return new ApiResponse(res);
+  @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
+  async findAll(): Promise<Product[]> {
+    return this.productsService.findAll();
   }
 
   @Get('/fetch_available')
-  async findAvailableCollection(
-    @GetHeaderInfo() headerInfo: HeaderInfo,
+  @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
+  async findAvailable(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
     query: FetchDataQuery,
-  ): Promise<ApiResponse<AdminProductResponseDto[]>> {
-    const productStatus = await this.productsService.findAvailable(query);
-    const res = productStatus.map(
-      (status) => new AdminProductResponseDto(status, headerInfo.language),
-    );
-    return new ApiResponse(res);
+  ): Promise<Product[]> {
+    return this.productsService.findAvailable(query);
   }
 
   @Get('/:id')
-  async findOne(
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-    @Param('id') id: string,
-  ): Promise<ApiResponse<AdminProductResponseDto>> {
-    const product = await this.productsService.findOne(id);
-    const res = new AdminProductResponseDto(product, headerInfo.language);
-    return new ApiResponse(res);
+  @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
+  async findOne(@Param('id') id: string): Promise<Product> {
+    return this.productsService.findOne(id);
   }
 
   @Patch('/:id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -140,8 +127,8 @@ export class ProductsController {
       image4?: Express.Multer.File[];
       image5?: Express.Multer.File[];
     },
-  ): Promise<ApiResponse<AdminProductResponseDto>> {
-    const product = await this.productsService.update(id, {
+  ): Promise<Product> {
+    return this.productsService.update(id, {
       ...updateProductDto,
       image: files.image?.[0]?.filename,
       image1: files.image1?.[0]?.filename,
@@ -150,8 +137,6 @@ export class ProductsController {
       image4: files.image4?.[0]?.filename,
       image5: files.image5?.[0]?.filename,
     });
-    const res = new AdminProductResponseDto(product, headerInfo.language);
-    return new ApiResponse(res, 'Update product successfull!');
   }
 
   @Delete(':id')
