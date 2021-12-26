@@ -1,4 +1,6 @@
 import { IsJSON, IsNumber, IsNumberString, IsOptional } from 'class-validator';
+import { String } from 'lodash';
+import { FindManyOptions } from 'typeorm';
 
 export class FetchDataQuery {
   @IsOptional()

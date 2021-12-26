@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import _, { isNil } from 'lodash';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { ColorRepository } from 'src/colors/repositories/color.repository';
+import { CommonService } from 'src/common/common-services.service';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
 import { SizeRepository } from 'src/sizes/repositories/size.repository';
@@ -20,7 +21,7 @@ import { Product } from './entities/product.entity';
 import { ProductRepository } from './repositories/product.repository';
 
 @Injectable()
-export class ProductsService {
+export class ProductsService extends CommonService<Product> {
   constructor(
     @InjectRepository(ProductRepository)
     private readonly productRepository: ProductRepository,
@@ -32,7 +33,9 @@ export class ProductsService {
     private readonly collectionRepository: CollectionRepository,
     @InjectRepository(ProductStatusRepository)
     private readonly productStatusRepository: ProductStatusRepository,
-  ) {}
+  ) {
+    super(productRepository);
+  }
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     try {
@@ -69,39 +72,21 @@ export class ProductsService {
     }
   }
 
-  async findAvailable(query: FetchDataQuery): Promise<Product[]> {
-    const defaultCondition =
-      'product.available = true AND product.deleted = false';
-
-    const whereClause = query.cond
-      ? `(${query.cond}) AND (${defaultCondition})`
-      : defaultCondition;
-
-    try {
-      return await this.productRepository.find({
-        relations: ['collections'],
-        join: {
-          alias: 'product',
-          leftJoinAndSelect: {
-            collections: 'product.collections',
-          },
+  async findAvailableProduct(query: FetchDataQuery): Promise<Product[]> {
+    return await this.findAvailable(query, {
+      relations: ['collections'],
+      join: {
+        alias: 'product',
+        leftJoinAndSelect: {
+          collections: 'product.collections',
         },
-        order: { ...query.order, sequence: 'DESC', createdAt: 'DESC' },
-        where: whereClause,
-        skip: query.offset,
-        take: query.limit,
-      });
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+      },
+    });
   }
 
-  async findAll(): Promise<Product[]> {
+  async findAllProduct(query: FetchDataQuery): Promise<Product[]> {
     try {
-      return await this.productRepository.find({
-        where: '',
-        order: { sequence: 'DESC', createdAt: 'DESC' },
-      });
+      return await this.findAll(query);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

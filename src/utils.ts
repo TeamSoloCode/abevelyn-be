@@ -1,8 +1,14 @@
 import { Request } from 'express';
 import { existsSync, unlink } from 'fs';
 import { parse, extname, join } from 'path';
-import { Equal, LessThan, MoreThan, Not } from 'typeorm';
+import { Equal, In, LessThan, MoreThan, Not } from 'typeorm';
 import { v1 } from 'uuid';
+import { ColorDataResponseDto } from './colors/dto/color-data-res.dto';
+
+export const DTO_KEY = Symbol('dtoKey');
+export const DTOKeyPrototypeMapper = {
+  color: ColorDataResponseDto.prototype,
+};
 
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -47,7 +53,7 @@ export function isNumeric(x) {
   return (typeof x === 'number' || typeof x === 'string') && !isNaN(Number(x));
 }
 
-type ConditionOperator = '>' | '<' | '=' | '!=';
+type ConditionOperator = '>' | '<' | '=' | '!=' | 'in';
 type ConditionItemType = [string, ConditionOperator, any];
 type CondJoinType = 'or' | 'in' | 'OR' | 'IN';
 export type ConditionArrayType = Array<ConditionItemType | CondJoinType>;
@@ -58,6 +64,7 @@ const queryFunctionsMapper: { [key in ConditionOperator]: Function } = {
   '<': LessThan,
   '=': Equal,
   '!=': Not,
+  in: In,
 };
 
 const gen = (
@@ -94,7 +101,9 @@ const generateCondFromArray = (conds: ConditionArrayType) => {
         gen(keys, compareValue, res, cond);
       } else {
         if (!queryFunctionsMapper[cond]) {
-          throw new Error("Condition only support '>' | '<' | '=' | '!='");
+          throw new Error(
+            "Condition only support '>' | '<' | '=' | '!=' | 'in'",
+          );
         }
 
         if (cond === '!=') {

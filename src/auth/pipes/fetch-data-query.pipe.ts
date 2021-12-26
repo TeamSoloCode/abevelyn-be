@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import {
+  generateConditions,
   generateConditionToSQLQuery,
   generateOrderFromObject,
   generateOrderToSQLQuery,

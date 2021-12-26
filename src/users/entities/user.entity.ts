@@ -18,6 +18,7 @@ import { Cart } from 'src/carts/entities/cart.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Feedback } from 'src/feedbacks/entities/feedback.entity';
 import { Order } from 'src/orders/entities/order.entity';
+import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -146,7 +147,7 @@ export class User extends BaseEntity {
    * -----------------------------------------------------
    */
 
-  @OneToMany(() => Cart, (cart) => cart.owner, { onDelete: 'CASCADE' })
+  @OneToMany(() => Cart, (cart) => cart.owner, { onDelete: 'SET NULL' })
   carts: Cart[];
 
   @OneToMany(() => Review, (review) => review.owner, { onDelete: 'SET NULL' })
@@ -159,6 +160,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Order, (order) => order.owner, { onDelete: 'SET NULL' })
   orders: Order[];
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.owner)
+  cartItems: CartItem[];
 
   /**
    * -----------------------------------------------------

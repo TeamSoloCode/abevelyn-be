@@ -20,7 +20,7 @@ export class Order extends RootEntity {
   @ManyToOne(() => OrderStatus, (status) => status.orders, { eager: true })
   status: OrderStatus;
 
-  @OneToOne(() => Cart)
+  @OneToOne(() => Cart, (cart) => cart.order)
   @JoinColumn({ name: 'cartUuid' })
   cart: Cart;
 

@@ -1,18 +1,11 @@
-import {
-  classToPlain,
-  Exclude,
-  Expose,
-  Transform,
-  TransformClassToPlain,
-  Type,
-} from 'class-transformer';
+import { classToPlain, Expose } from 'class-transformer';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
 import CommonDataResponse from 'src/common/common-data-response.dto';
 import { LanguageCode, UserRoles } from 'src/common/entity-enum';
 import { AdminProductStatusResponseDto } from 'src/product-status/dto/admin-product-status-res.dto';
 import { AdminSizeResponseDto } from 'src/sizes/dto/admin-size-res.dto';
-import { Product } from '../entities/product.entity';
+import { DTOKeyPrototypeMapper, DTO_KEY } from 'src/utils';
 
 export class ProductDataResponseDto extends CommonDataResponse<
   Partial<ProductDataResponseDto>
@@ -42,6 +35,7 @@ export class ProductDataResponseDto extends CommonDataResponse<
   productStatus: AdminProductStatusResponseDto;
 
   // @Type(() => ColorDataResponseDto)
+  @Reflect.metadata(DTO_KEY, 'color')
   color: ColorDataResponseDto;
 
   collections: Collection[];
@@ -70,16 +64,15 @@ export class ProductDataResponseDto extends CommonDataResponse<
 
     obj._language = language;
 
-    product.color = new ColorDataResponseDto().create(
-      product.color,
-      language,
-      locale,
-      dataResponseRole,
-    );
-
-    Object.entries(product).forEach(([key, value]) => {
-      if (product[key] instanceof ColorDataResponseDto) {
-        console.log('abcd#####', value.create1);
+    Object.keys(product).forEach((key) => {
+      const dtoMetadata = Reflect.getMetadata(DTO_KEY, obj, key);
+      if (dtoMetadata) {
+        product[key] = Object.create(DTOKeyPrototypeMapper[dtoMetadata]).create(
+          product[key],
+          language,
+          locale,
+          dataResponseRole,
+        );
       }
     });
 

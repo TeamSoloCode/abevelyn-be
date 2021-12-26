@@ -70,8 +70,11 @@ export class ProductsController {
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
-  async findAll(): Promise<Product[]> {
-    return this.productsService.findAll();
+  async findAll(
+    @Query(ValidationPipe, FetchDataQueryValidationPipe)
+    query: FetchDataQuery,
+  ): Promise<Product[]> {
+    return this.productsService.findAvailableProduct(query);
   }
 
   @Get('/fetch_available')
@@ -80,7 +83,7 @@ export class ProductsController {
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
     query: FetchDataQuery,
   ): Promise<Product[]> {
-    return this.productsService.findAvailable(query);
+    return this.productsService.findAvailableProduct(query);
   }
 
   @Get('/:id')

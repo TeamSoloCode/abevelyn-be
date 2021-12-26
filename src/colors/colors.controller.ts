@@ -15,7 +15,6 @@ import {
   ClassSerializerInterceptor,
   SerializeOptions,
   Next,
-  Response,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -32,6 +31,7 @@ import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { Color } from './entities/color.entity';
+import { Response } from 'express';
 
 @Controller('colors')
 export class ColorsController {
@@ -51,20 +51,20 @@ export class ColorsController {
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
-  async findAll(): // @Req() request: Request,
-  // @Res({ passthrough: true }) response: Response,
-  Promise<Color[]> {
-    // response.cookie('test', 'abcde' + Date.now(), {
-    //   expires: new Date(new Date().getTime() + 30 * 1000),
-    //   sameSite: 'strict',
-    //   httpOnly: true,
-    // });
+  async findAll(): Promise<Color[]> {
     return this.colorsService.findAll();
   }
 
   @Get('/fetch_available')
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
-  async findAvailable(): Promise<Color[]> {
+  async findAvailable(
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<Color[]> {
+    response.cookie('test', 'abcde' + Date.now(), {
+      expires: new Date(new Date().getTime() + 30 * 1000),
+      sameSite: 'strict',
+      httpOnly: true,
+    });
     return this.colorsService.findAvailable();
   }
 
