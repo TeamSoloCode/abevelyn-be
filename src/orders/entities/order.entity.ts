@@ -1,4 +1,5 @@
 import { IsUUID } from 'class-validator';
+import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { OrderStatus } from 'src/order-status/entities/order-status.entity';
@@ -7,6 +8,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -20,9 +22,8 @@ export class Order extends RootEntity {
   @ManyToOne(() => OrderStatus, (status) => status.orders, { eager: true })
   status: OrderStatus;
 
-  @OneToOne(() => Cart, (cart) => cart.order)
-  @JoinColumn({ name: 'cartUuid' })
-  cart: Cart;
+  @OneToMany(() => CartItem, (cartItem) => cartItem.order, { eager: true })
+  cartItems: CartItem[];
 
   @ManyToOne(() => User, (user) => user.orders)
   owner: User;

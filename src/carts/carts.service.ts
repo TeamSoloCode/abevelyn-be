@@ -35,16 +35,18 @@ export class CartsService {
   }
 
   async findUserCart(id: string, user: User) {
-    let unpaidCart = await this.cartRepository.findOne({
-      where: { owner: { uuid: user.uuid }, isPaid: false },
+    let userCart = await this.cartRepository.findOne({
+      where: { owner: { uuid: user.uuid } },
     });
 
-    if (!unpaidCart) {
+    if (!userCart) {
       const newCart = await this.create(user);
-      unpaidCart = await this.cartRepository.save(newCart);
+      userCart = await this.cartRepository.save(newCart);
     }
 
-    return unpaidCart;
+    return this.cartRepository.findOne({
+      where: { uuid: userCart.uuid },
+    });
   }
 
   async update(
@@ -73,6 +75,7 @@ export class CartsService {
       const cartItem = await this.cartItemService.create(cart, product, user);
       cart.addCartItem(cartItem);
     }
+
     await this.cartRepository.save(cart);
     return await this.cartRepository.findOne(cart.uuid);
   }

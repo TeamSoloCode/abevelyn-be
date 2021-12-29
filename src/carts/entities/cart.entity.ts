@@ -22,24 +22,8 @@ export class Cart extends RootEntity {
   @IsUUID()
   uuid: string;
 
-  @Column('bit', {
-    default: false,
-    transformer: {
-      from: (v: Buffer) => {
-        if (v instanceof Buffer) {
-          return !!v?.readInt8(0);
-        }
-      },
-      to: (v) => v,
-    },
-  })
-  isPaid: boolean;
-
   @ManyToOne(() => User, (owner) => owner.carts)
   owner: User;
-
-  @OneToOne(() => Order, (order) => order.cart)
-  order: Order;
 
   @OneToMany(() => CartItem, (item) => item.cart, {
     onDelete: 'CASCADE',

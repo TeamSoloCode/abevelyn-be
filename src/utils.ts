@@ -4,6 +4,8 @@ import { parse, extname, join } from 'path';
 import { Equal, In, LessThan, MoreThan, Not } from 'typeorm';
 import { v1 } from 'uuid';
 import { ColorDataResponseDto } from './colors/dto/color-data-res.dto';
+import { config } from 'dotenv';
+config();
 
 export const DTO_KEY = Symbol('dtoKey');
 export const DTOKeyPrototypeMapper = {

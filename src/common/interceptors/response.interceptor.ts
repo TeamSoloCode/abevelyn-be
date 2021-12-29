@@ -36,11 +36,12 @@ export class ResponseDataInterceptor<T, M>
     const response = context.switchToHttp().getResponse();
 
     // TODO: Put the url into env
-    const dataResponseRole =
-      request.headers.origin == 'http://localhost:8080' ||
-      request.headers.origin == 'https://localhost:8080'
-        ? UserRoles.ADMIN
-        : UserRoles.USER;
+    const dataResponseRole = [
+      'http://localhost:8080',
+      'https://localhost:8080',
+    ].includes(request.headers.origin)
+      ? UserRoles.ADMIN
+      : UserRoles.USER;
 
     const language = <LanguageCode>request.get('language');
     const locale = request.get('locale');
@@ -56,7 +57,7 @@ export class ResponseDataInterceptor<T, M>
           res = this.transferData(value, language, locale, dataResponseRole);
         }
 
-        return new ApiResponse(res, 'Action Successful!');
+        return new ApiResponse(res);
       }),
     );
   }

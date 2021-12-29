@@ -9,6 +9,7 @@ import {
   Query,
   ValidationPipe,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
@@ -46,11 +47,14 @@ export class CartItemController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard())
+  @UsePipes(ValidationPipe)
   update(
     @Param('id') id: string,
     @Body() updateCartItemDto: UpdateCartItemDto,
+    @GetUser() user: User,
   ) {
-    return this.cartItemService.update(+id, updateCartItemDto);
+    return this.cartItemService.update(id, updateCartItemDto, user);
   }
 
   @Delete(':id')

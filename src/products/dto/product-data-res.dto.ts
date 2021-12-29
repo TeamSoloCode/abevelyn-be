@@ -15,6 +15,7 @@ export class ProductDataResponseDto extends CommonDataResponse<
   }
 
   uuid: string;
+
   @Expose({ groups: [UserRoles.ADMIN] })
   updatedAt: Date;
 
