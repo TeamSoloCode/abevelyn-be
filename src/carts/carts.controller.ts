@@ -9,12 +9,15 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { User } from 'src/users/entities/user.entity';
 import { CartsService } from './carts.service';
+import { CartDataResponse } from './dto/cart-data-response.dto';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { Cart } from './entities/cart.entity';
@@ -36,6 +39,7 @@ export class CartsController {
   }
 
   @Get('my_cart')
+  @UseInterceptors(new ResponseDataInterceptor(new CartDataResponse()))
   findUserCart(@Param('id') id: string, @GetUser() user: User) {
     return this.cartsService.findUserCart(id, user);
   }

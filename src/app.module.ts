@@ -23,6 +23,7 @@ import { RolesModule } from './roles/roles.module';
 import { CartItemModule } from './cart-item/cart-item.module';
 import { FileModule } from './file/file.module';
 import { GoogleStrategy } from './auth/strategies/google.strategy';
+import { AddressesModule } from './addresses/addresses.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { GoogleStrategy } from './auth/strategies/google.strategy';
     RolesModule,
     CartItemModule,
     FileModule,
+    AddressesModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy],

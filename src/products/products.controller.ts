@@ -74,7 +74,7 @@ export class ProductsController {
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
     query: FetchDataQuery,
   ): Promise<Product[]> {
-    return this.productsService.findAvailableProduct(query);
+    return this.productsService.findAllProduct(query);
   }
 
   @Get('/fetch_available')

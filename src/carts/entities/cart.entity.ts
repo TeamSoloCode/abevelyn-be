@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { RootEntity } from 'src/common/root-entity.entity';
@@ -31,11 +32,13 @@ export class Cart extends RootEntity {
   })
   cartItems: CartItem[];
 
+  @Exclude()
   addCartItem = (cartItem: CartItem) => {
     const isExists = this.cartItems.find((i) => i.uuid === cartItem.uuid);
     !isExists && this.cartItems.push(cartItem);
   };
 
+  @Exclude()
   removeCartItem = (cartItem: CartItem) => {
     const newCartItems = [];
     this.cartItems.forEach((i) => {

@@ -16,7 +16,7 @@ export class CommonService<T> {
     order?: { [P in EntityFieldsNames<T>]?: 'ASC' | 'DESC' | 1 | -1 },
     findOptions: FindManyOptions<T> = {},
     offset: number = 0,
-    limit: number = 300,
+    limit: number = 100,
   ): FindManyOptions<T> {
     return {
       order: <any>{
@@ -25,8 +25,8 @@ export class CommonService<T> {
         createdAt: 'DESC',
       },
       where: whereClause,
-      skip: offset || 0,
-      take: limit || 300,
+      skip: offset,
+      take: limit,
       ...findOptions,
     };
   }
