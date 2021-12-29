@@ -23,6 +23,8 @@ import { RolesModule } from './roles/roles.module';
 import { CartItemModule } from './cart-item/cart-item.module';
 import { FileModule } from './file/file.module';
 import { GoogleStrategy } from './auth/strategies/google.strategy';
+import { UsersService } from 'src/users/users.service';
+import { UserRepository } from 'src/users/repositories/user.repository';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { GoogleStrategy } from './auth/strategies/google.strategy';
     OrderStatusModule,
     ReviewsModule,
     TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forFeature([UserRepository]),
     UserProfileModule,
     MaterialsModule,
     SizesModule,
@@ -48,6 +51,6 @@ import { GoogleStrategy } from './auth/strategies/google.strategy';
     FileModule,
   ],
   controllers: [AppController],
-  providers: [AppService, GoogleStrategy],
+  providers: [AppService, GoogleStrategy, UsersService],
 })
 export class AppModule {}

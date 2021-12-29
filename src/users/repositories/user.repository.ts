@@ -31,6 +31,25 @@ export class UserRepository extends Repository<User> {
     }
   }
 
+  async signUpByGoogle(ggAccount: { email: string, accessToken: string }): Promise<User> {
+    const { email, accessToken } = ggAccount;
+    
+    const user = new User();
+    user.username = email;
+    user.token = accessToken;
+
+    try {
+      return user.save();
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        // duplicate user
+        throw new ConflictException(['Username already exists!']);
+      } else {
+        throw new InternalServerErrorException(error.message);
+      }
+    }
+  }
+
   async validatePassword(
     authCredentialDto: SignInCredentialDto,
   ): Promise<User> {
