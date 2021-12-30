@@ -1,5 +1,9 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Product } from 'src/products/entities/product.entity';
+import { User } from 'src/users/entities/user.entity';
 import { FindManyOptions, JoinOptions, Repository } from 'typeorm';
 import { EntityFieldsNames } from 'typeorm/common/EntityFieldsNames';
 import { FetchDataQuery } from './fetch-data-query';
@@ -75,6 +79,20 @@ export class CommonService<T> {
           query.limit,
         ),
       );
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async findOne(id: string, user?: User): Promise<T> {
+    try {
+      const ownerFind = user ? { owner: { uuid: user.uuid } } : {};
+      const data = await this.repository.findOne(<any>{
+        uuid: id,
+        ...ownerFind,
+      });
+      if (!data) throw new NotFoundException();
+      return data;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

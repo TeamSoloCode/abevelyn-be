@@ -8,6 +8,7 @@ import { CollectionRepository } from 'src/collections/repositories/collection.re
 import { ColorRepository } from 'src/colors/repositories/color.repository';
 import { SizeRepository } from 'src/sizes/repositories/size.repository';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
+import { MaterialRepository } from 'src/materials/repositories/material.reponsitory';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ProductStatusRepository } from 'src/product-status/repositories/product
       ColorRepository,
       SizeRepository,
       ProductStatusRepository,
+      MaterialRepository,
     ]),
   ],
   controllers: [ProductsController],

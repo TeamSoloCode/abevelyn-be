@@ -17,7 +17,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { M2MProductMaterial } from './product_material.entity';
 
 @Entity('product')
 export class Product extends RootEntity {
@@ -117,13 +116,6 @@ export class Product extends RootEntity {
   })
   coupon?: Coupon;
 
-  @OneToMany(
-    () => M2MProductMaterial,
-    (prodAndMaterial) => prodAndMaterial.product,
-    { nullable: true },
-  )
-  productMaterial?: M2MProductMaterial;
-
   @OneToMany(() => Review, (review) => review.product, { onDelete: 'SET NULL' })
   reviews: Review[];
 
@@ -135,4 +127,10 @@ export class Product extends RootEntity {
   @ManyToMany((type) => Collection, (col) => col.products, { eager: true })
   @JoinTable()
   collections: Collection[];
+
+  @ManyToMany((type) => Material, (material) => material.products, {
+    eager: true,
+  })
+  @JoinTable()
+  materials?: Material[];
 }

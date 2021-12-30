@@ -6,12 +6,13 @@ import { v1 } from 'uuid';
 import { ColorDataResponseDto } from './colors/dto/color-data-res.dto';
 import { config } from 'dotenv';
 import { UserDataResponse } from './users/dto/user-data-response.dto';
+import { ProductDataResponseDto } from './products/dto/product-data-res.dto';
 config();
 
-export const DTO_KEY = Symbol('dtoKey');
 export const DTOKeyPrototypeMapper = {
   color: ColorDataResponseDto.prototype,
   user: UserDataResponse.prototype,
+  product: ProductDataResponseDto.prototype,
 };
 
 export const imageFileFilter = (req, file, callback) => {

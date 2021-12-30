@@ -1,11 +1,21 @@
 import { IsUUID } from 'class-validator';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Product } from 'src/products/entities/product.entity';
-import { M2MProductMaterial } from 'src/products/entities/product_material.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Material extends RootEntity {
+  constructor(name: string) {
+    super();
+    this.name = name;
+  }
+
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
@@ -13,13 +23,13 @@ export class Material extends RootEntity {
   @Column('varchar', { length: 256 })
   name: string;
 
-  @Column('varchar', { length: 256 })
+  @Column('varchar', { nullable: true })
   nameInFrench: string;
 
-  @Column('varchar', { length: 256 })
+  @Column('varchar', { nullable: true })
   nameInVietnames: string;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   description: string;
 
   @Column('text', { nullable: true })
@@ -28,9 +38,6 @@ export class Material extends RootEntity {
   @Column('text', { nullable: true })
   descriptionInVietnames: string;
 
-  @OneToMany(
-    () => M2MProductMaterial,
-    (prodAndMaterial) => prodAndMaterial.material,
-  )
-  productMaterial: M2MProductMaterial;
+  @ManyToMany(() => Product, (prod) => prod.materials)
+  products: Product[];
 }

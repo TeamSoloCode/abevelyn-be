@@ -29,21 +29,10 @@ export class AuthController {
   }
 
   @Post('/signin')
-  async signin(
-    @Res({ passthrough: true }) response: Response,
-    @Body(ValidationPipe) authCredentials: SignInCredentialDto,
-  ) {
+  async signin(@Body(ValidationPipe) authCredentials: SignInCredentialDto) {
     const { accessToken, username } = await this.authService.signIn(
       authCredentials,
     );
-    response.cookie('username', username, {
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-    response.cookie('token', accessToken, {
-      sameSite: 'strict',
-      httpOnly: true,
-    });
     return { username, accessToken };
   }
 

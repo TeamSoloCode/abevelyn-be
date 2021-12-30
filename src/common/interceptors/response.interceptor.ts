@@ -18,15 +18,10 @@ export class ResponseDataInterceptor<T, M>
   implements NestInterceptor<T, ApiResponse<M | M[]>>
 {
   constructor(responseDto: CommonDataResponse<M>) {
-    this.transferData = responseDto.create;
+    this.responseDto = responseDto;
   }
 
-  private transferData: (
-    data: T,
-    language: LanguageCode,
-    locale: string,
-    dataResponseRole: UserRoles,
-  ) => M;
+  private responseDto: CommonDataResponse<M>;
 
   intercept(
     context: ExecutionContext,
@@ -51,10 +46,20 @@ export class ResponseDataInterceptor<T, M>
         let res: M | M[] = undefined;
         if (value instanceof Array) {
           res = value.map((v) => {
-            return this.transferData(v, language, locale, dataResponseRole);
+            return this.responseDto.create(
+              v,
+              language,
+              locale,
+              dataResponseRole,
+            );
           });
         } else {
-          res = this.transferData(value, language, locale, dataResponseRole);
+          res = this.responseDto.create(
+            value,
+            language,
+            locale,
+            dataResponseRole,
+          );
         }
 
         return new ApiResponse(res);

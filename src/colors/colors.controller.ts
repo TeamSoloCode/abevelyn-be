@@ -60,11 +60,6 @@ export class ColorsController {
   async findAvailable(
     @Res({ passthrough: true }) response: Response,
   ): Promise<Color[]> {
-    response.cookie('test', 'abcde' + Date.now(), {
-      expires: new Date(new Date().getTime() + 30 * 1000),
-      sameSite: 'strict',
-      httpOnly: true,
-    });
     return this.colorsService.findAvailable();
   }
 

@@ -1,3 +1,3 @@
 export class CreateMaterialDto {
-  abcd: string;
+  name: string;
 }

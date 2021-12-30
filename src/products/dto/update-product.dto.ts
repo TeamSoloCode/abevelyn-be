@@ -13,8 +13,7 @@ import { CreateProductDto } from './create-product.dto';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
   @IsOptional()
-  @IsUUID()
-  materialId?: string;
+  materialIds?: string | string[];
 
   @IsOptional()
   colectionIds?: string | string[];

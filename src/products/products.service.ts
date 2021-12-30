@@ -11,6 +11,7 @@ import { CollectionRepository } from 'src/collections/repositories/collection.re
 import { ColorRepository } from 'src/colors/repositories/color.repository';
 import { CommonService } from 'src/common/common-services.service';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
+import { MaterialRepository } from 'src/materials/repositories/material.reponsitory';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
 import { SizeRepository } from 'src/sizes/repositories/size.repository';
 import { OrderArrayType } from 'src/utils';
@@ -33,6 +34,8 @@ export class ProductsService extends CommonService<Product> {
     private readonly collectionRepository: CollectionRepository,
     @InjectRepository(ProductStatusRepository)
     private readonly productStatusRepository: ProductStatusRepository,
+    @InjectRepository(MaterialRepository)
+    private readonly materialRepository: MaterialRepository,
   ) {
     super(productRepository);
   }
@@ -74,11 +77,12 @@ export class ProductsService extends CommonService<Product> {
 
   async findAvailableProduct(query: FetchDataQuery): Promise<Product[]> {
     return await this.findAvailable(query, {
-      relations: ['collections'],
+      relations: ['collections', 'materials'],
       join: {
         alias: 'product',
         leftJoinAndSelect: {
           collections: 'product.collections',
+          materials: 'product.materials',
         },
       },
     });
@@ -123,6 +127,9 @@ export class ProductsService extends CommonService<Product> {
       product.size.uuid = sizeId;
       product.productStatus.uuid = statusId;
 
+      product.materials = [];
+      product.collections = [];
+
       if (updateProductDto.colectionIds) {
         const collections = await this.collectionRepository.find({
           where: {
@@ -135,8 +142,20 @@ export class ProductsService extends CommonService<Product> {
         });
 
         product.collections = collections;
-      } else {
-        product.collections = [];
+      }
+
+      if (updateProductDto.materialIds) {
+        const materials = await this.materialRepository.find({
+          where: {
+            uuid: In(
+              typeof updateProductDto.materialIds == 'string'
+                ? updateProductDto.materialIds.split(',')
+                : updateProductDto.materialIds,
+            ),
+          },
+        });
+
+        product.materials = materials;
       }
 
       await this.productRepository.save(product);
