@@ -139,9 +139,9 @@ export class User extends BaseEntity {
     this._salt = value;
   }
 
-  @OneToOne(() => UserProfile, { nullable: true })
-  @JoinColumn({ name: 'userProfileUuid' })
-  userProdfile: UserProfile;
+  @OneToOne(() => UserProfile, (profile) => profile.owner, { nullable: true })
+  @JoinColumn({ name: 'profileUuid' })
+  prodfile: UserProfile;
 
   /**
    * -----------------------------------------------------

@@ -1,21 +1,12 @@
-import { classToPlain, Expose, Transform } from 'class-transformer';
-import { Collection } from 'src/collections/entities/collection.entity';
-import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
+import { Expose } from 'class-transformer';
 import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, UserRoles } from 'src/common/entity-enum';
-import { MaterialResponseDto } from 'src/materials/dto/material-data-response.dto';
-import { Material } from 'src/materials/entities/material.entity';
-import { AdminProductStatusResponseDto } from 'src/product-status/dto/admin-product-status-res.dto';
-import { AdminSizeResponseDto } from 'src/sizes/dto/admin-size-res.dto';
-import { DTOKeyPrototypeMapper } from 'src/utils';
+import { LanguageCode, SaleUnit, UserRoles } from 'src/common/entity-enum';
+import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
+import { Product } from 'src/products/entities/product.entity';
 
-export class ProductDataResponseDto extends CommonDataResponse<
-  Partial<ProductDataResponseDto>
+export class SaleResponseDto extends CommonDataResponse<
+  Partial<SaleResponseDto>
 > {
-  constructor() {
-    super();
-  }
-
   uuid: string;
 
   @Expose({ groups: [UserRoles.ADMIN] })
@@ -23,14 +14,24 @@ export class ProductDataResponseDto extends CommonDataResponse<
 
   createdAt: Date;
 
+  startedDate: Date;
+
+  expiredDate: Date;
+
+  saleOff: number;
+
+  maxOff: number;
+
+  unit: SaleUnit;
+
   @Expose({ groups: [UserRoles.ADMIN] })
   name: string;
 
   @Expose({ groups: [UserRoles.ADMIN] })
-  nameInFrench: string;
+  nameInFrench?: string;
 
   @Expose({ groups: [UserRoles.ADMIN] })
-  nameInVietnamese: string;
+  nameInVietnamese?: string;
 
   @Expose({ groups: [UserRoles.ADMIN] })
   description?: string;
@@ -41,16 +42,10 @@ export class ProductDataResponseDto extends CommonDataResponse<
   @Expose({ groups: [UserRoles.ADMIN] })
   descriptionInVietnamese?: string;
 
-  size: AdminSizeResponseDto;
-  productStatus: AdminProductStatusResponseDto;
+  @Reflect.metadata(CommonDataResponse.DTO_KEY, 'product')
+  products: ProductDataResponseDto[];
 
-  @Reflect.metadata(CommonDataResponse.DTO_KEY, 'color')
-  color: ColorDataResponseDto;
-
-  @Reflect.metadata(CommonDataResponse.DTO_KEY, 'material')
-  materials: MaterialResponseDto[];
-
-  collections: Collection[];
+  // collections: Collection[];
 
   @Expose({ name: 'name', groups: [UserRoles.USER], toPlainOnly: true })
   getNameByLanguage() {
@@ -76,15 +71,13 @@ export class ProductDataResponseDto extends CommonDataResponse<
     }
   }
 
-  create(
-    data: ProductDataResponseDto,
+  public create(
+    data: SaleResponseDto,
     language: LanguageCode = LanguageCode.ENGLISH,
     locale: string,
     dataResponseRole: UserRoles,
   ) {
-    const obj: ProductDataResponseDto = Object.create(
-      ProductDataResponseDto.prototype,
-    );
+    const obj: SaleResponseDto = Object.create(SaleResponseDto.prototype);
 
     obj._language = language;
 

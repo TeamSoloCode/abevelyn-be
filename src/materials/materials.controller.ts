@@ -11,6 +11,7 @@ import {
   ValidationPipe,
   Query,
   UseGuards,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { MaterialsService } from './materials.service';
 import { CreateMaterialDto } from './dto/create-material.dto';
@@ -46,7 +47,6 @@ export class MaterialsController {
   }
 
   @Get('/fetch_available')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new MaterialResponseDto()))
   async findAvailable(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
@@ -58,7 +58,7 @@ export class MaterialsController {
   @Get(':id')
   @UseInterceptors(new ResponseDataInterceptor(new MaterialResponseDto()))
   findOne(@Param('id') id: string) {
-    return this.materialsService.findOne(id);
+    return this.materialsService.fetchOneMaterial(id);
   }
 
   @Patch(':id')

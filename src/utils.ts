@@ -7,12 +7,14 @@ import { ColorDataResponseDto } from './colors/dto/color-data-res.dto';
 import { config } from 'dotenv';
 import { UserDataResponse } from './users/dto/user-data-response.dto';
 import { ProductDataResponseDto } from './products/dto/product-data-res.dto';
+import { MaterialResponseDto } from './materials/dto/material-data-response.dto';
 config();
 
 export const DTOKeyPrototypeMapper = {
   color: ColorDataResponseDto.prototype,
   user: UserDataResponse.prototype,
   product: ProductDataResponseDto.prototype,
+  material: MaterialResponseDto.prototype,
 };
 
 export const imageFileFilter = (req, file, callback) => {

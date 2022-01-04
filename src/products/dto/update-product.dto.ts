@@ -38,11 +38,6 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   image5?: string;
 
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  saleOf?: number = 0;
-
-  @IsOptional()
   @ValidateIf((o) => isNumeric(o.price))
   quantity: number;
 

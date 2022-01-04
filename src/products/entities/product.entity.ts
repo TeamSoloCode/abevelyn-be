@@ -7,6 +7,7 @@ import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { Material } from 'src/materials/entities/material.entity';
 import { ProductStatus } from 'src/product-status/entities/product-status.entity';
 import { Review } from 'src/reviews/entities/review.entity';
+import { Sale } from 'src/sales/entities/sale.entity';
 import { Size } from 'src/sizes/entities/size.entity';
 import {
   Column,
@@ -43,16 +44,16 @@ export class Product extends RootEntity {
   @IsUUID()
   uuid: string;
 
-  @Column('varchar', { length: 512, unique: true })
-  name: string;
-
   @Column('int', { default: 1 })
   quantity: number;
 
-  @Column('varchar', { length: 512, nullable: true, unique: true })
+  @Column('varchar', { length: 512 })
+  name: string;
+
+  @Column('varchar', { length: 512, nullable: true })
   nameInFrench?: string;
 
-  @Column('varchar', { length: 512, nullable: true, unique: true })
+  @Column('varchar', { length: 512, nullable: true })
   nameInVietnamese?: string;
 
   @Column('text')
@@ -67,11 +68,6 @@ export class Product extends RootEntity {
   @Column('double')
   @Min(0)
   price: number;
-
-  @Column('double')
-  @Max(1)
-  @Min(0)
-  saleOf: number = 0;
 
   @Column('text')
   image: string;
@@ -133,4 +129,7 @@ export class Product extends RootEntity {
   })
   @JoinTable()
   materials?: Material[];
+
+  @ManyToMany(() => Sale, (sale) => sale.products)
+  sales: Sale[];
 }

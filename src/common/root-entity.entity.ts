@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserRoles } from './entity-enum';
 
 export class RootEntity extends BaseEntity {
   @Column('int', {
@@ -37,6 +38,7 @@ export class RootEntity extends BaseEntity {
       to: (v) => v,
     },
   })
+  @Expose({ groups: [UserRoles.ADMIN] })
   deleted: boolean = false;
   /**
    * -----------------------------------------------------

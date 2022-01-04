@@ -14,21 +14,20 @@ import CommonDataResponse from '../common-data-response.dto';
 import { LanguageCode, UserRoles } from '../entity-enum';
 
 @Injectable()
-export class ResponseDataInterceptor<T, M>
-  implements NestInterceptor<T, ApiResponse<M | M[]>>
+export class ResponseDataInterceptor<T>
+  implements NestInterceptor<T, ApiResponse<T | T[]>>
 {
-  constructor(responseDto: CommonDataResponse<M>) {
+  constructor(responseDto: CommonDataResponse<T>) {
     this.responseDto = responseDto;
   }
 
-  private responseDto: CommonDataResponse<M>;
+  private responseDto: CommonDataResponse<T>;
 
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<ApiResponse<M | M[]>> {
+  ): Observable<ApiResponse<T | T[]>> {
     const request: Request = context.switchToHttp().getRequest();
-    const response = context.switchToHttp().getResponse();
 
     // TODO: Put the url into env
     const dataResponseRole = [
@@ -38,12 +37,13 @@ export class ResponseDataInterceptor<T, M>
       ? UserRoles.ADMIN
       : UserRoles.USER;
 
-    const language = <LanguageCode>request.get('language');
+    const language =
+      <LanguageCode>request.get('language') || LanguageCode.ENGLISH;
     const locale = request.get('locale');
 
     return next.handle().pipe(
       map((value: T | T[]) => {
-        let res: M | M[] = undefined;
+        let res: T | T[] = undefined;
         if (value instanceof Array) {
           res = value.map((v) => {
             return this.responseDto.create(

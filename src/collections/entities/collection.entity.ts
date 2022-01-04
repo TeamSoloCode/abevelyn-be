@@ -4,12 +4,14 @@ import { Coupon } from 'src/coupons/entities/coupon.entity';
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
+import { Sale } from 'src/sales/entities/sale.entity';
 
 @Entity('collection')
 export class Collection extends RootEntity {
@@ -59,4 +61,7 @@ export class Collection extends RootEntity {
 
   @ManyToMany((type) => Product, (prod) => prod.collections)
   products: Product[];
+
+  @ManyToMany(() => Sale, (sale) => sale.collections)
+  sales: Sale[];
 }

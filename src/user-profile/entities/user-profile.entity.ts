@@ -1,13 +1,17 @@
 import { IsUUID } from 'class-validator';
 import { Address } from 'src/addresses/entities/address.entity';
 import { RootEntity } from 'src/common/root-entity.entity';
-import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class UserProfile extends RootEntity {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
+
+  @OneToOne(() => User, (user) => user.prodfile)
+  owner: User;
 
   @OneToMany(() => Address, (address) => address.profile)
   addresses: Address[];

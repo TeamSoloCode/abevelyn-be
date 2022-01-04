@@ -65,6 +65,25 @@ export class CommonService<T> {
     }
   }
 
+  protected async search(
+    query: FetchDataQuery = {},
+    findOptions: FindManyOptions<T> = {},
+  ): Promise<T[]> {
+    try {
+      return await this.repository.find(
+        this.getFindOptions(
+          query.cond,
+          query.order,
+          findOptions,
+          query.offset,
+          query.limit,
+        ),
+      );
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   protected async findAll(
     query: FetchDataQuery = {},
     findOptions: FindManyOptions<T> = {},
@@ -84,13 +103,16 @@ export class CommonService<T> {
     }
   }
 
-  async findOne(id: string, user?: User): Promise<T> {
+  async findOne(id: string, user?: User, relations?: string[]): Promise<T> {
     try {
       const ownerFind = user ? { owner: { uuid: user.uuid } } : {};
-      const data = await this.repository.findOne(<any>{
-        uuid: id,
-        ...ownerFind,
-      });
+      const data = await this.repository.findOne(
+        <any>{
+          uuid: id,
+          ...ownerFind,
+        },
+        { relations: relations },
+      );
       if (!data) throw new NotFoundException();
       return data;
     } catch (error) {

@@ -45,6 +45,10 @@ export class MaterialsService extends CommonService<Material> {
     });
   }
 
+  async fetchOneMaterial(id: string): Promise<Material> {
+    return this.findOne(id, undefined, ['products']);
+  }
+
   async update(
     id: string,
     updateMaterialDto: UpdateMaterialDto,

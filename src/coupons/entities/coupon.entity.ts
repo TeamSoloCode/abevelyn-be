@@ -14,7 +14,7 @@ export class Coupon extends RootEntity {
   code: string;
 
   @Column('datetime')
-  applyDate: Date;
+  startedDate: Date;
 
   @Column('datetime')
   expiredDate: Date;

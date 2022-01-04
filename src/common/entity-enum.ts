@@ -15,3 +15,8 @@ export enum LanguageCode {
   FRENCH = 'fr',
   ENGLISH = 'en',
 }
+
+export enum SaleUnit {
+  PERCENTAGE = '%',
+  USD = 'usd',
+}

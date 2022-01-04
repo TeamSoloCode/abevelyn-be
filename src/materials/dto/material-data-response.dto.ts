@@ -1,4 +1,11 @@
-import { classToPlain, Expose } from 'class-transformer';
+import {
+  classToPlain,
+  deserializeArray,
+  Exclude,
+  Expose,
+  serialize,
+  Type,
+} from 'class-transformer';
 import CommonDataResponse from 'src/common/common-data-response.dto';
 import { LanguageCode, UserRoles } from 'src/common/entity-enum';
 import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
@@ -10,6 +17,7 @@ export class MaterialResponseDto extends CommonDataResponse<
   Partial<MaterialResponseDto>
 > {
   uuid: string;
+
   createdAt: Date;
 
   @Expose({ groups: [UserRoles.ADMIN] })
@@ -45,7 +53,7 @@ export class MaterialResponseDto extends CommonDataResponse<
   @Expose({ groups: [UserRoles.ADMIN] })
   descriptionInVietnames: string;
 
-  @Expose({ name: 'description', groups: [UserRoles.USER] })
+  @Expose({ name: 'description', groups: [UserRoles.USER], toPlainOnly: true })
   getDescriptionByLanguage() {
     switch (this._language) {
       case LanguageCode.ENGLISH:
@@ -57,42 +65,28 @@ export class MaterialResponseDto extends CommonDataResponse<
     }
   }
 
+  @Expose()
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'product')
   products: ProductDataResponseDto[];
 
   public create(
-    data: Material,
+    data: MaterialResponseDto,
     language: LanguageCode,
     locale: string,
     dataResponseRole: UserRoles,
-  ): Partial<MaterialResponseDto> {
-    const obj: ProductDataResponseDto = Object.create(
-      ProductDataResponseDto.prototype,
+  ) {
+    const obj: MaterialResponseDto = Object.create(
+      MaterialResponseDto.prototype,
     );
 
     obj._language = language;
 
-    Object.keys(data).forEach((key) => {
-      const dtoMetadata = Reflect.getMetadata(
-        CommonDataResponse.DTO_KEY,
-        obj,
-        key,
-      );
-      if (dtoMetadata) {
-        data[key] = Object.create(DTOKeyPrototypeMapper[dtoMetadata]).create(
-          data[key],
-          language,
-          locale,
-          dataResponseRole,
-        );
-      }
-    });
-
-    Object.assign(obj, classToPlain(data));
-
-    return classToPlain(obj, {
-      excludePrefixes: ['_'],
-      groups: [dataResponseRole],
-    });
+    return this.serializeDataResponse(
+      obj,
+      data,
+      language,
+      locale,
+      dataResponseRole,
+    );
   }
 }

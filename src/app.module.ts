@@ -24,6 +24,7 @@ import { CartItemModule } from './cart-item/cart-item.module';
 import { FileModule } from './file/file.module';
 import { GoogleStrategy } from './auth/strategies/google.strategy';
 import { AddressesModule } from './addresses/addresses.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AddressesModule } from './addresses/addresses.module';
     CartItemModule,
     FileModule,
     AddressesModule,
+    SalesModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy],

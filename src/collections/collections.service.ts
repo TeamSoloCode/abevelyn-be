@@ -71,23 +71,9 @@ export class CollectionsService {
         throw new NotFoundException();
       }
 
-      const {
-        available,
-        name,
-        nameInFrench,
-        nameInVietnames,
-        description,
-        descriptionInFrench,
-        descriptionInVietnames,
-      } = updateCollectionDto;
-
-      collection.available = available;
-      collection.name = name;
-      collection.nameInFrench = nameInFrench;
-      collection.nameInVietnames = nameInVietnames;
-      collection.description = description;
-      collection.descriptionInFrench = descriptionInFrench;
-      collection.descriptionInVietnames = descriptionInVietnames;
+      Object.entries(updateCollectionDto).forEach(([key, value]) => {
+        collection[key] = value;
+      });
 
       await this.collectionRepository.save(collection);
       return await this.collectionRepository.findOne(collection.uuid);
