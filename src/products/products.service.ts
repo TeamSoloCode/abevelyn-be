@@ -13,6 +13,7 @@ import { CommonService } from 'src/common/common-services.service';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { MaterialRepository } from 'src/materials/repositories/material.reponsitory';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
+import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { SizeRepository } from 'src/sizes/repositories/size.repository';
 import { OrderArrayType } from 'src/utils';
 import { In } from 'typeorm';
@@ -36,6 +37,8 @@ export class ProductsService extends CommonService<Product> {
     private readonly productStatusRepository: ProductStatusRepository,
     @InjectRepository(MaterialRepository)
     private readonly materialRepository: MaterialRepository,
+    @InjectRepository(SaleRepository)
+    private readonly saleRepository: SaleRepository,
   ) {
     super(productRepository);
   }
@@ -129,6 +132,7 @@ export class ProductsService extends CommonService<Product> {
 
       product.materials = [];
       product.collections = [];
+      product.sales = [];
 
       if (updateProductDto.collectionIds) {
         const collections = await this.collectionRepository.find({
@@ -158,8 +162,24 @@ export class ProductsService extends CommonService<Product> {
         product.materials = materials;
       }
 
+      if (updateProductDto.saleIds) {
+        const sales = await this.saleRepository.find({
+          where: {
+            uuid: In(
+              typeof updateProductDto.saleIds == 'string'
+                ? updateProductDto.saleIds.split(',')
+                : updateProductDto.saleIds,
+            ),
+          },
+        });
+
+        product.sales = sales;
+      }
+
       await this.productRepository.save(product);
-      return await this.productRepository.findOne({ uuid: product.uuid });
+      return await this.productRepository.findOne({
+        where: { uuid: product.uuid },
+      });
     } catch (error) {
       console.log('abcd', error);
       throw new InternalServerErrorException(error.message);

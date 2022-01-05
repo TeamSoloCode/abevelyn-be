@@ -130,6 +130,6 @@ export class Product extends RootEntity {
   @JoinTable()
   materials?: Material[];
 
-  @ManyToMany(() => Sale, (sale) => sale.products)
+  @ManyToMany(() => Sale, (sale) => sale.products, { eager: true })
   sales: Sale[];
 }

@@ -19,6 +19,9 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   collectionIds?: string | string[];
 
   @IsOptional()
+  saleIds?: string | string[];
+
+  @IsOptional()
   @IsUUID()
   couponId?: string | string[];
 
