@@ -41,10 +41,7 @@ export class ColorsController {
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   @UsePipes(ValidationPipe)
-  async create(
-    @Body() createColorDto: CreateColorDto,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<Color> {
+  async create(@Body() createColorDto: CreateColorDto): Promise<Color> {
     return this.colorsService.create(createColorDto);
   }
 

@@ -6,6 +6,15 @@ export default abstract class CommonDataResponse<T> {
   _language: LanguageCode;
   static DTO_KEY = Symbol('dtoKey');
 
+  @Expose({ groups: [UserRoles.ADMIN] })
+  sequence: number;
+
+  @Expose({ groups: [UserRoles.ADMIN] })
+  available: boolean = true;
+
+  @Expose({ groups: [UserRoles.ADMIN] })
+  deleted: boolean = false;
+
   protected serializeDataResponse(
     obj: CommonDataResponse<T>,
     data: T,

@@ -130,13 +130,13 @@ export class ProductsService extends CommonService<Product> {
       product.materials = [];
       product.collections = [];
 
-      if (updateProductDto.colectionIds) {
+      if (updateProductDto.collectionIds) {
         const collections = await this.collectionRepository.find({
           where: {
             uuid: In(
-              typeof updateProductDto.colectionIds == 'string'
-                ? updateProductDto.colectionIds.split(',')
-                : updateProductDto.colectionIds,
+              typeof updateProductDto.collectionIds == 'string'
+                ? updateProductDto.collectionIds.split(',')
+                : updateProductDto.collectionIds,
             ),
           },
         });

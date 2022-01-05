@@ -16,7 +16,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   materialIds?: string | string[];
 
   @IsOptional()
-  colectionIds?: string | string[];
+  collectionIds?: string | string[];
 
   @IsOptional()
   @IsUUID()

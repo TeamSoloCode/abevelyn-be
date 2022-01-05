@@ -44,7 +44,7 @@ export class SalesController {
     return this.salesService.findAllSale(query);
   }
 
-  @Get()
+  @Get('fetch_available')
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   fetchAvailable(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
@@ -54,16 +54,21 @@ export class SalesController {
   }
 
   @Get(':id')
+  @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   findOne(@Param('id') id: string) {
     return this.salesService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
-    return this.salesService.update(+id, updateSaleDto);
+    return this.salesService.update(id, updateSaleDto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   remove(@Param('id') id: string) {
     return this.salesService.remove(+id);
   }

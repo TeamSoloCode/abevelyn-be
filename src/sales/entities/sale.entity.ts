@@ -51,10 +51,10 @@ export class Sale extends RootEntity {
   @Column('enum', { enum: SaleUnit, default: SaleUnit.PERCENTAGE })
   unit: SaleUnit;
 
-  @Column('date')
+  @Column('datetime')
   startedDate: Date;
 
-  @Column('date')
+  @Column('datetime')
   expiredDate: Date;
 
   @ManyToMany(() => Product, (prod) => prod.sales)

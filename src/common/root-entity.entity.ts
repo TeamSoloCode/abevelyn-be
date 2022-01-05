@@ -38,7 +38,6 @@ export class RootEntity extends BaseEntity {
       to: (v) => v,
     },
   })
-  @Expose({ groups: [UserRoles.ADMIN] })
   deleted: boolean = false;
   /**
    * -----------------------------------------------------

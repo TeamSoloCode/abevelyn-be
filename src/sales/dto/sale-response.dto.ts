@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import CommonDataResponse from 'src/common/common-data-response.dto';
 import { LanguageCode, SaleUnit, UserRoles } from 'src/common/entity-enum';
 import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
