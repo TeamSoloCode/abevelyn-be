@@ -16,8 +16,9 @@ async function bootstrap() {
   //   }),
   // );
   app.enableCors({
-    origin: 'http://localhost:8080',
+    origin: ['http://localhost:8080'],
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+    credentials: true,
   });
   // app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
   await app.listen(3000);

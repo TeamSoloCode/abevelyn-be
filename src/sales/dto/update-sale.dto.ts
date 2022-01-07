@@ -23,6 +23,9 @@ export class UpdateSaleDto extends PartialType(CreateSaleDto) {
   descriptionInVietnamese?: string;
 
   @IsOptional()
+  applyPrice?: number;
+
+  @IsOptional()
   @IsArray()
   productIds: string[];
 

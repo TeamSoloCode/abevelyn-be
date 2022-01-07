@@ -19,4 +19,7 @@ export class UpdateCollectionDto extends PartialType(CreateCollectionDto) {
 
   @IsOptional()
   descriptionInVietnames?: string;
+
+  @IsOptional()
+  saleIds: string | string[];
 }

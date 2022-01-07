@@ -54,7 +54,7 @@ export class User extends BaseEntity {
   private _username: string;
 
   @Index('username-idx', { fulltext: true })
-  @Column({ name: 'username', unique: true })
+  @Column({ name: 'username', unique: true, nullable: true })
   public get username(): string {
     return this._username;
   }

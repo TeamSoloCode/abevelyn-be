@@ -8,10 +8,13 @@ import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../users/repositories/user.repository';
 import { User } from 'src/users/entities/user.entity';
 import { UserRoles } from 'src/common/entity-enum';
+import { GoogleLoginResponseDTO } from './dto/google-login-response.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly userService: UsersService,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
     private jwtService: JwtService,
@@ -47,7 +50,6 @@ export class AuthService {
       const payload: JwtPayload = {
         uuid: user.uuid,
         username: user.username,
-
         salt: await bcrypt.genSalt(),
       };
 
@@ -107,5 +109,31 @@ export class AuthService {
     } catch (err) {
       throw err;
     }
+  }
+
+  async googleLogin(req): Promise<{ accessToken: string; username: string }> {
+    if (!req.user) {
+      throw new UnauthorizedException('Cannot loggin with this account!');
+    }
+
+    let res = new GoogleLoginResponseDTO();
+    res = <GoogleLoginResponseDTO>req.user;
+
+    const user = await this.userService.loginWithGoogle(res);
+
+    const payload: JwtPayload = {
+      uuid: user.uuid,
+      username: user.email,
+      salt: await bcrypt.genSalt(),
+    };
+
+    const accessToken = await this.jwtService.sign(payload);
+
+    await this.userRepository.update(
+      { uuid: user.uuid },
+      { token: accessToken },
+    );
+
+    return { accessToken, username: user.email };
   }
 }

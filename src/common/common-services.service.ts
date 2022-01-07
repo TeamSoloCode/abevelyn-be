@@ -84,7 +84,7 @@ export class CommonService<T> {
     }
   }
 
-  protected async findAll(
+  async findAll(
     query: FetchDataQuery = {},
     findOptions: FindManyOptions<T> = {},
   ): Promise<T[]> {

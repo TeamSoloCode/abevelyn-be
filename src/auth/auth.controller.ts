@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Redirect,
+  Req,
   Res,
   UseGuards,
   UsePipes,
@@ -17,6 +20,7 @@ import { SignUpCredentialDto } from './dto/signup-credential.dto';
 import { MatchStoredTokenGuard } from './guards/match-token.guard';
 import { SignUpValidationPipe } from './pipes/signup.pipe';
 import { Response } from 'express';
+import { AdminRoleGuard } from './guards/admin-role.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -43,10 +47,33 @@ export class AuthController {
     return this.authService.signIn(authCredentials, UserRoles.ADMIN);
   }
 
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {}
+
+  @Get('redirect')
+  @UseGuards(AuthGuard('google'))
+  @Redirect('http://localhost:8080')
+  async googleAuthRedirect(@Req() req, @Res() res: Response) {
+    const googleUser = await this.authService.googleLogin(req);
+
+    const { username, accessToken } = googleUser;
+
+    res.cookie('token', accessToken);
+    res.cookie('username', username);
+    res.cookie('email', username);
+  }
+
   @Post('/logout')
   @UseGuards(MatchStoredTokenGuard, AuthGuard())
   logout(@GetUser() user: User) {
     return this.authService.logOut(user);
+  }
+
+  @Post('/admin_verify_token')
+  @UseGuards(AuthGuard(), MatchStoredTokenGuard, AdminRoleGuard)
+  adminVarifyToken() {
+    return { result: 'Authorized' };
   }
 
   @Post('/verify_token')

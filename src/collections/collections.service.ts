@@ -5,8 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundError } from 'rxjs';
-import { Product } from 'src/products/entities/product.entity';
+import { SaleRepository } from 'src/sales/repositories/sale.repository';
+import { In } from 'typeorm';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { Collection } from './entities/collection.entity';
@@ -17,6 +17,8 @@ export class CollectionsService {
   constructor(
     @InjectRepository(CollectionRepository)
     private readonly collectionRepository: CollectionRepository,
+    @InjectRepository(SaleRepository)
+    private readonly saleRepository: SaleRepository,
   ) {}
 
   async create(createCollectionDto: CreateCollectionDto): Promise<Collection> {
@@ -74,6 +76,22 @@ export class CollectionsService {
       Object.entries(updateCollectionDto).forEach(([key, value]) => {
         collection[key] = value;
       });
+
+      collection.sales = [];
+
+      if (updateCollectionDto.saleIds) {
+        const sales = await this.saleRepository.find({
+          where: {
+            uuid: In(
+              typeof updateCollectionDto.saleIds == 'string'
+                ? updateCollectionDto.saleIds.split(',')
+                : updateCollectionDto.saleIds,
+            ),
+          },
+        });
+
+        collection.sales = sales;
+      }
 
       await this.collectionRepository.save(collection);
       return await this.collectionRepository.findOne(collection.uuid);

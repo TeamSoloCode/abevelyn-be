@@ -62,6 +62,6 @@ export class Collection extends RootEntity {
   @ManyToMany((type) => Product, (prod) => prod.collections)
   products: Product[];
 
-  @ManyToMany(() => Sale, (sale) => sale.collections)
+  @ManyToMany(() => Sale, (sale) => sale.collections, { eager: true })
   sales: Sale[];
 }

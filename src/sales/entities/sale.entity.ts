@@ -51,6 +51,9 @@ export class Sale extends RootEntity {
   @Column('enum', { enum: SaleUnit, default: SaleUnit.PERCENTAGE })
   unit: SaleUnit;
 
+  @Column('double', { nullable: true })
+  applyPrice: number;
+
   @Column('datetime')
   startedDate: Date;
 
