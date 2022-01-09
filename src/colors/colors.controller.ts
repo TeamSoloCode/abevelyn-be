@@ -24,7 +24,7 @@ import {
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { LanguageCode } from 'src/common/entity-enum';
-import { ApiResponse } from 'src/utils';
+import { ApiDataResponse } from 'src/utils';
 import { ColorsService } from './colors.service';
 import { ColorDataResponseDto } from './dto/color-data-res.dto';
 import { CreateColorDto } from './dto/create-color.dto';
@@ -32,13 +32,25 @@ import { UpdateColorDto } from './dto/update-color.dto';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { Color } from './entities/color.entity';
 import { Response } from 'express';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiHeader,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 
 @Controller('colors')
+@ApiTags('Color APIs')
+@ApiHeader({ name: 'language', enum: LanguageCode })
 export class ColorsController {
   constructor(private readonly colorsService: ColorsService) {}
 
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
+  @ApiBearerAuth('access-token')
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   @UsePipes(ValidationPipe)
   async create(@Body() createColorDto: CreateColorDto): Promise<Color> {
@@ -46,6 +58,22 @@ export class ColorsController {
   }
 
   @Get()
+  @ApiBearerAuth('access-token')
+  @ApiResponse({
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(ApiDataResponse) },
+        {
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: getSchemaPath(ColorDataResponseDto) },
+            },
+          },
+        },
+      ],
+    },
+  })
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   async findAll(): Promise<Color[]> {
@@ -70,17 +98,11 @@ export class ColorsController {
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   @UsePipes(ValidationPipe)
+  @ApiBearerAuth('access-token')
   async update(
     @Param('id') id: string,
     @Body() updateColorDto: UpdateColorDto,
   ): Promise<Color> {
     return this.colorsService.update(id, updateColorDto);
-  }
-
-  @Delete('/:id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
-  async remove(@Param('id') id: string): Promise<Color> {
-    return this.colorsService.remove(id);
   }
 }

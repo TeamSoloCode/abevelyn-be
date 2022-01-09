@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   classToPlain,
   Exclude,
@@ -18,7 +19,9 @@ export class ColorDataResponseDto extends CommonDataResponse<
     super();
   }
 
+  @ApiProperty()
   uuid: string;
+  @ApiProperty()
   code: string;
   createdAt: Date;
 

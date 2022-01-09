@@ -6,6 +6,7 @@ import { CartItemRepository } from 'src/cart-item/repositories/cart-item.reposit
 import { ProductRepository } from 'src/products/repositories/product.repository';
 import { User } from 'src/users/entities/user.entity';
 import { UserRepository } from 'src/users/repositories/user.repository';
+import { CalculatePriceInfo } from 'src/utils';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { Cart } from './entities/cart.entity';
@@ -30,11 +31,7 @@ export class CartsService {
     return await this.cartRepository.save(newCart);
   }
 
-  findAll() {
-    return `This action returns all carts`;
-  }
-
-  async findUserCart(id: string, user: User) {
+  async findUserCart(user: User) {
     let userCart = await this.cartRepository.findOne({
       where: { owner: { uuid: user.uuid } },
     });
@@ -62,25 +59,44 @@ export class CartsService {
       throw new NotFoundException('Cart not found');
     }
 
-    const existCartItem = cart.cartItems.find(
-      (item) => item.product.uuid === updateCartDto.productId,
+    const product = await this.productRepository.findOne(
+      updateCartDto.productId,
     );
+    const cartItem = await this.cartItemService.create(cart, product, user);
 
-    if (existCartItem) {
-      cart.removeCartItem(existCartItem);
-    } else {
-      const product = await this.productRepository.findOne(
-        updateCartDto.productId,
+    if (updateCartDto.action === 'add') {
+      const existCartItem = cart.cartItems.find(
+        (item) => item.product.uuid === updateCartDto.productId,
       );
-      const cartItem = await this.cartItemService.create(cart, product, user);
+
+      if (existCartItem) return;
+
       cart.addCartItem(cartItem);
+    } else if (updateCartDto.action === 'delete') {
+      cart.removeCartItem(cartItem);
     }
 
     await this.cartRepository.save(cart);
     return await this.cartRepository.findOne(cart.uuid);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cart`;
+  async getPriceInformation(user: User): Promise<CalculatePriceInfo> {
+    const cart = await this.cartRepository.findOne({
+      relations: [
+        'cartItems',
+        'cartItems.product',
+        'cartItems.product.collections',
+        'cartItems.product.sales',
+        'cartItems.product.collections.sales',
+        'owner',
+      ],
+      where: { owner: { uuid: user.uuid } },
+    });
+
+    if (!cart) {
+      throw new NotFoundException('Cart not found');
+    }
+
+    return cart.getCartPrice();
   }
 }

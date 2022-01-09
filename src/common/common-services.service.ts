@@ -13,7 +13,7 @@ export class CommonService<T> {
     this.repository = repository;
   }
 
-  repository: Repository<T>;
+  private repository: Repository<T>;
 
   private getFindOptions(
     whereClause: string,

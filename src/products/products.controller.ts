@@ -19,7 +19,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ApiResponse } from 'src/utils';
+import { ApiDataResponse } from 'src/utils';
 import { Product } from './entities/product.entity';
 import { ProductDataResponseDto } from './dto/product-data-res.dto';
 import { diskStorage, Express } from 'multer';
@@ -140,10 +140,5 @@ export class ProductsController {
       image4: files.image4?.[0]?.filename,
       image5: files.image5?.[0]?.filename,
     });
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
   }
 }

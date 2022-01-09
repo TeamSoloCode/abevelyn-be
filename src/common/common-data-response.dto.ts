@@ -3,17 +3,17 @@ import { DTOKeyPrototypeMapper } from 'src/utils';
 import { LanguageCode, UserRoles } from './entity-enum';
 
 export default abstract class CommonDataResponse<T> {
-  _language: LanguageCode;
+  _language?: LanguageCode;
   static DTO_KEY = Symbol('dtoKey');
 
   @Expose({ groups: [UserRoles.ADMIN] })
-  sequence: number;
+  sequence?: number;
 
   @Expose({ groups: [UserRoles.ADMIN] })
-  available: boolean = true;
+  available?: boolean = true;
 
   @Expose({ groups: [UserRoles.ADMIN] })
-  deleted: boolean = false;
+  deleted?: boolean = false;
 
   protected serializeDataResponse(
     obj: CommonDataResponse<T>,

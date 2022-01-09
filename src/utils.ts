@@ -8,6 +8,7 @@ import { config } from 'dotenv';
 import { UserDataResponse } from './users/dto/user-data-response.dto';
 import { ProductDataResponseDto } from './products/dto/product-data-res.dto';
 import { MaterialResponseDto } from './materials/dto/material-data-response.dto';
+import { ApiProperty } from '@nestjs/swagger';
 config();
 
 export const DTOKeyPrototypeMapper = {
@@ -44,15 +45,25 @@ export const deleteUnusedImage = (
   }
 };
 
-export class ApiResponse<T> {
+export class CalculatePriceInfo {
+  totalPrice: number;
+  totalSaleOffAsCurrency: number;
+  totalSaleOffAsPercentage: number;
+  calculatedPrice: number;
+}
+
+export class ApiDataResponse<T> {
   constructor(data: T, message?: string, errorCode?: string) {
     this.code = errorCode;
     this.data = data;
     this.message = message;
   }
 
+  @ApiProperty()
   code: string;
+  @ApiProperty()
   data: T;
+  @ApiProperty()
   message: string;
 }
 

@@ -1,10 +1,13 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { SignInCredentialDto } from 'src/auth/dto/signin-credential.dto';
 import { SignUpCredentialDto } from 'src/auth/dto/signup-credential.dto';
+import { SignInType, UserRoles } from 'src/common/entity-enum';
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 
@@ -35,11 +38,19 @@ export class UserRepository extends Repository<User> {
     authCredentialDto: SignInCredentialDto,
   ): Promise<User> {
     const { username, password } = authCredentialDto;
+
     const user = await this.findOne({ username });
 
-    if (user && (await user.validatePassword(password))) {
+    if (!user) {
+      throw new NotFoundException('Invalid username or password');
+    } else if (user.signupType !== SignInType.REGISTER) {
+      throw new UnauthorizedException(
+        'This user cannot be login with this method',
+      );
+    } else if (user && (await user.validatePassword(password))) {
       return user;
     }
+
     return null;
   }
 

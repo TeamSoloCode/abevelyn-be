@@ -21,7 +21,9 @@ import { MatchStoredTokenGuard } from './guards/match-token.guard';
 import { SignUpValidationPipe } from './pipes/signup.pipe';
 import { Response } from 'express';
 import { AdminRoleGuard } from './guards/admin-role.guard';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth APIs')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -32,6 +34,7 @@ export class AuthController {
     return this.authService.signUp(signUpCredentials);
   }
 
+  @ApiBody({ type: SignInCredentialDto })
   @Post('/signin')
   async signin(@Body(ValidationPipe) authCredentials: SignInCredentialDto) {
     const { accessToken, username } = await this.authService.signIn(

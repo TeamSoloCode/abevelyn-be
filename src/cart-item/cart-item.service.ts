@@ -5,6 +5,7 @@ import { CommonService } from 'src/common/common-services.service';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
+import { CalculatePriceInfo } from 'src/utils';
 import { IsNull, Not } from 'typeorm';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
@@ -68,7 +69,25 @@ export class CartItemService extends CommonService<CartItem> {
     return this.cartItemRepository.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cartItem`;
+  async getPriceInformation(
+    cartItemId: string,
+    user: User,
+  ): Promise<CalculatePriceInfo> {
+    const cartItem = await this.cartItemRepository.findOne({
+      relations: [
+        'product',
+        'product.sales',
+        'product.collections',
+        'product.collections.sales',
+        'owner',
+      ],
+      where: { uuid: cartItemId, owner: { uuid: user.uuid } },
+    });
+
+    if (!cartItem) {
+      throw new NotFoundException('Cart item not found');
+    }
+
+    return cartItem.getCartItemPrice();
   }
 }

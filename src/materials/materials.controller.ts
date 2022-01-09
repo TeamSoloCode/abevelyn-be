@@ -70,10 +70,4 @@ export class MaterialsController {
   ) {
     return this.materialsService.update(id, updateMaterialDto);
   }
-
-  @Delete(':id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
-  remove(@Param('id') id: string) {
-    return this.materialsService.remove(id);
-  }
 }

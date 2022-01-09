@@ -9,13 +9,13 @@ import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
-import { ApiResponse } from 'src/utils';
+import { ApiDataResponse } from 'src/utils';
 import CommonDataResponse from '../common-data-response.dto';
 import { LanguageCode, UserRoles } from '../entity-enum';
 
 @Injectable()
 export class ResponseDataInterceptor<T>
-  implements NestInterceptor<T, ApiResponse<T | T[]>>
+  implements NestInterceptor<T, ApiDataResponse<T | T[]>>
 {
   constructor(responseDto: CommonDataResponse<T>) {
     this.responseDto = responseDto;
@@ -26,7 +26,7 @@ export class ResponseDataInterceptor<T>
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<ApiResponse<T | T[]>> {
+  ): Observable<ApiDataResponse<T | T[]>> {
     const request: Request = context.switchToHttp().getRequest();
 
     // TODO: Put the url into env
@@ -62,7 +62,7 @@ export class ResponseDataInterceptor<T>
           );
         }
 
-        return new ApiResponse(res);
+        return new ApiDataResponse(res);
       }),
     );
   }

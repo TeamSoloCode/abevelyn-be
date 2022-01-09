@@ -65,11 +65,4 @@ export class SalesController {
   update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
     return this.salesService.update(id, updateSaleDto);
   }
-
-  @Delete(':id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
-  remove(@Param('id') id: string) {
-    return this.salesService.remove(+id);
-  }
 }

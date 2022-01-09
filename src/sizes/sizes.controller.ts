@@ -20,7 +20,7 @@ import {
   HeaderInfo,
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminSizeResponseDto } from './dto/admin-size-res.dto';
-import { ApiResponse } from 'src/utils';
+import { ApiDataResponse } from 'src/utils';
 
 @Controller('sizes')
 export class SizesController {
@@ -32,43 +32,43 @@ export class SizesController {
   async create(
     @Body() createSizeDto: CreateSizeDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminSizeResponseDto>> {
+  ): Promise<ApiDataResponse<AdminSizeResponseDto>> {
     const size = await this.sizesService.create(createSizeDto);
     const res = new AdminSizeResponseDto(size, headerInfo.language);
-    return new ApiResponse(res);
+    return new ApiDataResponse(res);
   }
 
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminSizeResponseDto[]>> {
+  ): Promise<ApiDataResponse<AdminSizeResponseDto[]>> {
     const sizes = await this.sizesService.findAll();
     const res = sizes.map(
       (size) => new AdminSizeResponseDto(size, headerInfo.language),
     );
-    return new ApiResponse(res);
+    return new ApiDataResponse(res);
   }
 
   @Get('/fetch_available')
   async findAvailableCollection(
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminSizeResponseDto[]>> {
+  ): Promise<ApiDataResponse<AdminSizeResponseDto[]>> {
     const sizes = await this.sizesService.findAvailable();
     const res = sizes.map(
       (size) => new AdminSizeResponseDto(size, headerInfo.language),
     );
-    return new ApiResponse(res);
+    return new ApiDataResponse(res);
   }
 
   @Get('/:id')
   async findOne(
     @Param('id') id: string,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminSizeResponseDto>> {
+  ): Promise<ApiDataResponse<AdminSizeResponseDto>> {
     const size = await this.sizesService.findOne(id);
     const res = new AdminSizeResponseDto(size, headerInfo.language);
-    return new ApiResponse(res);
+    return new ApiDataResponse(res);
   }
 
   @Patch('/:id')
@@ -78,21 +78,9 @@ export class SizesController {
     @Param('id') id: string,
     @Body() updateSizeDto: UpdateSizeDto,
     @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminSizeResponseDto>> {
+  ): Promise<ApiDataResponse<AdminSizeResponseDto>> {
     const size = await this.sizesService.update(id, updateSizeDto);
     const res = new AdminSizeResponseDto(size, headerInfo.language);
-    return new ApiResponse(res, 'Update successful!');
-  }
-
-  @Delete('/:id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UsePipes(ValidationPipe)
-  async remove(
-    @Param('id') id: string,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiResponse<AdminSizeResponseDto>> {
-    const size = await this.sizesService.remove(id);
-    const res = new AdminSizeResponseDto(size, headerInfo.language);
-    return new ApiResponse(res);
+    return new ApiDataResponse(res, 'Update successful!');
   }
 }

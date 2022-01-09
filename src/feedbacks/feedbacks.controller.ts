@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { FeedbacksService } from './feedbacks.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
@@ -23,12 +31,10 @@ export class FeedbacksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFeedbackDto: UpdateFeedbackDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateFeedbackDto: UpdateFeedbackDto,
+  ) {
     return this.feedbacksService.update(+id, updateFeedbackDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.feedbacksService.remove(+id);
   }
 }
