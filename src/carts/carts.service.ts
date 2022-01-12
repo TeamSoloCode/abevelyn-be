@@ -62,7 +62,6 @@ export class CartsService {
     const product = await this.productRepository.findOne(
       updateCartDto.productId,
     );
-    const cartItem = await this.cartItemService.create(cart, product, user);
 
     if (updateCartDto.action === 'add') {
       const existCartItem = cart.cartItems.find(
@@ -73,13 +72,24 @@ export class CartsService {
         return cart;
       }
 
+      const cartItem = await this.cartItemService.create(cart, product, user);
       cart.addCartItem(cartItem);
+      await this.cartRepository.save(cart);
+      return await this.cartRepository.findOne(cart.uuid);
     } else if (updateCartDto.action === 'delete') {
-      cart.removeCartItem(cartItem);
-    }
+      const cartItem = await this.cartItemRepository.findOne({
+        cart: { uuid: cart.uuid },
+        product: { uuid: updateCartDto.productId },
+      });
 
-    await this.cartRepository.save(cart);
-    return await this.cartRepository.findOne(cart.uuid);
+      if (cartItem) {
+        cart.removeCartItem(cartItem);
+        await this.cartRepository.save(cart);
+        return await this.cartRepository.findOne(cart.uuid);
+      }
+
+      return cart;
+    }
   }
 
   async getPriceInformation(user: User): Promise<CalculatePriceInfo> {
