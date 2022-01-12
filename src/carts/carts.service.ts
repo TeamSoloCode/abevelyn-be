@@ -69,7 +69,9 @@ export class CartsService {
         (item) => item.product.uuid === updateCartDto.productId,
       );
 
-      if (existCartItem) return;
+      if (existCartItem) {
+        return cart;
+      }
 
       cart.addCartItem(cartItem);
     } else if (updateCartDto.action === 'delete') {
