@@ -37,7 +37,9 @@ import {
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Products APIs')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

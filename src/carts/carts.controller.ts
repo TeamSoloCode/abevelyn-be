@@ -67,6 +67,7 @@ export class CartsController {
   @ApiBody({ type: UpdateCartDto })
   @Patch(':id')
   @UsePipes(ValidationPipe)
+  @UseInterceptors(new ResponseDataInterceptor(new CartPriceResponseDTO()))
   async update(
     @Param('id') id: string,
     @Body() updateCartDto: UpdateCartDto,

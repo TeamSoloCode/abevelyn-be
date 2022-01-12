@@ -19,6 +19,7 @@ import { Review } from 'src/reviews/entities/review.entity';
 import { Feedback } from 'src/feedbacks/entities/feedback.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
+import { Address } from 'src/addresses/entities/address.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -164,6 +165,8 @@ export class User extends BaseEntity {
   @OneToMany(() => CartItem, (cartItem) => cartItem.owner)
   cartItems: CartItem[];
 
+  @OneToMany(() => Address, (address) => address.owner)
+  addresses: Address[];
   /**
    * -----------------------------------------------------
    */

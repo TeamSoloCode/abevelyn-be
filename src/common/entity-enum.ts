@@ -20,3 +20,11 @@ export enum SaleUnit {
   PERCENTAGE = '%',
   USD = 'usd',
 }
+
+export enum OrderStatus {
+  PENDING = 'pending',
+  CANCELED = 'cancel',
+  REJECTED = 'rejected',
+  REFUNDED = 'refunded',
+  COMPLETED = 'completed',
+}

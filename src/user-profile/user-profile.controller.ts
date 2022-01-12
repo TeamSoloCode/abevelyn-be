@@ -23,7 +23,9 @@ import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { UserProfileResponseDTO } from './dto/profile-response.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User Profile APIs')
 @Controller('user-profile')
 export class UserProfileController {
   constructor(private readonly userProfileService: UserProfileService) {}

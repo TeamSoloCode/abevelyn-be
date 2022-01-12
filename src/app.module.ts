@@ -11,7 +11,6 @@ import { FeedbacksModule } from './feedbacks/feedbacks.module';
 import { CartsModule } from './carts/carts.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { OrdersModule } from './orders/orders.module';
-import { OrderStatusModule } from './order-status/order-status.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
@@ -38,7 +37,6 @@ import { SalesModule } from './sales/sales.module';
     CartsModule,
     CouponsModule,
     OrdersModule,
-    OrderStatusModule,
     ReviewsModule,
     TypeOrmModule.forRoot(typeOrmConfig),
     UserProfileModule,
