@@ -28,3 +28,10 @@ export enum OrderStatus {
   REFUNDED = 'refunded',
   COMPLETED = 'completed',
 }
+
+export enum SaleType {
+  ORDER = 'order',
+  COLLECTION = 'collection',
+  PRODUCT = 'product',
+  COMBO = 'combo',
+}

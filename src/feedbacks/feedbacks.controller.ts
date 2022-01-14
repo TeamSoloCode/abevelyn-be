@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FeedbacksService } from './feedbacks.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 
 @Controller('feedbacks')
+@UseInterceptors(new ApiResponseInterceptor())
 export class FeedbacksController {
   constructor(private readonly feedbacksService: FeedbacksService) {}
 

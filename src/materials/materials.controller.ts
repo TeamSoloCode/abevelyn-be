@@ -23,8 +23,10 @@ import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 
 @Controller('materials')
+@UseInterceptors(new ApiResponseInterceptor())
 export class MaterialsController {
   constructor(private readonly materialsService: MaterialsService) {}
 

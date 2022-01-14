@@ -4,6 +4,8 @@ import { LanguageCode, UserRoles } from './entity-enum';
 
 export default abstract class CommonDataResponse<T> {
   _language?: LanguageCode;
+  responseMessage?: string;
+  statusCode?: string;
   static DTO_KEY = Symbol('dtoKey');
 
   @Expose({ groups: [UserRoles.ADMIN] })

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,6 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 import { AddressesService } from './addresses.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
@@ -23,6 +25,7 @@ import { UpdateAddressDto } from './dto/update-address.dto';
 @ApiTags('Address APIs')
 @ApiBearerAuth('access-token')
 @Controller('addresses')
+@UseInterceptors(new ApiResponseInterceptor())
 export class AddressesController {
   constructor(private readonly addressesService: AddressesService) {}
 

@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SaleType } from 'src/common/entity-enum';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { In } from 'typeorm';
 import { CreateCollectionDto } from './dto/create-collection.dto';
@@ -87,6 +88,7 @@ export class CollectionsService {
                 ? updateCollectionDto.saleIds.split(',')
                 : updateCollectionDto.saleIds,
             ),
+            saleType: SaleType.COLLECTION,
           },
         });
 

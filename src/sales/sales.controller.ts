@@ -21,19 +21,33 @@ import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { SaleResponseDto } from './dto/sale-response.dto';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
 
+@ApiTags('Sale APIs')
 @Controller('sales')
+@UseInterceptors(new ApiResponseInterceptor())
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
+  @ApiBearerAuth('access-token')
   @Post()
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
+  @UseInterceptors(
+    new ResponseMessageInterceptor<SaleResponseDto>({
+      201: (data) => {
+        return `Create sale '${data.name}' successful!`;
+      },
+    }),
+    new ResponseDataInterceptor(new SaleResponseDto()),
+  )
   @UsePipes(ValidationPipe)
   create(@Body() createSaleDto: CreateSaleDto) {
     return this.salesService.create(createSaleDto);
   }
 
+  @ApiBearerAuth('access-token')
   @Get()
   @UseGuards(AuthGuard(), AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
@@ -59,9 +73,17 @@ export class SalesController {
     return this.salesService.findOne(id);
   }
 
+  @ApiBearerAuth('access-token')
   @Patch(':id')
   @UseGuards(AuthGuard(), AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
+  @UseInterceptors(
+    new ResponseMessageInterceptor<SaleResponseDto>({
+      200: (data) => {
+        return `Update sale '${data.name}' successful!`;
+      },
+    }),
+    new ResponseDataInterceptor(new SaleResponseDto()),
+  )
   update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
     return this.salesService.update(id, updateSaleDto);
   }

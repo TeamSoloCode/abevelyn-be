@@ -1,6 +1,7 @@
 import { IsUUID } from 'class-validator';
+import moment from 'moment';
 import { Cart } from 'src/carts/entities/cart.entity';
-import { SaleUnit } from 'src/common/entity-enum';
+import { SaleType, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Product } from 'src/products/entities/product.entity';
@@ -64,14 +65,19 @@ export class CartItem extends RootEntity {
 
     const computeSale = (sales: Sale[], price: number, qty: number): void => {
       sales.forEach((sale) => {
+        if (
+          moment(sale.expiredDate).isBefore(moment.utc()) &&
+          moment(sale.startedDate).isAfter(moment.utc())
+        ) {
+          return;
+        }
+
         switch (sale.unit) {
           case SaleUnit.USD:
             totalSaleAsCurrency += sale.saleOff * qty;
             break;
           case SaleUnit.PERCENTAGE:
-            if ((sale.saleOff / 100) * price <= sale.maxOff) {
-              productSaleAsPercentage = sale.saleOff / 100;
-            }
+            productSaleAsPercentage = sale.saleOff / 100;
             break;
         }
       });

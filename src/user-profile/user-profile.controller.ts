@@ -24,15 +24,18 @@ import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { UserProfileResponseDTO } from './dto/profile-response.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 
 @ApiTags('User Profile APIs')
 @Controller('user-profile')
+@UseInterceptors(new ApiResponseInterceptor())
 export class UserProfileController {
   constructor(private readonly userProfileService: UserProfileService) {}
 
   @Post()
   @UseGuards(AuthGuard())
   @UsePipes(ValidationPipe)
+  @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
   create(
     @Body() createUserProfileDto: CreateUserProfileDto,
     @GetUser() user: User,

@@ -41,10 +41,11 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-
-@Controller('colors')
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 @ApiTags('Color APIs')
 @ApiHeader({ name: 'language', enum: LanguageCode })
+@Controller('colors')
+@UseInterceptors(new ApiResponseInterceptor())
 export class ColorsController {
   constructor(private readonly colorsService: ColorsService) {}
 

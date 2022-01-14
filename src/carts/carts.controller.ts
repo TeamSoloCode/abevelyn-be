@@ -25,6 +25,7 @@ import {
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { LanguageCode } from 'src/common/entity-enum';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { CartPriceResponseDTO } from 'src/common/price-info-res.dto';
 import { User } from 'src/users/entities/user.entity';
@@ -43,6 +44,7 @@ import { Cart } from './entities/cart.entity';
 @ApiBearerAuth('access-token')
 @Controller('carts')
 @UseGuards(AuthGuard())
+@UseInterceptors(new ApiResponseInterceptor())
 export class CartsController {
   constructor(private readonly cartsService: CartsService) {}
 

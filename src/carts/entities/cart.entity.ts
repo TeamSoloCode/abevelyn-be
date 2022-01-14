@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { SaleUnit } from 'src/common/entity-enum';
+import { SaleType, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Product } from 'src/products/entities/product.entity';
@@ -9,6 +9,7 @@ import { Sale } from 'src/sales/entities/sale.entity';
 import { User } from 'src/users/entities/user.entity';
 import { CalculatePriceInfo } from 'src/utils';
 import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import moment from 'moment';
 
 @Entity()
 export class Cart extends RootEntity {
@@ -36,24 +37,30 @@ export class Cart extends RootEntity {
     this.cartItems = this.cartItems.filter((i) => i.uuid !== cartItem.uuid);
   };
 
-  getCartPrice = (): CalculatePriceInfo => {
+  getCartPrice = (orderSales: Sale[] = []): CalculatePriceInfo => {
     let totalPrice = 0;
     let totalSaleAsCurrency = 0;
     let totalSaleAsPercentage = 0;
 
     let productSaleAsPercentage = 0;
     let collectionSaleAsPercentage = 0;
+    let orderSaleAsPercentage = 0;
 
     const computeSale = (sales: Sale[], price: number, qty: number): void => {
       sales.forEach((sale) => {
+        if (
+          moment(sale.expiredDate).isBefore(moment.utc()) &&
+          moment(sale.startedDate).isAfter(moment.utc())
+        ) {
+          return;
+        }
+
         switch (sale.unit) {
           case SaleUnit.USD:
             totalSaleAsCurrency += sale.saleOff * qty;
             break;
           case SaleUnit.PERCENTAGE:
-            if ((sale.saleOff / 100) * price <= sale.maxOff) {
-              productSaleAsPercentage = sale.saleOff / 100;
-            }
+            productSaleAsPercentage = sale.saleOff / 100;
             break;
         }
       });
@@ -78,15 +85,22 @@ export class Cart extends RootEntity {
       }
     });
 
+    // let maxOrderSale = 0
+    // const selectedOrderSale = orderSales.find((sale) => {
+    //   return
+    // })
+
     totalSaleAsPercentage =
       collectionSaleAsPercentage + productSaleAsPercentage;
+
+    const priceExcludeOrderSale =
+      totalPrice - totalSaleAsCurrency - totalPrice * totalSaleAsPercentage;
 
     return {
       totalPrice,
       totalSaleOffAsCurrency: totalSaleAsCurrency,
       totalSaleOffAsPercentage: totalSaleAsPercentage,
-      calculatedPrice:
-        totalPrice - totalSaleAsCurrency - totalPrice * totalSaleAsPercentage,
+      calculatedPrice: priceExcludeOrderSale,
     };
   };
 }

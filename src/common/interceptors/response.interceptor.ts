@@ -14,19 +14,14 @@ import CommonDataResponse from '../common-data-response.dto';
 import { LanguageCode, UserRoles } from '../entity-enum';
 
 @Injectable()
-export class ResponseDataInterceptor<T>
-  implements NestInterceptor<T, ApiDataResponse<T | T[]>>
-{
+export class ResponseDataInterceptor<T> implements NestInterceptor<T> {
   constructor(responseDto: CommonDataResponse<T>) {
     this.responseDto = responseDto;
   }
 
   private responseDto: CommonDataResponse<T>;
 
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Observable<ApiDataResponse<T | T[]>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<T | T[]> {
     const request: Request = context.switchToHttp().getRequest();
 
     // TODO: Put the url into env
@@ -62,7 +57,7 @@ export class ResponseDataInterceptor<T>
           );
         }
 
-        return new ApiDataResponse(res);
+        return res;
       }),
     );
   }

@@ -1,7 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { CommonService } from 'src/common/common-services.service';
+import { SaleType } from 'src/common/entity-enum';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { ProductRepository } from 'src/products/repositories/product.repository';
 import { In } from 'typeorm';
@@ -24,16 +30,34 @@ export class SalesService extends CommonService<Sale> {
   }
 
   create(createSaleDto: CreateSaleDto) {
-    const newSale = new Sale(
-      createSaleDto.saleOff,
-      createSaleDto.startedDate,
-      createSaleDto.expiredDate,
-    );
+    const {
+      saleOff,
+      unit,
+      startedDate,
+      expiredDate,
+      saleType,
+      applyPrice,
+      name,
+    } = createSaleDto;
 
-    if (createSaleDto.maxOff) newSale.maxOff = createSaleDto.maxOff;
-    if (createSaleDto.unit) newSale.unit = createSaleDto.unit;
+    const newSale = new Sale(saleOff, startedDate, expiredDate, saleType);
 
-    return this.saleRepository.save(newSale);
+    if (saleType === SaleType.ORDER) {
+      newSale.applyPrice = applyPrice;
+    }
+
+    newSale.unit = unit;
+    newSale.name = name;
+    try {
+      return this.saleRepository.save(newSale);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        // duplicate user
+        throw new ConflictException(['Username already exists!']);
+      } else {
+        throw new InternalServerErrorException(error.message);
+      }
+    }
   }
 
   findAllSale(query: FetchDataQuery): Promise<Sale[]> {
@@ -50,9 +74,7 @@ export class SalesService extends CommonService<Sale> {
       throw new NotFoundException('Sale not found!');
     }
 
-    Object.entries(updateSaleDto).forEach(([key, value]) => {
-      sale[key] = value;
-    });
+    Object.assign(sale, updateSaleDto);
 
     sale.collections = [];
     sale.products = [];

@@ -23,6 +23,7 @@ import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { CartPriceResponseDTO } from 'src/common/price-info-res.dto';
 import { User } from 'src/users/entities/user.entity';
@@ -35,6 +36,7 @@ import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 @ApiBearerAuth('access-token')
 @Controller('cart-item')
 @UseGuards(AuthGuard())
+@UseInterceptors(new ApiResponseInterceptor())
 export class CartItemController {
   constructor(private readonly cartItemService: CartItemService) {}
   @ApiOperation({ summary: 'Get all cart items' })

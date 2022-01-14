@@ -74,41 +74,24 @@ export class CartsService {
 
       const cartItem = await this.cartItemService.create(cart, product, user);
       cart.addCartItem(cartItem);
-      await this.cartRepository.save(cart);
-      return await this.cartRepository.findOne(cart.uuid);
     } else if (updateCartDto.action === 'delete') {
       const cartItem = await this.cartItemRepository.findOne({
         cart: { uuid: cart.uuid },
         product: { uuid: updateCartDto.productId },
       });
 
-      if (cartItem) {
-        cart.removeCartItem(cartItem);
-        await this.cartRepository.save(cart);
-        return await this.cartRepository.findOne(cart.uuid);
+      if (!cartItem) {
+        return cart;
       }
 
-      return cart;
+      cart.removeCartItem(cartItem);
     }
+
+    await this.cartRepository.save(cart);
+    return await this.cartRepository.findOne(cart.uuid);
   }
 
   async getPriceInformation(user: User): Promise<CalculatePriceInfo> {
-    const cart = await this.cartRepository.findOne({
-      relations: [
-        'cartItems',
-        'cartItems.product',
-        'cartItems.product.collections',
-        'cartItems.product.sales',
-        'cartItems.product.collections.sales',
-        'owner',
-      ],
-      where: { owner: { uuid: user.uuid } },
-    });
-
-    if (!cart) {
-      throw new NotFoundException('Cart not found');
-    }
-
-    return cart.getCartPrice();
+    return await this.cartRepository.getPriceInformation(user);
   }
 }

@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 
 @Controller('orders')
+@UseInterceptors(new ApiResponseInterceptor())
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 

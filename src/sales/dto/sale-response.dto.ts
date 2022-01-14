@@ -12,6 +12,8 @@ export class SaleResponseDto extends CommonDataResponse<
   @Expose({ groups: [UserRoles.ADMIN] })
   updatedAt: Date;
 
+  applyPrice: number;
+
   createdAt: Date;
 
   startedDate: Date;
@@ -19,8 +21,6 @@ export class SaleResponseDto extends CommonDataResponse<
   expiredDate: Date;
 
   saleOff: number;
-
-  maxOff: number;
 
   unit: SaleUnit;
 

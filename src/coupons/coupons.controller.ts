@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 import { CouponsService } from './coupons.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 
 @Controller('coupons')
+@UseInterceptors(new ApiResponseInterceptor())
 export class CouponsController {
   constructor(private readonly couponsService: CouponsService) {}
 

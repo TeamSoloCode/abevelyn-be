@@ -11,6 +11,8 @@ import { MaterialResponseDto } from './materials/dto/material-data-response.dto'
 import { ApiProperty } from '@nestjs/swagger';
 config();
 
+export const DEFAULT_DATETIME_FORMAT = 'MM-DD-YYYY HH:mm:ss';
+
 export const DTOKeyPrototypeMapper = {
   color: ColorDataResponseDto.prototype,
   user: UserDataResponse.prototype,

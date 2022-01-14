@@ -10,6 +10,7 @@ import _, { isNil } from 'lodash';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { ColorRepository } from 'src/colors/repositories/color.repository';
 import { CommonService } from 'src/common/common-services.service';
+import { SaleType } from 'src/common/entity-enum';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { MaterialRepository } from 'src/materials/repositories/material.reponsitory';
 import { ProductStatusRepository } from 'src/product-status/repositories/product-status.repository';
@@ -120,9 +121,7 @@ export class ProductsService extends CommonService<Product> {
         throw new NotFoundException();
       }
 
-      Object.entries(updateProductDto).forEach(([key, value]) => {
-        product[key] = value;
-      });
+      Object.assign(product, updateProductDto);
 
       const { sizeId, colorId, statusId } = updateProductDto;
 
@@ -170,6 +169,7 @@ export class ProductsService extends CommonService<Product> {
                 ? updateProductDto.saleIds.split(',')
                 : updateProductDto.saleIds,
             ),
+            saleType: SaleType.PRODUCT,
           },
         });
 
@@ -181,7 +181,6 @@ export class ProductsService extends CommonService<Product> {
         where: { uuid: product.uuid },
       });
     } catch (error) {
-      console.log('abcd', error);
       throw new InternalServerErrorException(error.message);
     }
   }
