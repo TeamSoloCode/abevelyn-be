@@ -22,6 +22,7 @@ import { SignUpValidationPipe } from './pipes/signup.pipe';
 import { Response } from 'express';
 import { AdminRoleGuard } from './guards/admin-role.guard';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { AuthGuards } from 'src/utils';
 
 @ApiTags('Auth APIs')
 @Controller('auth')
@@ -68,19 +69,19 @@ export class AuthController {
   }
 
   @Post('/logout')
-  @UseGuards(MatchStoredTokenGuard, AuthGuard())
+  @UseGuards(...AuthGuards)
   logout(@GetUser() user: User) {
     return this.authService.logOut(user);
   }
 
   @Post('/admin_verify_token')
-  @UseGuards(AuthGuard(), MatchStoredTokenGuard, AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   adminVarifyToken() {
     return { result: 'Authorized' };
   }
 
   @Post('/verify_token')
-  @UseGuards(AuthGuard(), MatchStoredTokenGuard)
+  @UseGuards(...AuthGuards)
   varifyToken() {
     return { result: 'Authorized' };
   }

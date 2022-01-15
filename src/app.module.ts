@@ -24,6 +24,7 @@ import { FileModule } from './file/file.module';
 import { GoogleStrategy } from './auth/strategies/google.strategy';
 import { AddressesModule } from './addresses/addresses.module';
 import { SalesModule } from './sales/sales.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { SalesModule } from './sales/sales.module';
     FileModule,
     AddressesModule,
     SalesModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy],

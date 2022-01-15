@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CartItemService } from 'src/cart-item/cart-item.service';
 import { CreateCartItemDto } from 'src/cart-item/dto/create-cart-item.dto';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
+import { CommonService } from 'src/common/common-services.service';
 import { ProductRepository } from 'src/products/repositories/product.repository';
 import { User } from 'src/users/entities/user.entity';
 import { UserRepository } from 'src/users/repositories/user.repository';
@@ -13,7 +14,7 @@ import { Cart } from './entities/cart.entity';
 import { CartRepository } from './repositories/cart.repository';
 
 @Injectable()
-export class CartsService {
+export class CartsService extends CommonService<Cart> {
   constructor(
     @InjectRepository(CartRepository)
     private readonly cartRepository: CartRepository,
@@ -24,7 +25,9 @@ export class CartsService {
     @InjectRepository(ProductRepository)
     private readonly productRepository: ProductRepository,
     private readonly cartItemService: CartItemService,
-  ) {}
+  ) {
+    super(cartRepository);
+  }
 
   async create(user: User): Promise<Cart> {
     const newCart = this.cartRepository.create({ owner: user });
@@ -32,13 +35,22 @@ export class CartsService {
   }
 
   async findUserCart(user: User) {
-    let userCart = await this.cartRepository.findOne({
-      where: { owner: { uuid: user.uuid } },
-    });
+    let userCart = await this.findOneAvailable(
+      { cond: 'cartItems.order = NULL' },
+      {
+        relations: ['cartItems', 'owner', 'cartItems.order'],
+        join: {
+          alias: 'cart',
+          leftJoinAndSelect: {
+            cartItems: 'cart.cartItems',
+          },
+        },
+      },
+    );
 
     if (!userCart) {
-      const newCart = await this.create(user);
-      userCart = await this.cartRepository.save(newCart);
+      // const newCart = await this.create(user);
+      // userCart = await this.cartRepository.save(newCart);
     }
 
     return this.cartRepository.findOne({

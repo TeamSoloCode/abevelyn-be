@@ -21,10 +21,10 @@ export class Order extends RootEntity {
   uuid: string;
 
   @Column('text')
-  orderDescription: string;
+  cancelReason: string;
 
   @Column('text')
-  stateDescription: string;
+  rejectReason: string;
 
   @Column('enum', { enum: OrderStatus })
   orderStatus: OrderStatus;

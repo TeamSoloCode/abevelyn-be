@@ -9,9 +9,12 @@ import { UserDataResponse } from './users/dto/user-data-response.dto';
 import { ProductDataResponseDto } from './products/dto/product-data-res.dto';
 import { MaterialResponseDto } from './materials/dto/material-data-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { MatchStoredTokenGuard } from './auth/guards/match-token.guard';
 config();
 
 export const DEFAULT_DATETIME_FORMAT = 'MM-DD-YYYY HH:mm:ss';
+export const AuthGuards = [MatchStoredTokenGuard, AuthGuard()];
 
 export const DTOKeyPrototypeMapper = {
   color: ColorDataResponseDto.prototype,

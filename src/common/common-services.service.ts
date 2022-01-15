@@ -4,7 +4,12 @@ import {
 } from '@nestjs/common';
 import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
-import { FindManyOptions, JoinOptions, Repository } from 'typeorm';
+import {
+  FindManyOptions,
+  FindOneOptions,
+  JoinOptions,
+  Repository,
+} from 'typeorm';
 import { EntityFieldsNames } from 'typeorm/common/EntityFieldsNames';
 import { FetchDataQuery } from './fetch-data-query';
 
@@ -21,7 +26,7 @@ export class CommonService<T> {
     findOptions: FindManyOptions<T> = {},
     offset: number = 0,
     limit: number = 100,
-  ): FindManyOptions<T> {
+  ): FindManyOptions<T> | FindOneOptions<T> {
     return {
       order: <any>{
         ...order,
@@ -52,6 +57,36 @@ export class CommonService<T> {
 
     try {
       return await this.repository.find(
+        this.getFindOptions(
+          whereClause,
+          query.order,
+          findOptions,
+          query.offset,
+          query.limit,
+        ),
+      );
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  protected async findOneAvailable(
+    query: FetchDataQuery = {},
+    findOptions: FindManyOptions<T> = {},
+  ): Promise<T> {
+    const mainJoinAlias = findOptions?.join?.alias;
+    let defaultCondition = 'available = true AND deleted = false';
+
+    if (mainJoinAlias) {
+      defaultCondition = `${mainJoinAlias}.available = true AND ${mainJoinAlias}.deleted = false`;
+    }
+
+    const whereClause = query.cond
+      ? `(${query.cond}) AND (${defaultCondition})`
+      : defaultCondition;
+
+    try {
+      return await this.repository.findOne(
         this.getFindOptions(
           whereClause,
           query.order,
