@@ -24,7 +24,7 @@ import {
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { LanguageCode } from 'src/common/entity-enum';
-import { ApiDataResponse } from 'src/utils';
+import { ApiDataResponse, AuthGuards } from 'src/utils';
 import { ColorsService } from './colors.service';
 import { ColorDataResponseDto } from './dto/color-data-res.dto';
 import { CreateColorDto } from './dto/create-color.dto';
@@ -50,7 +50,7 @@ export class ColorsController {
   constructor(private readonly colorsService: ColorsService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @ApiBearerAuth('access-token')
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   @UsePipes(ValidationPipe)
@@ -75,7 +75,7 @@ export class ColorsController {
       ],
     },
   })
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   async findAll(): Promise<Color[]> {
     return this.colorsService.findAll();
@@ -96,7 +96,7 @@ export class ColorsController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ColorDataResponseDto()))
   @UsePipes(ValidationPipe)
   @ApiBearerAuth('access-token')

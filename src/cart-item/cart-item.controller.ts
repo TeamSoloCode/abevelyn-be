@@ -27,7 +27,7 @@ import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.int
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { CartPriceResponseDTO } from 'src/common/price-info-res.dto';
 import { User } from 'src/users/entities/user.entity';
-import { CalculatePriceInfo } from 'src/utils';
+import { AuthGuards, CalculatePriceInfo } from 'src/utils';
 import { CartItemService } from './cart-item.service';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
@@ -35,7 +35,7 @@ import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 @ApiTags('Cart item APIs')
 @ApiBearerAuth('access-token')
 @Controller('cart-item')
-@UseGuards(AuthGuard())
+@UseGuards(...AuthGuards)
 @UseInterceptors(new ApiResponseInterceptor())
 export class CartItemController {
   constructor(private readonly cartItemService: CartItemService) {}

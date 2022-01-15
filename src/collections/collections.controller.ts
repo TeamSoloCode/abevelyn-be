@@ -17,7 +17,7 @@ import {
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { LanguageCode } from 'src/common/entity-enum';
-import { ApiDataResponse } from 'src/utils';
+import { ApiDataResponse, AuthGuards } from 'src/utils';
 import { CollectionsService } from './collections.service';
 import { AdminCollectionResponseDto } from './dto/admin-collection-res.dto';
 import { CreateCollectionDto } from './dto/create-collection.dto';
@@ -28,7 +28,7 @@ export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UsePipes(ValidationPipe)
   async create(
     @Body() createCollectionDto: CreateCollectionDto,
@@ -42,7 +42,7 @@ export class CollectionsController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiDataResponse<AdminCollectionResponseDto[]>> {
@@ -77,7 +77,7 @@ export class CollectionsController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UsePipes(ValidationPipe)
   async update(
     @Param('id') id: string,

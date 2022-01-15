@@ -24,6 +24,7 @@ import { SaleResponseDto } from './dto/sale-response.dto';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
+import { AuthGuards } from 'src/utils';
 
 @ApiTags('Sale APIs')
 @Controller('sales')
@@ -33,7 +34,7 @@ export class SalesController {
 
   @ApiBearerAuth('access-token')
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(
     new ResponseMessageInterceptor<SaleResponseDto>({
       201: (data) => {
@@ -49,7 +50,7 @@ export class SalesController {
 
   @ApiBearerAuth('access-token')
   @Get()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   findAll(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
@@ -75,7 +76,7 @@ export class SalesController {
 
   @ApiBearerAuth('access-token')
   @Patch(':id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(
     new ResponseMessageInterceptor<SaleResponseDto>({
       200: (data) => {

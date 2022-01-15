@@ -19,7 +19,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ApiDataResponse } from 'src/utils';
+import { ApiDataResponse, AuthGuards } from 'src/utils';
 import { Product } from './entities/product.entity';
 import { ProductDataResponseDto } from './dto/product-data-res.dto';
 import { diskStorage, Express } from 'multer';
@@ -47,7 +47,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
   @UsePipes(ValidationPipe)
   @UseInterceptors(
@@ -72,7 +72,7 @@ export class ProductsController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
   async findAll(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
@@ -97,7 +97,7 @@ export class ProductsController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
   @UsePipes(ValidationPipe)
   @UseInterceptors(

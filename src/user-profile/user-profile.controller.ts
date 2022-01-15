@@ -25,6 +25,7 @@ import { ResponseDataInterceptor } from 'src/common/interceptors/response.interc
 import { UserProfileResponseDTO } from './dto/profile-response.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { AuthGuards } from 'src/utils';
 
 @ApiTags('User Profile APIs')
 @Controller('user-profile')
@@ -33,7 +34,7 @@ export class UserProfileController {
   constructor(private readonly userProfileService: UserProfileService) {}
 
   @Post()
-  @UseGuards(AuthGuard())
+  @UseGuards(...AuthGuards)
   @UsePipes(ValidationPipe)
   @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
   create(
@@ -44,7 +45,7 @@ export class UserProfileController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
   findAll(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
@@ -54,14 +55,14 @@ export class UserProfileController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard())
+  @UseGuards(...AuthGuards)
   @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
   findOne(@Param('id') id: string, @GetUser() user: User) {
     return this.userProfileService.findOne(id, user);
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard())
+  @UseGuards(...AuthGuards)
   @UsePipes(ValidationPipe)
   update(
     @Param('id') id: string,

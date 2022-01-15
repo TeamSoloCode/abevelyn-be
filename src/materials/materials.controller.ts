@@ -24,6 +24,7 @@ import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pi
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { AuthGuards } from 'src/utils';
 
 @Controller('materials')
 @UseInterceptors(new ApiResponseInterceptor())
@@ -31,7 +32,7 @@ export class MaterialsController {
   constructor(private readonly materialsService: MaterialsService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new MaterialResponseDto()))
   @UsePipes(ValidationPipe)
   create(@Body() createMaterialDto: CreateMaterialDto) {
@@ -39,7 +40,7 @@ export class MaterialsController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new MaterialResponseDto()))
   findAll(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
@@ -64,7 +65,7 @@ export class MaterialsController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new MaterialResponseDto()))
   update(
     @Param('id') id: string,

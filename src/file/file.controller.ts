@@ -18,7 +18,12 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { createReadStream, existsSync } from 'fs';
 import { diskStorage } from 'multer';
 import { join } from 'path';
-import { deleteUnusedImage, editFileName, imageFileFilter } from '../utils';
+import {
+  AuthGuards,
+  deleteUnusedImage,
+  editFileName,
+  imageFileFilter,
+} from '../utils';
 
 @Controller('file')
 export class FileController {
@@ -42,7 +47,7 @@ export class FileController {
   }
 
   @Post('multiple_upload')
-  @UseGuards(AuthGuard())
+  @UseGuards(...AuthGuards)
   @UseInterceptors(
     FilesInterceptor('images', 5, {
       storage: diskStorage({
@@ -64,7 +69,7 @@ export class FileController {
   }
 
   @Post('upload')
-  @UseGuards(AuthGuard())
+  @UseGuards(...AuthGuards)
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({

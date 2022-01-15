@@ -20,14 +20,14 @@ import {
   HeaderInfo,
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminSizeResponseDto } from './dto/admin-size-res.dto';
-import { ApiDataResponse } from 'src/utils';
+import { ApiDataResponse, AuthGuards } from 'src/utils';
 
 @Controller('sizes')
 export class SizesController {
   constructor(private readonly sizesService: SizesService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UsePipes(ValidationPipe)
   async create(
     @Body() createSizeDto: CreateSizeDto,
@@ -39,7 +39,7 @@ export class SizesController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiDataResponse<AdminSizeResponseDto[]>> {
@@ -72,7 +72,7 @@ export class SizesController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UsePipes(ValidationPipe)
   async update(
     @Param('id') id: string,

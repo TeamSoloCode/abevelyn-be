@@ -15,7 +15,7 @@ import { CreateProductStatusDto } from './dto/create-product-status.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ApiDataResponse } from 'src/utils';
+import { ApiDataResponse, AuthGuards } from 'src/utils';
 import { AdminProductStatusResponseDto } from './dto/admin-product-status-res.dto';
 import {
   GetHeaderInfo,
@@ -27,7 +27,7 @@ export class ProductStatusController {
   constructor(private readonly productStatusService: ProductStatusService) {}
 
   @Post()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UsePipes(ValidationPipe)
   async create(
     @Body() createProductStatusDto: CreateProductStatusDto,
@@ -44,7 +44,7 @@ export class ProductStatusController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
   ): Promise<ApiDataResponse<AdminProductStatusResponseDto[]>> {
@@ -82,7 +82,7 @@ export class ProductStatusController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard(), AdminRoleGuard)
+  @UseGuards(...AuthGuards, AdminRoleGuard)
   @UsePipes(ValidationPipe)
   async update(
     @Param('id') id: string,
