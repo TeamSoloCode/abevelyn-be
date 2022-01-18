@@ -11,6 +11,8 @@ import { MaterialResponseDto } from './materials/dto/material-data-response.dto'
 import { ApiProperty } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { MatchStoredTokenGuard } from './auth/guards/match-token.guard';
+import { CartDataResponse } from './carts/dto/cart-data-response.dto';
+import { CartItemDataResponseDTO } from './cart-item/dto/cart-item-data-response.dto';
 config();
 
 export const DEFAULT_DATETIME_FORMAT = 'MM-DD-YYYY HH:mm:ss';
@@ -21,6 +23,8 @@ export const DTOKeyPrototypeMapper = {
   user: UserDataResponse.prototype,
   product: ProductDataResponseDto.prototype,
   material: MaterialResponseDto.prototype,
+  cart: CartDataResponse.prototype,
+  cartItem: CartItemDataResponseDTO.prototype,
 };
 
 export const imageFileFilter = (req, file, callback) => {

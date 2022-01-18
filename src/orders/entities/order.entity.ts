@@ -1,6 +1,5 @@
 import { IsUUID } from 'class-validator';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { Cart } from 'src/carts/entities/cart.entity';
 import { OrderStatus } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { User } from 'src/users/entities/user.entity';

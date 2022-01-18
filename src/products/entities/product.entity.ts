@@ -1,7 +1,9 @@
 import { IsUUID, Max, Min } from 'class-validator';
+import * as moment from 'moment';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { Color } from 'src/colors/entities/color.entity';
+import { SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { Material } from 'src/materials/entities/material.entity';
@@ -9,6 +11,7 @@ import { ProductStatus } from 'src/product-status/entities/product-status.entity
 import { Review } from 'src/reviews/entities/review.entity';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { Size } from 'src/sizes/entities/size.entity';
+import { CalculatePriceInfo } from 'src/utils';
 import {
   Column,
   Entity,
@@ -132,4 +135,76 @@ export class Product extends RootEntity {
 
   @ManyToMany(() => Sale, (sale) => sale.products, { eager: true })
   sales: Sale[];
+
+  priceInfo: CalculatePriceInfo;
+
+  getPrice = (): CalculatePriceInfo => {
+    let totalSaleAsCurrency = 0;
+    let totalSaleAsPercentage = 0;
+
+    let productSaleAsPercentage = 0;
+    let collectionSaleAsPercentage = 0;
+
+    const computeSale = (
+      sales: Sale[],
+      price: number,
+      qty: number,
+      saleFor: 'product' | 'collection' = 'product',
+    ): void => {
+      sales.forEach((sale) => {
+        if (
+          moment(sale.expiredDate).isBefore(moment.utc()) &&
+          moment(sale.startedDate).isAfter(moment.utc())
+        ) {
+          return;
+        }
+
+        switch (sale.unit) {
+          case SaleUnit.USD:
+            totalSaleAsCurrency += sale.saleOff * qty;
+            break;
+          case SaleUnit.PERCENTAGE:
+            switch (saleFor) {
+              case 'product':
+                if (productSaleAsPercentage < sale.saleOff / 100) {
+                  productSaleAsPercentage = sale.saleOff / 100;
+                }
+                break;
+              case 'collection':
+                if (collectionSaleAsPercentage < sale.saleOff / 100) {
+                  collectionSaleAsPercentage = sale.saleOff / 100;
+                }
+                break;
+            }
+
+            break;
+        }
+      });
+    };
+
+    const productSales = this?.sales;
+    if (productSales) {
+      computeSale(productSales, this.price, 1, 'product');
+    }
+
+    const collections = this?.collections;
+    if (collections) {
+      collections.forEach(({ sales }) => {
+        if (sales) {
+          computeSale(sales, this.price, 1, 'collection');
+        }
+      });
+    }
+
+    totalSaleAsPercentage =
+      collectionSaleAsPercentage + productSaleAsPercentage;
+
+    return {
+      totalPrice: this.price,
+      totalSaleOffAsCurrency: totalSaleAsCurrency,
+      totalSaleOffAsPercentage: totalSaleAsPercentage,
+      calculatedPrice:
+        this.price - totalSaleAsCurrency - this.price * totalSaleAsPercentage,
+    };
+  };
 }

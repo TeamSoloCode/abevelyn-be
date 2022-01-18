@@ -5,6 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -12,6 +13,11 @@ import {
 
 @Entity()
 export class UserProfile extends RootEntity {
+  constructor(user: User) {
+    super();
+    this.owner = user;
+  }
+
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
@@ -26,6 +32,7 @@ export class UserProfile extends RootEntity {
   picture: string;
 
   @OneToOne(() => User, (user) => user.prodfile)
+  @JoinColumn()
   owner: User;
 
   @OneToMany(() => Address, (address) => address.profile)

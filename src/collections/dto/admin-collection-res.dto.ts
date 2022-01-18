@@ -2,6 +2,7 @@ import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { LanguageCode } from 'src/common/entity-enum';
 import { Product } from 'src/products/entities/product.entity';
 import { Collection } from '../entities/collection.entity';
+import { Sale } from 'src/sales/entities/sale.entity';
 
 export class AdminCollectionResponseDto {
   constructor(
@@ -51,5 +52,6 @@ export class AdminCollectionResponseDto {
   name: string;
   description: string;
   coupon: Coupon;
+  sales: Sale[];
   products: Product[];
 }

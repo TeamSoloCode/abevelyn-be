@@ -29,6 +29,7 @@ import { CartPriceResponseDTO } from 'src/common/price-info-res.dto';
 import { User } from 'src/users/entities/user.entity';
 import { AuthGuards, CalculatePriceInfo } from 'src/utils';
 import { CartItemService } from './cart-item.service';
+import { CartItemDataResponseDTO } from './dto/cart-item-data-response.dto';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 
@@ -55,20 +56,10 @@ export class CartItemController {
     return this.cartItemService.findAvailableCartItems(user);
   }
 
-  @ApiOperation({ summary: 'Get the cart item price' })
-  @ApiParam({ name: 'id', description: 'the uuid of the cart item' })
-  @Get('cart_item_price/:id')
-  @UseInterceptors(new ResponseDataInterceptor(new CartPriceResponseDTO()))
-  async getCartPriceInfomation(
-    @Param('id') id: string,
-    @GetUser() user: User,
-  ): Promise<CalculatePriceInfo> {
-    return this.cartItemService.getPriceInformation(id, user);
-  }
-
   @ApiOperation({ summary: 'Get the cart item by id' })
   @ApiParam({ name: 'id', description: 'the uuid of the cart item' })
   @Get(':id')
+  @UseInterceptors(new ResponseDataInterceptor(new CartItemDataResponseDTO()))
   findOne(@Param('id') id: string, @GetUser() user: User) {
     return this.cartItemService.findOne(id, user);
   }

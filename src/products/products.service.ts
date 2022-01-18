@@ -81,12 +81,13 @@ export class ProductsService extends CommonService<Product> {
 
   async findAvailableProduct(query: FetchDataQuery): Promise<Product[]> {
     return await this.findAvailable(query, {
-      relations: ['collections', 'materials'],
+      relations: ['collections', 'collections.sales', 'materials'],
       join: {
         alias: 'product',
         leftJoinAndSelect: {
           collections: 'product.collections',
           materials: 'product.materials',
+          'collections.sales': 'collections.sales',
         },
       },
     });

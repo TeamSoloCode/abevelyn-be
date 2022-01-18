@@ -7,7 +7,7 @@ import { MaterialResponseDto } from 'src/materials/dto/material-data-response.dt
 import { Material } from 'src/materials/entities/material.entity';
 import { AdminProductStatusResponseDto } from 'src/product-status/dto/admin-product-status-res.dto';
 import { AdminSizeResponseDto } from 'src/sizes/dto/admin-size-res.dto';
-import { DTOKeyPrototypeMapper } from 'src/utils';
+import { CalculatePriceInfo, DTOKeyPrototypeMapper } from 'src/utils';
 
 export class ProductDataResponseDto extends CommonDataResponse<
   Partial<ProductDataResponseDto>
@@ -76,12 +76,15 @@ export class ProductDataResponseDto extends CommonDataResponse<
     }
   }
 
+  @Expose({ name: 'priceInfo', toPlainOnly: true })
+  getPrice = () => CalculatePriceInfo;
+
   create(
     data: ProductDataResponseDto,
     language: LanguageCode = LanguageCode.ENGLISH,
     locale: string,
     dataResponseRole: UserRoles,
-  ) {
+  ): Partial<ProductDataResponseDto> {
     const obj: ProductDataResponseDto = Object.create(
       ProductDataResponseDto.prototype,
     );

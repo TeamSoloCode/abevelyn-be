@@ -33,7 +33,7 @@ export class UserProfileService extends CommonService<UserProfile> {
       throw new ConflictException('User profile already existed');
     }
     const { firstName, picture, lastName } = createUserProfileDto;
-    const newProfile = new UserProfile();
+    const newProfile = new UserProfile(owner);
 
     newProfile.firstName = firstName;
     newProfile.lastName = lastName;

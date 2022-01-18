@@ -1,5 +1,5 @@
 import { IsUUID } from 'class-validator';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { SaleType, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
@@ -55,60 +55,11 @@ export class CartItem extends RootEntity {
   })
   isSelected: boolean;
 
-  getCartItemPrice(): CalculatePriceInfo {
-    let totalPrice = 0;
-    let totalSaleAsCurrency = 0;
-    let totalSaleAsPercentage = 0;
+  getCartItemPrice = (): number => {
+    return this.product.getPrice
+      ? this.product.getPrice().calculatedPrice * this.quantity
+      : this.product.priceInfo.calculatedPrice;
+  };
 
-    let productSaleAsPercentage = 0;
-    let collectionSaleAsPercentage = 0;
-
-    const computeSale = (sales: Sale[], price: number, qty: number): void => {
-      sales.forEach((sale) => {
-        if (
-          moment(sale.expiredDate).isBefore(moment.utc()) &&
-          moment(sale.startedDate).isAfter(moment.utc())
-        ) {
-          return;
-        }
-
-        switch (sale.unit) {
-          case SaleUnit.USD:
-            totalSaleAsCurrency += sale.saleOff * qty;
-            break;
-          case SaleUnit.PERCENTAGE:
-            productSaleAsPercentage = sale.saleOff / 100;
-            break;
-        }
-      });
-    };
-
-    if (this.product && this.isSelected) {
-      const product = this.product;
-      totalPrice += product.price * this.quantity;
-
-      const productSales = this.product?.sales;
-      if (productSales) {
-        computeSale(productSales, product.price, this.quantity);
-      }
-
-      const collections = this.product?.collections;
-      collections.forEach(({ sales }) => {
-        if (sales) {
-          computeSale(sales, product.price, this.quantity);
-        }
-      });
-    }
-
-    totalSaleAsPercentage =
-      collectionSaleAsPercentage + productSaleAsPercentage;
-
-    return {
-      totalPrice,
-      totalSaleOffAsCurrency: totalSaleAsCurrency,
-      totalSaleOffAsPercentage: totalSaleAsPercentage,
-      calculatedPrice:
-        totalPrice - totalSaleAsCurrency - totalPrice * totalSaleAsPercentage,
-    };
-  }
+  price: number;
 }

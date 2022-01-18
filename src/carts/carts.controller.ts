@@ -55,15 +55,6 @@ export class CartsController {
     return this.cartsService.findUserCart(user);
   }
 
-  @ApiOperation({ summary: 'Get users cart total price' })
-  @Get('cart_price')
-  @UseInterceptors(new ResponseDataInterceptor(new CartPriceResponseDTO()))
-  async getCartPriceInfomation(
-    @GetUser() user: User,
-  ): Promise<CalculatePriceInfo> {
-    return this.cartsService.getPriceInformation(user);
-  }
-
   @ApiOperation({ summary: 'Add or Delete cart item from cart' })
   @ApiParam({ name: 'id', description: 'The uuid of the cart' })
   @ApiBody({ type: UpdateCartDto })

@@ -43,9 +43,12 @@ export class UserDataResponse extends CommonDataResponse<
     Object.assign(obj, classToPlain(data));
     obj._language = language;
 
-    return classToPlain(obj, {
-      excludePrefixes: ['_'],
-      groups: [dataResponseRole],
-    });
+    return this.serializeDataResponse(
+      obj,
+      data,
+      language,
+      locale,
+      dataResponseRole,
+    );
   }
 }

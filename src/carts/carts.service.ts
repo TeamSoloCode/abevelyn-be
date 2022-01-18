@@ -1,13 +1,17 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment';
 import { CartItemService } from 'src/cart-item/cart-item.service';
 import { CreateCartItemDto } from 'src/cart-item/dto/create-cart-item.dto';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CommonService } from 'src/common/common-services.service';
+import { SaleType } from 'src/common/entity-enum';
 import { ProductRepository } from 'src/products/repositories/product.repository';
+import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { User } from 'src/users/entities/user.entity';
 import { UserRepository } from 'src/users/repositories/user.repository';
-import { CalculatePriceInfo } from 'src/utils';
+import { CalculatePriceInfo, DEFAULT_DATETIME_FORMAT } from 'src/utils';
+import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { Cart } from './entities/cart.entity';
@@ -24,6 +28,8 @@ export class CartsService extends CommonService<Cart> {
     private readonly cartItemRepository: CartItemRepository,
     @InjectRepository(ProductRepository)
     private readonly productRepository: ProductRepository,
+    @InjectRepository(SaleRepository)
+    private readonly saleRepository: SaleRepository,
     private readonly cartItemService: CartItemService,
   ) {
     super(cartRepository);
@@ -36,7 +42,20 @@ export class CartsService extends CommonService<Cart> {
 
   async findUserCart(user: User) {
     let userCart = await this.cartRepository.findOne({
-      where: { owner: { uuid: user.uuid } },
+      relations: [
+        'cartItems',
+        'cartItems.product',
+        'cartItems.product.collections',
+        'cartItems.product.sales',
+        'cartItems.product.collections.sales',
+      ],
+      where: 'cartItems.order.uuid IS NULL',
+      join: {
+        alias: 'cart',
+        leftJoinAndSelect: {
+          cartItems: 'cart.cartItems',
+        },
+      },
     });
 
     if (!userCart) {
@@ -92,9 +111,5 @@ export class CartsService extends CommonService<Cart> {
 
     await this.cartRepository.save(cart);
     return await this.cartRepository.findOne(cart.uuid);
-  }
-
-  async getPriceInformation(user: User): Promise<CalculatePriceInfo> {
-    return await this.cartRepository.getPriceInformation(user);
   }
 }

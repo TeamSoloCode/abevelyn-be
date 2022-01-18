@@ -41,9 +41,13 @@ export class CartItemService extends CommonService<CartItem> {
 
   async findOne(id: string, user: User): Promise<CartItem> {
     const cartItem = await this.cartItemRepository.findOne({
-      uuid: id,
-      owner: { uuid: user.uuid },
+      relations: ['product'],
+      where: {
+        uuid: id,
+        owner: { uuid: user.uuid },
+      },
     });
+
     return cartItem;
   }
 
@@ -67,27 +71,5 @@ export class CartItemService extends CommonService<CartItem> {
 
     await this.cartItemRepository.save(cartItem);
     return this.cartItemRepository.findOne(id);
-  }
-
-  async getPriceInformation(
-    cartItemId: string,
-    user: User,
-  ): Promise<CalculatePriceInfo> {
-    const cartItem = await this.cartItemRepository.findOne({
-      relations: [
-        'product',
-        'product.sales',
-        'product.collections',
-        'product.collections.sales',
-        'owner',
-      ],
-      where: { uuid: cartItemId, owner: { uuid: user.uuid } },
-    });
-
-    if (!cartItem) {
-      throw new NotFoundException('Cart item not found');
-    }
-
-    return cartItem.getCartItemPrice();
   }
 }
