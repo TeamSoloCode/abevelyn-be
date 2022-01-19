@@ -1,4 +1,4 @@
-import { classToPlain, Exclude } from 'class-transformer';
+import { classToPlain, Exclude, Expose } from 'class-transformer';
 import CommonDataResponse from 'src/common/common-data-response.dto';
 import { LanguageCode, SignInType, UserRoles } from 'src/common/entity-enum';
 import { User } from '../entities/user.entity';
@@ -6,10 +6,6 @@ import { User } from '../entities/user.entity';
 export class UserDataResponse extends CommonDataResponse<
   Partial<UserDataResponse>
 > {
-  constructor() {
-    super();
-  }
-
   uuid: string;
 
   @Exclude()
@@ -18,16 +14,32 @@ export class UserDataResponse extends CommonDataResponse<
   @Exclude()
   refreshToken: string;
 
-  username: string;
-
-  email: string;
-
   @Exclude()
   password: string;
 
-  signupType: SignInType;
+  _signupType: SignInType;
+  @Expose({ name: 'signupType' })
+  get signupType(): SignInType {
+    return this._signupType;
+  }
 
-  role: UserRoles;
+  _username: string;
+  @Expose({ name: 'username' })
+  public get username(): string {
+    return this._username;
+  }
+
+  _role: UserRoles;
+  @Expose({ name: 'role' })
+  public get role(): UserRoles {
+    return this._role;
+  }
+
+  _email: string;
+  @Expose({ name: 'email' })
+  public get email(): string {
+    return this._email;
+  }
 
   @Exclude()
   salt: string;
@@ -40,7 +52,6 @@ export class UserDataResponse extends CommonDataResponse<
   ): Partial<UserDataResponse> {
     const obj: UserDataResponse = Object.create(UserDataResponse.prototype);
 
-    Object.assign(obj, classToPlain(data));
     obj._language = language;
 
     return this.serializeDataResponse(

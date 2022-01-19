@@ -138,9 +138,9 @@ export class CommonService<T> {
     }
   }
 
-  async findOne(id: string, user?: User, relations?: string[]): Promise<T> {
+  async findOne(id: string, owner?: User, relations?: string[]): Promise<T> {
     try {
-      const ownerFind = user ? { owner: { uuid: user.uuid } } : {};
+      const ownerFind = owner ? { owner: { uuid: owner.uuid } } : {};
       const data = await this.repository.findOne(
         <any>{
           uuid: id,

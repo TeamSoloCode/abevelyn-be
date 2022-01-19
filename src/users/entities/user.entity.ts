@@ -20,9 +20,11 @@ import { Feedback } from 'src/feedbacks/entities/feedback.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { Address } from 'src/addresses/entities/address.entity';
+import { RootEntity } from 'src/common/root-entity.entity';
+import { Expose } from 'class-transformer';
 
 @Entity('user')
-export class User extends BaseEntity {
+export class User extends RootEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   @IsUUID()
   uuid: string;
@@ -142,7 +144,7 @@ export class User extends BaseEntity {
 
   @OneToOne(() => UserProfile, (profile) => profile.owner, { nullable: true })
   @JoinColumn({ name: 'profileUuid' })
-  prodfile: UserProfile;
+  profile: UserProfile;
 
   /**
    * -----------------------------------------------------
@@ -167,40 +169,6 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Address, (address) => address.owner)
   addresses: Address[];
-  /**
-   * -----------------------------------------------------
-   */
-  private _createdAt: Date;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  public set createdAt(value: Date) {
-    this._createdAt = value;
-  }
-
-  /**
-   * -----------------------------------------------------
-   */
-  private _updatedAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  public get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  public set updatedAt(value: Date) {
-    this._updatedAt = value;
-  }
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

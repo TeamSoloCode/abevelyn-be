@@ -31,7 +31,7 @@ export class UserProfile extends RootEntity {
   @Column('text')
   picture: string;
 
-  @OneToOne(() => User, (user) => user.prodfile)
+  @OneToOne(() => User, (user) => user.profile)
   @JoinColumn()
   owner: User;
 

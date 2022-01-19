@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,14 +7,18 @@ import { User } from './entities/user.entity';
 import { GoogleLoginResponseDTO } from 'src/auth/dto/google-login-response.dto';
 import { SignInType } from 'src/common/entity-enum';
 import { UserProfileService } from 'src/user-profile/user-profile.service';
+import { CommonService } from 'src/common/common-services.service';
+import { UpdateUserRoleDTO } from './dto/update-user-role.dto';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends CommonService<User> {
   constructor(
     private readonly userProfileService: UserProfileService,
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
-  ) {}
+  ) {
+    super(userRepository);
+  }
 
   async loginWithGoogle(
     googleResponseDTO: GoogleLoginResponseDTO,
@@ -43,29 +47,21 @@ export class UsersService {
       createdUser,
     );
 
-    createdUser.prodfile = profile;
+    createdUser.profile = profile;
     await this.userRepository.save(createdUser);
 
     return this.userRepository.findOne(createdUser.uuid);
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  async updateUserRoleById(id: string, updateUserRoleDTO: UpdateUserRoleDTO) {
+    const user = await this.userRepository.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found!');
+    }
 
-  findAll() {
-    return `This action returns all users`;
-  }
+    user.role = updateUserRoleDTO.role;
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    await user.save();
+    return this.userRepository.findOne(id);
   }
 }

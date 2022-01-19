@@ -136,8 +136,6 @@ export class Product extends RootEntity {
   @ManyToMany(() => Sale, (sale) => sale.products, { eager: true })
   sales: Sale[];
 
-  priceInfo: CalculatePriceInfo;
-
   getPrice = (): CalculatePriceInfo => {
     let totalSaleAsCurrency = 0;
     let totalSaleAsPercentage = 0;
@@ -207,4 +205,6 @@ export class Product extends RootEntity {
         this.price - totalSaleAsCurrency - this.price * totalSaleAsPercentage,
     };
   };
+
+  priceInfo: CalculatePriceInfo;
 }
