@@ -13,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { MatchStoredTokenGuard } from './auth/guards/match-token.guard';
 import { CartDataResponse } from './carts/dto/cart-data-response.dto';
 import { CartItemDataResponseDTO } from './cart-item/dto/cart-item-data-response.dto';
+import { OrderDataResponseDTO } from './orders/dto/order-response.dto';
 config();
 
 export const DEFAULT_DATETIME_FORMAT = 'MM-DD-YYYY HH:mm:ss';
@@ -25,6 +26,7 @@ export const DTOKeyPrototypeMapper = {
   material: MaterialResponseDto.prototype,
   cart: CartDataResponse.prototype,
   cartItem: CartItemDataResponseDTO.prototype,
+  order: OrderDataResponseDTO.prototype,
 };
 
 export const imageFileFilter = (req, file, callback) => {

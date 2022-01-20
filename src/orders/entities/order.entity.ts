@@ -15,18 +15,24 @@ import {
 
 @Entity('order')
 export class Order extends RootEntity {
+  constructor(cartItems: CartItem[]) {
+    super();
+
+    this.cartItems = cartItems;
+  }
+
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   uuid: string;
 
-  @Column('text')
-  cancelReason: string;
+  @Column('text', { nullable: true })
+  cancelReason?: string;
 
-  @Column('text')
-  rejectReason: string;
+  @Column('text', { nullable: true })
+  rejectReason?: string;
 
-  @Column('enum', { enum: OrderStatus })
-  orderStatus: OrderStatus;
+  @Column('enum', { enum: OrderStatus, default: OrderStatus.PENDING })
+  status: OrderStatus;
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.order, { eager: true })
   cartItems: CartItem[];
