@@ -32,8 +32,17 @@ export class CreateSaleDto {
   @IsDateString()
   expiredDate: Date;
 
+  @ApiProperty({
+    description: 'The type of the sale saling for (product, collection, order)',
+    enum: SaleType,
+  })
   @IsEnum(Object.values(SaleType).filter((v) => typeof v == 'string'))
   saleType: SaleType;
+
+  @ApiProperty({ description: 'The max sale client can get' })
+  @IsOptional()
+  @IsNumber()
+  maxOff: number;
 
   @IsOptional()
   @IsEnum(Object.values(SaleUnit).filter((v) => typeof v == 'string'))

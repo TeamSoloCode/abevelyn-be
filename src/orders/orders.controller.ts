@@ -56,7 +56,7 @@ export class OrdersController {
     return this.ordersService.findUserOrders(user);
   }
 
-  @ApiOperation({ summary: 'Get order by id' })
+  @ApiOperation({ summary: 'Get order by id (For client)' })
   @ApiParam({ name: 'id', description: 'Any order id' })
   @Get('my_orders/:id')
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
@@ -81,8 +81,15 @@ export class OrdersController {
     return this.ordersService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Update order by id' })
+  @ApiParam({ name: 'id', description: 'Any order id' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.update(+id, updateOrderDto);
+  @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
+  update(
+    @Param('id') id: string,
+    @GetUser() user: User,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    return this.ordersService.updateUserOrder(id, user, updateOrderDto);
   }
 }

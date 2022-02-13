@@ -1,7 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CommonService } from 'src/common/common-services.service';
+import { UserRoles } from 'src/common/entity-enum';
 import { User } from 'src/users/entities/user.entity';
 import { In, IsNull } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -36,13 +41,13 @@ export class OrdersService extends CommonService<Order> {
       );
     }
 
-    const newOrder = new Order(items);
+    const newOrder = new Order(items, user);
     return newOrder.save();
   }
 
   async findUserOrders(user: User): Promise<Order[]> {
     return this.findAvailable(
-      { cond: `owner.uuid = '${user.uuid}'` },
+      { cond: `order.owner.uuid = '${user.uuid}'` },
       {
         relations: ['owner'],
         join: {
@@ -59,8 +64,40 @@ export class OrdersService extends CommonService<Order> {
     return this.findOneAvailable({ cond: `uuid = '${id}'` });
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  async updateUserOrder(
+    orderId: string,
+    user: User,
+    updateOrderDto: UpdateOrderDto,
+  ): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: `order.owner.uuid = '${user.uuid}'`,
+      relations: ['owner'],
+      join: {
+        alias: 'order',
+        leftJoinAndSelect: {
+          owner: 'order.owner',
+        },
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found!');
+    }
+    const { cancelReason, rejectReason } = updateOrderDto;
+
+    if (cancelReason && user.role !== UserRoles.USER) {
+      throw new UnauthorizedException('Only user can update cancel reason');
+    } else {
+      order.cancelReason = cancelReason;
+    }
+
+    if (rejectReason && user.role === UserRoles.USER) {
+      throw new UnauthorizedException('Only admin can update reject reason');
+    } else {
+      order.rejectReason = rejectReason;
+    }
+
+    return order.save();
   }
 
   remove(id: number) {

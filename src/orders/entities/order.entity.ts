@@ -15,10 +15,11 @@ import {
 
 @Entity('order')
 export class Order extends RootEntity {
-  constructor(cartItems: CartItem[]) {
+  constructor(cartItems: CartItem[], owner: User) {
     super();
 
     this.cartItems = cartItems;
+    this.owner = owner;
   }
 
   @PrimaryGeneratedColumn('uuid')

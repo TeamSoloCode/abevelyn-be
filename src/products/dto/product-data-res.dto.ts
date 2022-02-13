@@ -6,6 +6,7 @@ import { LanguageCode, UserRoles } from 'src/common/entity-enum';
 import { MaterialResponseDto } from 'src/materials/dto/material-data-response.dto';
 import { Material } from 'src/materials/entities/material.entity';
 import { AdminProductStatusResponseDto } from 'src/product-status/dto/admin-product-status-res.dto';
+import { SaleResponseDto } from 'src/sales/dto/sale-response.dto';
 import { AdminSizeResponseDto } from 'src/sizes/dto/admin-size-res.dto';
 import { CalculatePriceInfo, DTOKeyPrototypeMapper } from 'src/utils';
 
@@ -42,6 +43,7 @@ export class ProductDataResponseDto extends CommonDataResponse<
   descriptionInVietnamese?: string;
 
   size: AdminSizeResponseDto;
+
   productStatus: AdminProductStatusResponseDto;
 
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'color')
@@ -49,6 +51,9 @@ export class ProductDataResponseDto extends CommonDataResponse<
 
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'material')
   materials: MaterialResponseDto[];
+
+  @Reflect.metadata(CommonDataResponse.DTO_KEY, 'sale')
+  sales: SaleResponseDto[];
 
   collections: Collection[];
 

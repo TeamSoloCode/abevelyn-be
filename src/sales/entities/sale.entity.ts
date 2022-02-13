@@ -57,6 +57,9 @@ export class Sale extends RootEntity {
   @Column('double', { nullable: true })
   applyPrice: number;
 
+  @Column('double', { nullable: true })
+  maxOff: number;
+
   @Column('datetime')
   startedDate: Date;
 

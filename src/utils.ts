@@ -14,6 +14,7 @@ import { MatchStoredTokenGuard } from './auth/guards/match-token.guard';
 import { CartDataResponse } from './carts/dto/cart-data-response.dto';
 import { CartItemDataResponseDTO } from './cart-item/dto/cart-item-data-response.dto';
 import { OrderDataResponseDTO } from './orders/dto/order-response.dto';
+import { SaleResponseDto } from './sales/dto/sale-response.dto';
 config();
 
 export const DEFAULT_DATETIME_FORMAT = 'MM-DD-YYYY HH:mm:ss';
@@ -27,6 +28,7 @@ export const DTOKeyPrototypeMapper = {
   cart: CartDataResponse.prototype,
   cartItem: CartItemDataResponseDTO.prototype,
   order: OrderDataResponseDTO.prototype,
+  sale: SaleResponseDto.prototype,
 };
 
 export const imageFileFilter = (req, file, callback) => {

@@ -38,6 +38,7 @@ export class SalesService extends CommonService<Sale> {
       saleType,
       applyPrice,
       name,
+      maxOff,
     } = createSaleDto;
 
     const newSale = new Sale(saleOff, startedDate, expiredDate, saleType);
@@ -48,6 +49,7 @@ export class SalesService extends CommonService<Sale> {
 
     newSale.unit = unit;
     newSale.name = name;
+    newSale.maxOff = maxOff;
     try {
       return this.saleRepository.save(newSale);
     } catch (error) {
@@ -101,9 +103,5 @@ export class SalesService extends CommonService<Sale> {
 
     await this.saleRepository.save(sale);
     return this.saleRepository.findOne(id);
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} sale`;
   }
 }
