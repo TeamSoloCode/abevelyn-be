@@ -9,6 +9,7 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -16,7 +17,9 @@ import {
   HeaderInfo,
 } from 'src/auth/decorators/get-language.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
 import { LanguageCode } from 'src/common/entity-enum';
+import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { ApiDataResponse, AuthGuards } from 'src/utils';
 import { CollectionsService } from './collections.service';
 import { AdminCollectionResponseDto } from './dto/admin-collection-res.dto';
@@ -45,8 +48,10 @@ export class CollectionsController {
   @UseGuards(...AuthGuards, AdminRoleGuard)
   async findAll(
     @GetHeaderInfo() headerInfo: HeaderInfo,
+    @Query(ValidationPipe, FetchDataQueryValidationPipe)
+    query: FetchDataQuery,
   ): Promise<ApiDataResponse<AdminCollectionResponseDto[]>> {
-    const collections = await this.collectionsService.findAll();
+    const collections = await this.collectionsService.findAll(query);
     const res = collections.map(
       (collection) =>
         new AdminCollectionResponseDto(collection, headerInfo.language),
@@ -57,8 +62,12 @@ export class CollectionsController {
   @Get('/fetch_available')
   async findAvailableCollection(
     @GetHeaderInfo() headerInfo: HeaderInfo,
+    @Query(ValidationPipe, FetchDataQueryValidationPipe)
+    query: FetchDataQuery,
   ): Promise<ApiDataResponse<AdminCollectionResponseDto[]>> {
-    const collections = await this.collectionsService.findAvailableCollection();
+    const collections = await this.collectionsService.findAvailableCollection(
+      query,
+    );
     const res = collections.map(
       (collection) =>
         new AdminCollectionResponseDto(collection, headerInfo.language),

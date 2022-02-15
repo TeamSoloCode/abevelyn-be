@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { SaleType } from 'src/common/entity-enum';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { In } from 'typeorm';
@@ -12,15 +13,19 @@ import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { Collection } from './entities/collection.entity';
 import { CollectionRepository } from './repositories/collection.repository';
+import { CommonService } from '../common/common-services.service';
+import { FetchDataQuery } from 'src/common/fetch-data-query';
 
 @Injectable()
-export class CollectionsService {
+export class CollectionsService extends CommonService<Collection> {
   constructor(
     @InjectRepository(CollectionRepository)
     private readonly collectionRepository: CollectionRepository,
     @InjectRepository(SaleRepository)
     private readonly saleRepository: SaleRepository,
-  ) {}
+  ) {
+    super(collectionRepository);
+  }
 
   async create(createCollectionDto: CreateCollectionDto): Promise<Collection> {
     try {
@@ -36,22 +41,20 @@ export class CollectionsService {
     }
   }
 
-  async findAll(): Promise<Collection[]> {
+  async findAll(query: FetchDataQuery): Promise<Collection[]> {
     try {
-      return await this.collectionRepository.find({
-        where: { deleted: false },
-        order: { sequence: 'DESC', createdAt: 'DESC' },
-      });
+      return await this.findAll(query);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  async findAvailableCollection(): Promise<Collection[]> {
+  async findAvailableCollection(query: FetchDataQuery): Promise<Collection[]> {
     try {
-      return await this.collectionRepository.find({
-        where: { available: true, deleted: false },
-        order: { sequence: 'DESC', createdAt: 'DESC' },
+      return await this.findAvailable(query, {
+        join: {
+          alias: 'collection',
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
