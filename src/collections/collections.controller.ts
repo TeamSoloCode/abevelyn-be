@@ -10,94 +10,103 @@ import {
   UsePipes,
   ValidationPipe,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import {
-  GetHeaderInfo,
-  HeaderInfo,
-} from 'src/auth/decorators/get-language.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
-import { LanguageCode } from 'src/common/entity-enum';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
-import { ApiDataResponse, AuthGuards } from 'src/utils';
+import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { AuthGuards, editFileName, imageFileFilter } from 'src/utils';
 import { CollectionsService } from './collections.service';
-import { AdminCollectionResponseDto } from './dto/admin-collection-res.dto';
+import { CollectionResponseDto } from './dto/collection-data-res.dto';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { Collection } from './entities/collection.entity';
+import { MultipartTransformPipe } from './pipes/dto-collection-transform';
+import { diskStorage, Express } from 'multer';
 
 @Controller('collections')
+@UseInterceptors(new ApiResponseInterceptor())
 export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
   @Post()
   @UseGuards(...AuthGuards, AdminRoleGuard)
-  @UsePipes(ValidationPipe)
+  @UseInterceptors(
+    new ResponseDataInterceptor(new CollectionResponseDto()),
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          editFileName(req, file, callback, 'collection');
+        },
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
   async create(
-    @Body() createCollectionDto: CreateCollectionDto,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiDataResponse<AdminCollectionResponseDto>> {
-    const collection = await this.collectionsService.create(
-      createCollectionDto,
-    );
-    const res = new AdminCollectionResponseDto(collection, headerInfo.language);
-    return new ApiDataResponse(res);
+    @Body(MultipartTransformPipe, ValidationPipe)
+    createCollectionDto: CreateCollectionDto,
+    @UploadedFile() image: Express.Multer.File,
+  ): Promise<Collection> {
+    return this.collectionsService.create({
+      ...createCollectionDto,
+      image: image?.filename || createCollectionDto.image,
+    });
   }
 
   @Get()
   @UseGuards(...AuthGuards, AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(new CollectionResponseDto()))
   async findAll(
-    @GetHeaderInfo() headerInfo: HeaderInfo,
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
     query: FetchDataQuery,
-  ): Promise<ApiDataResponse<AdminCollectionResponseDto[]>> {
-    const collections = await this.collectionsService.findAll(query);
-    const res = collections.map(
-      (collection) =>
-        new AdminCollectionResponseDto(collection, headerInfo.language),
-    );
-    return new ApiDataResponse(res);
+  ): Promise<Collection[]> {
+    return this.collectionsService.findAll(query);
   }
 
   @Get('/fetch_available')
+  @UseInterceptors(new ResponseDataInterceptor(new CollectionResponseDto()))
   async findAvailableCollection(
-    @GetHeaderInfo() headerInfo: HeaderInfo,
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
     query: FetchDataQuery,
-  ): Promise<ApiDataResponse<AdminCollectionResponseDto[]>> {
-    const collections = await this.collectionsService.findAvailableCollection(
-      query,
-    );
-    const res = collections.map(
-      (collection) =>
-        new AdminCollectionResponseDto(collection, headerInfo.language),
-    );
-    return new ApiDataResponse(res);
+  ): Promise<Collection[]> {
+    return this.collectionsService.findAvailableCollection(query);
   }
 
   @Get('/:id')
-  async findOne(
-    @Param('id') id: string,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiDataResponse<AdminCollectionResponseDto>> {
-    const collection = await this.collectionsService.findOne(id);
-    const res = new AdminCollectionResponseDto(collection, headerInfo.language);
-    return new ApiDataResponse(res);
+  @UseInterceptors(new ResponseDataInterceptor(new CollectionResponseDto()))
+  async findOne(@Param('id') id: string): Promise<Collection> {
+    return this.collectionsService.findOne(id);
   }
 
   @Patch('/:id')
   @UseGuards(...AuthGuards, AdminRoleGuard)
-  @UsePipes(ValidationPipe)
+  // @UsePipes(MultipartTransformPipe, ValidationPipe)
+  @UseInterceptors(
+    new ResponseDataInterceptor(new CollectionResponseDto()),
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          editFileName(req, file, callback, 'collection');
+        },
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
   async update(
     @Param('id') id: string,
-    @Body() updateCollectionDto: UpdateCollectionDto,
-    @GetHeaderInfo() headerInfo: HeaderInfo,
-  ): Promise<ApiDataResponse<AdminCollectionResponseDto>> {
-    const collection = await this.collectionsService.update(
-      id,
-      updateCollectionDto,
-    );
-    const res = new AdminCollectionResponseDto(collection, headerInfo.language);
-    return new ApiDataResponse(res, 'Update collection successful!');
+    @Body(MultipartTransformPipe, ValidationPipe)
+    updateCollectionDto: UpdateCollectionDto,
+    @UploadedFile() image: Express.Multer.File,
+  ): Promise<Collection> {
+    return this.collectionsService.update(id, {
+      ...updateCollectionDto,
+      image: image?.filename || updateCollectionDto.image,
+    });
   }
 }

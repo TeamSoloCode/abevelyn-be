@@ -15,6 +15,7 @@ import { Collection } from './entities/collection.entity';
 import { CollectionRepository } from './repositories/collection.repository';
 import { CommonService } from '../common/common-services.service';
 import { FetchDataQuery } from 'src/common/fetch-data-query';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class CollectionsService extends CommonService<Collection> {
@@ -30,6 +31,7 @@ export class CollectionsService extends CommonService<Collection> {
   async create(createCollectionDto: CreateCollectionDto): Promise<Collection> {
     try {
       const product = new Collection(createCollectionDto.name);
+      if (createCollectionDto.image) product.image = createCollectionDto.image;
       return await this.collectionRepository.save(product);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
@@ -38,14 +40,6 @@ export class CollectionsService extends CommonService<Collection> {
       } else {
         throw new InternalServerErrorException(error.message);
       }
-    }
-  }
-
-  async findAll(query: FetchDataQuery): Promise<Collection[]> {
-    try {
-      return await this.findAll(query);
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -72,7 +66,6 @@ export class CollectionsService extends CommonService<Collection> {
   async update(id: string, updateCollectionDto: UpdateCollectionDto) {
     try {
       const collection = await this.collectionRepository.findOne(id);
-
       if (!collection) {
         throw new NotFoundException();
       }

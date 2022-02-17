@@ -15,4 +15,7 @@ export class CreateCollectionDto {
 
   @IsIn([true, false])
   available: boolean = true;
+
+  @IsOptional()
+  image?: string;
 }

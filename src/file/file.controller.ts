@@ -33,17 +33,24 @@ export class FileController {
     @Req() req: Request,
     @Response({ passthrough: true }) res,
   ): StreamableFile {
-    const fileName = req.url.split('/')[2];
-    if (!existsSync(join(process.cwd(), `/uploads/${fileName}`))) {
-      throw new NotFoundException();
-    }
+    try {
+      const fileName = req.url.split('/')[2];
+      if (!fileName) return;
+      if (!existsSync(join(process.cwd(), `/uploads/${fileName}`))) {
+        throw new NotFoundException();
+      }
 
-    const file = createReadStream(join(process.cwd(), `/uploads/${fileName}`));
-    res.set({
-      'Content-Type': 'image/jpeg',
-      // 'Content-Disposition': 'attachment; filename="package.json"',
-    });
-    return new StreamableFile(file);
+      const file = createReadStream(
+        join(process.cwd(), `/uploads/${fileName}`),
+      );
+      res.set({
+        'Content-Type': 'image/jpeg',
+        // 'Content-Disposition': 'attachment; filename="package.json"',
+      });
+      return new StreamableFile(file);
+    } catch (e) {
+      return;
+    }
   }
 
   @Post('multiple_upload')

@@ -54,6 +54,11 @@ export class Collection extends RootEntity {
   })
   descriptionInVietnames?: string;
 
+  @Column('text', {
+    nullable: true,
+  })
+  image?: string;
+
   @ManyToOne((type) => Coupon, (coupon) => coupon.collections, {
     nullable: true,
   })
