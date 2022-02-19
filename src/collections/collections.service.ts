@@ -35,7 +35,7 @@ export class CollectionsService extends CommonService<Collection> {
       return await this.collectionRepository.save(product);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
-        // duplicate user
+        // duplicate Collection
         throw new ConflictException(['Collection name is already existed!']);
       } else {
         throw new InternalServerErrorException(error.message);

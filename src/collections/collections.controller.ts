@@ -27,6 +27,7 @@ import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { Collection } from './entities/collection.entity';
 import { MultipartTransformPipe } from './pipes/dto-collection-transform';
 import { diskStorage, Express } from 'multer';
+import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
 
 @Controller('collections')
 @UseInterceptors(new ApiResponseInterceptor())
@@ -36,6 +37,11 @@ export class CollectionsController {
   @Post()
   @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(
+    new ResponseMessageInterceptor<CollectionResponseDto>({
+      201: (data) => {
+        return `Create Collection '${data.name}' successful!`;
+      },
+    }),
     new ResponseDataInterceptor(new CollectionResponseDto()),
     FileInterceptor('image', {
       storage: diskStorage({
@@ -87,6 +93,11 @@ export class CollectionsController {
   @UseGuards(...AuthGuards, AdminRoleGuard)
   // @UsePipes(MultipartTransformPipe, ValidationPipe)
   @UseInterceptors(
+    new ResponseMessageInterceptor<CollectionResponseDto>({
+      200: (data) => {
+        return `Update Collection '${data.name}' successful!`;
+      },
+    }),
     new ResponseDataInterceptor(new CollectionResponseDto()),
     FileInterceptor('image', {
       storage: diskStorage({
