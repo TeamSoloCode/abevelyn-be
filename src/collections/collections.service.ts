@@ -74,7 +74,7 @@ export class CollectionsService extends CommonService<Collection> {
         collection[key] = value;
       });
 
-      collection.sales = [];
+      collection.sales = collection.sales;
 
       if (updateCollectionDto.saleIds) {
         const sales = await this.saleRepository.find({

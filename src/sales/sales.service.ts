@@ -78,8 +78,8 @@ export class SalesService extends CommonService<Sale> {
 
     Object.assign(sale, updateSaleDto);
 
-    sale.collections = [];
-    sale.products = [];
+    sale.collections = sale.collections;
+    sale.products = sale.products;
 
     if (updateSaleDto.collectionIds) {
       const collections = await this.collectionRepository.find({

@@ -6,13 +6,10 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('address')
 export class Address extends RootEntity {
-  constructor(
-    country: string,
-    provinceOrState: string,
-    district: string,
-    street: string,
-  ) {
+  constructor(street: string) {
     super();
+
+    this.street = street;
   }
 
   @PrimaryGeneratedColumn('uuid')
@@ -25,16 +22,16 @@ export class Address extends RootEntity {
   @Column()
   street: string;
 
-  @Column()
+  @Column({ nullable: true })
   provinceOrState: string;
 
   @Column({ nullable: true })
   ward: string;
 
-  @Column()
+  @Column({ nullable: true })
   district: string;
 
-  @Column()
+  @Column({ nullable: true })
   country: string;
 
   @Column({ nullable: true })

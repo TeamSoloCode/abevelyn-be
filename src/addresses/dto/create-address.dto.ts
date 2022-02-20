@@ -11,16 +11,19 @@ export class CreateAddressDto {
   @IsString()
   street: string;
 
-  @ApiProperty({ description: 'The address province' })
+  @ApiPropertyOptional({ description: 'The address province' })
   @IsString()
+  @IsOptional()
   provinceOrState: string;
 
-  @ApiProperty({ description: 'The address district' })
+  @ApiPropertyOptional({ description: 'The address district' })
   @IsString()
+  @IsOptional()
   district: string;
 
-  @ApiProperty({ description: 'The address country' })
+  @ApiPropertyOptional({ description: 'The address country' })
   @IsString()
+  @IsOptional()
   country: string;
 
   @ApiPropertyOptional({ description: 'The address post code' })

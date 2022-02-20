@@ -150,9 +150,17 @@ export class Product extends RootEntity {
       saleFor: 'product' | 'collection' = 'product',
     ): void => {
       sales.forEach((sale) => {
+        console.log(
+          'abcd',
+          sale.expiredDate,
+          sale.startedDate,
+          moment.utc(),
+          moment(sale.expiredDate).isAfter(moment.utc()),
+          moment(sale.startedDate).isBefore(moment.utc()),
+        );
         if (
-          moment(sale.expiredDate).isAfter(moment.utc()) &&
-          moment(sale.startedDate).isBefore(moment.utc())
+          !moment(sale.expiredDate).isAfter(moment.utc()) ||
+          !moment(sale.startedDate).isBefore(moment.utc())
         ) {
           return;
         }

@@ -27,12 +27,16 @@ export class AddressesService extends CommonService<Address> {
       street,
     } = createAddressDto;
 
-    const newAddress = new Address(country, provinceOrState, district, street);
+    const newAddress = new Address(street);
     Object.assign(newAddress, {
+      country,
       addressName,
       companyName,
+      district,
       isDefaultAddress,
       postCode,
+      provinceOrState,
+      street,
     });
 
     return this.addressRepository.save(newAddress);
