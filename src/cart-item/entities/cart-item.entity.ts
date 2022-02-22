@@ -58,7 +58,7 @@ export class CartItem extends RootEntity {
   getCartItemPrice = (): number => {
     return this.product.getPrice
       ? this.product.getPrice().calculatedPrice * this.quantity
-      : this.product.priceInfo.calculatedPrice;
+      : this.product.priceInfo.calculatedPrice * this.quantity;
   };
 
   price: number;

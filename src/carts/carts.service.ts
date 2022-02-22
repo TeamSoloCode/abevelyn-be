@@ -10,9 +10,6 @@ import { ProductRepository } from 'src/products/repositories/product.repository'
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { User } from 'src/users/entities/user.entity';
 import { UserRepository } from 'src/users/repositories/user.repository';
-import { CalculatePriceInfo, DEFAULT_DATETIME_FORMAT } from 'src/utils';
-import { LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
-import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { Cart } from './entities/cart.entity';
 import { CartRepository } from './repositories/cart.repository';

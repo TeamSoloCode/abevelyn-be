@@ -17,7 +17,7 @@ import { OrderDataResponseDTO } from './orders/dto/order-response.dto';
 import { SaleResponseDto } from './sales/dto/sale-response.dto';
 config();
 
-export const DEFAULT_DATETIME_FORMAT = 'MM-DD-YYYY HH:mm:ss';
+export const DEFAULT_DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 export const AuthGuards = [MatchStoredTokenGuard, AuthGuard()];
 
 export const DTOKeyPrototypeMapper = {

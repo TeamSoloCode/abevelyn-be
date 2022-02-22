@@ -26,7 +26,7 @@ export class RootRoleGuard implements CanActivate {
 
         if (!isRoot) {
           throw new UnauthorizedException(
-            'You are not a root admin to do this action',
+            'You are not a ROOT admin to do this action',
           );
         } else {
           throw new UnauthorizedException(

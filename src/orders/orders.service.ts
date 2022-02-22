@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CommonService } from 'src/common/common-services.service';
 import { UserRoles } from 'src/common/entity-enum';
+import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { User } from 'src/users/entities/user.entity';
 import { In, IsNull } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -21,6 +22,8 @@ export class OrdersService extends CommonService<Order> {
     private readonly orderRepository: OrderRepository,
     @InjectRepository(CartItemRepository)
     private readonly cartItemRepository: CartItemRepository,
+    @InjectRepository(SaleRepository)
+    private readonly saleRepository: SaleRepository,
   ) {
     super(orderRepository);
   }
@@ -40,9 +43,29 @@ export class OrdersService extends CommonService<Order> {
         'Cart items not found or no item is selected!',
       );
     }
-
-    const newOrder = new Order(items, user);
+    const orderSales = await this.saleRepository.getAvailableOrderSales();
+    const newOrder = new Order(items, user, orderSales);
     return newOrder.save();
+  }
+
+  async orderInformation(user: User): Promise<Order> {
+    const items = await this.cartItemRepository.find({
+      relations: ['owner', 'order'],
+      where: {
+        owner: { uuid: user.uuid },
+        isSelected: true,
+        order: IsNull(),
+      },
+    });
+
+    if (!items || items.length == 0) {
+      throw new NotFoundException(
+        'Cart items not found or no item is selected!',
+      );
+    }
+
+    const orderSales = await this.saleRepository.getAvailableOrderSales();
+    return new Order(items, user, orderSales);
   }
 
   async findUserOrders(user: User): Promise<Order[]> {
@@ -98,9 +121,5 @@ export class OrdersService extends CommonService<Order> {
     }
 
     return order.save();
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
   }
 }

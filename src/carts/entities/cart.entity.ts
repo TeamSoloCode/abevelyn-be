@@ -41,9 +41,7 @@ export class Cart extends RootEntity {
     let totalPrice = 0;
     this.cartItems.forEach((item) => {
       if (item.isSelected) {
-        totalPrice += item.getCartItemPrice
-          ? item.getCartItemPrice()
-          : item.price;
+        totalPrice += item.price;
       }
     });
 

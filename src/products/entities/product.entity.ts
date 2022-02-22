@@ -150,14 +150,6 @@ export class Product extends RootEntity {
       saleFor: 'product' | 'collection' = 'product',
     ): void => {
       sales.forEach((sale) => {
-        console.log(
-          'abcd',
-          sale.expiredDate,
-          sale.startedDate,
-          moment.utc(),
-          moment(sale.expiredDate).isAfter(moment.utc()),
-          moment(sale.startedDate).isBefore(moment.utc()),
-        );
         if (
           !moment(sale.expiredDate).isAfter(moment.utc()) ||
           !moment(sale.startedDate).isBefore(moment.utc())
@@ -171,19 +163,6 @@ export class Product extends RootEntity {
             break;
           case SaleUnit.PERCENTAGE:
             let salePrice = sale.saleOff;
-
-            // console.log(
-            //   'abcd##########',
-            //   this.name,
-            //   (salePrice / 100) * price,
-            //   salePrice,
-            //   sale.maxOff,
-            // );
-
-            // if (sale.maxOff && (salePrice / 100) * price > sale.maxOff) {
-            //   salePrice = sale.maxOff * 100;
-            // }
-
             switch (saleFor) {
               case 'product':
                 if (productSaleAsPercentage < salePrice / 100) {

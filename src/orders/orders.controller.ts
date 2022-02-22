@@ -42,6 +42,13 @@ export class OrdersController {
     return this.ordersService.create(user);
   }
 
+  @ApiOperation({ summary: 'Get new order infomation' })
+  @Get('pre-order-info')
+  @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
+  orderInformation(@GetUser() user: User) {
+    return this.ordersService.orderInformation(user);
+  }
+
   @ApiOperation({ summary: 'Get all order of user' })
   @Get('my_orders')
   @UseInterceptors(

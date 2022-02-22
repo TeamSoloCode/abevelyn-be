@@ -22,7 +22,7 @@ import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { SaleResponseDto } from './dto/sale-response.dto';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
 import { AuthGuards } from 'src/utils';
 
@@ -33,6 +33,7 @@ export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
   @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Create Sale (Admin Only)' })
   @Post()
   @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(
@@ -49,6 +50,7 @@ export class SalesController {
   }
 
   @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Fetch all sale (Admin Only)' })
   @Get()
   @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
@@ -59,6 +61,7 @@ export class SalesController {
     return this.salesService.findAllSale(query);
   }
 
+  @ApiOperation({ summary: 'Fetch all available sale' })
   @Get('fetch_available')
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   fetchAvailable(
@@ -68,6 +71,7 @@ export class SalesController {
     return this.salesService.findAvailableSale(query);
   }
 
+  @ApiOperation({ summary: 'Fetch a sale by id' })
   @Get(':id')
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   findOne(@Param('id') id: string) {
@@ -75,6 +79,7 @@ export class SalesController {
   }
 
   @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Update sale infomation (Admin Only)' })
   @Patch(':id')
   @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(

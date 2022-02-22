@@ -28,8 +28,11 @@ export class UserProfile extends RootEntity {
   @Column('varchar', { length: 128 })
   lastName: string;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   picture: string;
+
+  @Column('varchar', { nullable: true, length: 20 })
+  phone: string;
 
   @OneToOne(() => User, (user) => user.profile)
   @JoinColumn()
