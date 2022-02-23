@@ -1,8 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsUUID } from 'class-validator';
 
 export class CreateOrderDto {
-  @ApiProperty({ description: 'The cart items uuid' })
-  @IsArray()
-  cartItemIds: string[];
+  @ApiPropertyOptional({ description: 'The order sale uuid' })
+  @IsUUID()
+  @IsOptional()
+  orderSaleId?: string;
 }

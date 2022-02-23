@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { Color } from 'src/colors/entities/color.entity';
-import { SaleUnit } from 'src/common/entity-enum';
+import { SaleType, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Coupon } from 'src/coupons/entities/coupon.entity';
 import { Material } from 'src/materials/entities/material.entity';
@@ -143,12 +143,7 @@ export class Product extends RootEntity {
     let productSaleAsPercentage = 0;
     let collectionSaleAsPercentage = 0;
 
-    const computeSale = (
-      sales: Sale[],
-      price: number,
-      qty: number,
-      saleFor: 'product' | 'collection' = 'product',
-    ): void => {
+    const computeSale = (sales: Sale[], price: number, qty: number): void => {
       sales.forEach((sale) => {
         if (
           !moment(sale.expiredDate).isAfter(moment.utc()) ||
@@ -163,13 +158,13 @@ export class Product extends RootEntity {
             break;
           case SaleUnit.PERCENTAGE:
             let salePrice = sale.saleOff;
-            switch (saleFor) {
-              case 'product':
+            switch (sale.saleType) {
+              case SaleType.PRODUCT:
                 if (productSaleAsPercentage < salePrice / 100) {
                   productSaleAsPercentage = salePrice / 100;
                 }
                 break;
-              case 'collection':
+              case SaleType.COLLECTION:
                 if (collectionSaleAsPercentage < salePrice / 100) {
                   collectionSaleAsPercentage = salePrice / 100;
                 }
@@ -183,14 +178,14 @@ export class Product extends RootEntity {
 
     const productSales = this?.sales;
     if (productSales) {
-      computeSale(productSales, this.price, 1, 'product');
+      computeSale(productSales, this.price, 1);
     }
 
     const collections = this?.collections;
     if (collections) {
       collections.forEach(({ sales }) => {
         if (sales) {
-          computeSale(sales, this.price, 1, 'collection');
+          computeSale(sales, this.price, 1);
         }
       });
     }

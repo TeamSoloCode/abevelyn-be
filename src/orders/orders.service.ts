@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CommonService } from 'src/common/common-services.service';
 import { UserRoles } from 'src/common/entity-enum';
+import { Sale } from 'src/sales/entities/sale.entity';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { User } from 'src/users/entities/user.entity';
 import { In, IsNull } from 'typeorm';
@@ -28,7 +29,11 @@ export class OrdersService extends CommonService<Order> {
     super(orderRepository);
   }
 
-  async create(user: User): Promise<Order> {
+  async create(
+    user: User,
+    ordeSaleId?: string,
+    returnInfo: boolean = false,
+  ): Promise<Order> {
     const items = await this.cartItemRepository.find({
       relations: ['owner', 'order'],
       where: {
@@ -43,29 +48,21 @@ export class OrdersService extends CommonService<Order> {
         'Cart items not found or no item is selected!',
       );
     }
-    const orderSales = await this.saleRepository.getAvailableOrderSales();
-    const newOrder = new Order(items, user, orderSales);
+
+    let orderSale: Sale = undefined;
+
+    if (ordeSaleId) {
+      const sales = await this.saleRepository.getAvailableOrderSales();
+      orderSale = sales.find((sale) => sale.uuid == ordeSaleId);
+    }
+
+    const newOrder = new Order(items, user, orderSale);
+
+    if (returnInfo) {
+      return newOrder;
+    }
+
     return newOrder.save();
-  }
-
-  async orderInformation(user: User): Promise<Order> {
-    const items = await this.cartItemRepository.find({
-      relations: ['owner', 'order'],
-      where: {
-        owner: { uuid: user.uuid },
-        isSelected: true,
-        order: IsNull(),
-      },
-    });
-
-    if (!items || items.length == 0) {
-      throw new NotFoundException(
-        'Cart items not found or no item is selected!',
-      );
-    }
-
-    const orderSales = await this.saleRepository.getAvailableOrderSales();
-    return new Order(items, user, orderSales);
   }
 
   async findUserOrders(user: User): Promise<Order[]> {

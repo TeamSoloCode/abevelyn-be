@@ -1,6 +1,7 @@
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import CommonDataResponse from 'src/common/common-data-response.dto';
 import { LanguageCode, OrderStatus, UserRoles } from 'src/common/entity-enum';
+import { SaleResponseDto } from 'src/sales/dto/sale-response.dto';
 import { User } from 'src/users/entities/user.entity';
 
 export class OrderDataResponseDTO extends CommonDataResponse<
@@ -17,6 +18,9 @@ export class OrderDataResponseDTO extends CommonDataResponse<
 
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'user')
   owner: User;
+
+  @Reflect.metadata(CommonDataResponse.DTO_KEY, 'sale')
+  sale: SaleResponseDto;
 
   public create(
     data: any,

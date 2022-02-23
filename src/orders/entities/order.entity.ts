@@ -1,6 +1,8 @@
+import { Exclude } from 'class-transformer';
 import { IsUUID } from 'class-validator';
+import { round } from 'lodash';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { OrderStatus } from 'src/common/entity-enum';
+import { OrderStatus, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -17,11 +19,12 @@ import {
 
 @Entity('order')
 export class Order extends RootEntity {
-  constructor(cartItems: CartItem[], owner: User, orderSales: Sale[]) {
+  constructor(cartItems: CartItem[], owner: User, orderSale?: Sale) {
     super();
 
     this.cartItems = cartItems;
     this.owner = owner;
+    this.sale = orderSale;
   }
 
   @PrimaryGeneratedColumn('uuid')
@@ -43,16 +46,43 @@ export class Order extends RootEntity {
   @ManyToOne(() => User, (user) => user.orders)
   owner: User;
 
-  orderSales: Sale[];
+  sale?: Sale;
 
-  totalPrice = (): number => {
+  priceInfo = (): CalculatePriceInfo => {
     let totalPrice = 0;
+
     this.cartItems.forEach((item) => {
       if (item.isSelected) {
         totalPrice += item.price;
       }
     });
 
-    return totalPrice;
+    let calculatedPrice = totalPrice;
+
+    if (this.sale && this.sale.applyPrice <= totalPrice) {
+      switch (this.sale.unit) {
+        case SaleUnit.PERCENTAGE:
+          const saleOff = totalPrice * (this.sale.saleOff / 100);
+          calculatedPrice =
+            calculatedPrice -
+            (saleOff > (this.sale.maxOff || saleOff)
+              ? this.sale.maxOff
+              : round(saleOff, 2));
+          break;
+        case SaleUnit.USD:
+          calculatedPrice = calculatedPrice - this.sale.saleOff;
+          break;
+      }
+    }
+
+    return {
+      totalPrice: totalPrice,
+      calculatedPrice,
+      totalSaleOffAsCurrency: round(totalPrice - calculatedPrice, 2),
+      totalSaleOffAsPercentage: round(
+        (totalPrice - calculatedPrice) / totalPrice,
+        2,
+      ),
+    };
   };
 }
