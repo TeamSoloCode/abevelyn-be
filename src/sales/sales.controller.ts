@@ -22,9 +22,15 @@ import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { SaleResponseDto } from './dto/sale-response.dto';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
 import { AuthGuards } from 'src/utils';
+import { SaleType } from 'src/common/entity-enum';
 
 @ApiTags('Sale APIs')
 @Controller('sales')
@@ -62,13 +68,14 @@ export class SalesController {
   }
 
   @ApiOperation({ summary: 'Fetch all available sale' })
+  @ApiQuery({ required: false, name: 'type', enum: SaleType })
   @Get('fetch_available')
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
   fetchAvailable(
-    @Query(ValidationPipe, FetchDataQueryValidationPipe)
-    query: FetchDataQuery,
+    @Query('type')
+    saleType: SaleType,
   ) {
-    return this.salesService.findAvailableSale(query);
+    return this.salesService.findAvailableSale(saleType);
   }
 
   @ApiOperation({ summary: 'Fetch a sale by id' })

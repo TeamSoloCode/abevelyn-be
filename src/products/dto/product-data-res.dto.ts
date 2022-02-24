@@ -1,4 +1,4 @@
-import { classToPlain, Expose, Transform } from 'class-transformer';
+import { classToPlain, Exclude, Expose, Transform } from 'class-transformer';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
 import CommonDataResponse from 'src/common/common-data-response.dto';
@@ -41,6 +41,9 @@ export class ProductDataResponseDto extends CommonDataResponse<
 
   @Expose({ groups: [UserRoles.ADMIN] })
   descriptionInVietnamese?: string;
+
+  @Exclude()
+  price: number;
 
   size: AdminSizeResponseDto;
 

@@ -6,9 +6,11 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CommonService } from 'src/common/common-services.service';
-import { UserRoles } from 'src/common/entity-enum';
+import { SaleType, UserRoles } from 'src/common/entity-enum';
+import ExceptionCode from 'src/exception-code';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
+import { UserProfileRepository } from 'src/user-profile/repositories/user-profile.respository';
 import { User } from 'src/users/entities/user.entity';
 import { In, IsNull } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -25,6 +27,8 @@ export class OrdersService extends CommonService<Order> {
     private readonly cartItemRepository: CartItemRepository,
     @InjectRepository(SaleRepository)
     private readonly saleRepository: SaleRepository,
+    @InjectRepository(UserProfileRepository)
+    private readonly userProfileRepository: UserProfileRepository,
   ) {
     super(orderRepository);
   }
@@ -34,6 +38,29 @@ export class OrdersService extends CommonService<Order> {
     ordeSaleId?: string,
     returnInfo: boolean = false,
   ): Promise<Order> {
+    const userProfile = await this.userProfileRepository.findOne({
+      relations: ['addresses'],
+      where: {
+        owner: { uuid: user.uuid },
+      },
+    });
+
+    if (!userProfile) {
+      throw new NotFoundException(
+        ExceptionCode.USER_PROFILE.NEED_PROFILE_TO_PROCESS,
+      );
+    }
+
+    if (
+      userProfile.addresses.length == 0 ||
+      !userProfile.phone ||
+      (!userProfile.lastName && !userProfile.firstName)
+    ) {
+      throw new NotFoundException(
+        ExceptionCode.USER_PROFILE.MISSING_INFO_TO_ORDER,
+      );
+    }
+
     const items = await this.cartItemRepository.find({
       relations: ['owner', 'order'],
       where: {
@@ -43,16 +70,16 @@ export class OrdersService extends CommonService<Order> {
       },
     });
 
-    if (!items || items.length == 0) {
-      throw new NotFoundException(
-        'Cart items not found or no item is selected!',
-      );
+    if ((!items || items.length == 0) && !returnInfo) {
+      throw new NotFoundException(ExceptionCode.CART_ITEM.NO_ITEM_SELECTED);
     }
 
     let orderSale: Sale = undefined;
 
     if (ordeSaleId) {
-      const sales = await this.saleRepository.getAvailableOrderSales();
+      const sales = await this.saleRepository.getAvailableSaleByType(
+        SaleType.ORDER,
+      );
       orderSale = sales.find((sale) => sale.uuid == ordeSaleId);
     }
 
@@ -61,7 +88,6 @@ export class OrdersService extends CommonService<Order> {
     if (returnInfo) {
       return newOrder;
     }
-
     return newOrder.save();
   }
 

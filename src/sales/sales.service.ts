@@ -66,8 +66,8 @@ export class SalesService extends CommonService<Sale> {
     return this.findAll(query);
   }
 
-  async findAvailableSale(query: FetchDataQuery): Promise<Sale[]> {
-    return this.findAvailable(query);
+  async findAvailableSale(saleType?: SaleType): Promise<Sale[]> {
+    return this.saleRepository.getAvailableSaleByType(saleType);
   }
 
   async update(id: string, updateSaleDto: UpdateSaleDto) {

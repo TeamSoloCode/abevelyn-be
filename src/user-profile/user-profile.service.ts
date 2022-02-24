@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommonService } from 'src/common/common-services.service';
+import ExceptionCode from 'src/exception-code';
 import { User } from 'src/users/entities/user.entity';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
@@ -42,19 +43,31 @@ export class UserProfileService extends CommonService<UserProfile> {
     return this.userProfileRepository.save(newProfile);
   }
 
+  async findProfileByOwner(owner: User): Promise<UserProfile> {
+    const profile = await this.userProfileRepository.findOne({
+      relations: ['owner'],
+      where: { owner: { uuid: owner.uuid } },
+    });
+
+    if (profile) {
+      throw new NotFoundException(ExceptionCode.USER_PROFILE.NOT_FOUND);
+    }
+
+    return profile;
+  }
+
   async update(
-    id: string,
     updateUserProfileDto: UpdateUserProfileDto,
     owner: User,
   ): Promise<UserProfile> {
     const profile = await this.userProfileRepository.findOne({
       where: {
-        uuid: id,
         owner: { uuid: owner.uuid },
       },
     });
+
     if (!profile) {
-      throw new NotFoundException('User profile is not found');
+      throw new NotFoundException(ExceptionCode.USER_PROFILE.NOT_FOUND);
     }
 
     const { firstName, lastName, picture } = updateUserProfileDto;
@@ -64,7 +77,7 @@ export class UserProfileService extends CommonService<UserProfile> {
     profile.picture = picture;
 
     await this.userProfileRepository.save(profile);
-    return await this.userProfileRepository.findOne(id);
+    return await this.userProfileRepository.findOne(profile.uuid);
   }
 
   remove(id: number) {

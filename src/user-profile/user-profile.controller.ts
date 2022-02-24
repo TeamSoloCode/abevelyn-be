@@ -23,18 +23,20 @@ import { FetchDataQuery } from 'src/common/fetch-data-query';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { UserProfileResponseDTO } from './dto/profile-response.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 import { AuthGuards } from 'src/utils';
 
 @ApiTags('User Profile APIs')
+@ApiBearerAuth('access-token')
 @Controller('user-profile')
 @UseInterceptors(new ApiResponseInterceptor())
+@UseGuards(...AuthGuards)
 export class UserProfileController {
   constructor(private readonly userProfileService: UserProfileService) {}
 
+  @ApiOperation({ summary: 'Create user profile' })
   @Post()
-  @UseGuards(...AuthGuards)
   @UsePipes(ValidationPipe)
   @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
   create(
@@ -44,8 +46,9 @@ export class UserProfileController {
     return this.userProfileService.create(createUserProfileDto, user);
   }
 
+  @ApiOperation({ summary: 'Get all user profile (Admin only)' })
   @Get()
-  @UseGuards(...AuthGuards, AdminRoleGuard)
+  @UseGuards(AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
   findAll(
     @Query(ValidationPipe, FetchDataQueryValidationPipe)
@@ -54,21 +57,28 @@ export class UserProfileController {
     return this.userProfileService.findAll(query);
   }
 
+  @ApiOperation({ summary: 'Get user profile by id (Admin only)' })
   @Get(':id')
-  @UseGuards(...AuthGuards)
+  @UseGuards(AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
-  findOne(@Param('id') id: string, @GetUser() user: User) {
-    return this.userProfileService.findOne(id, user);
+  findOne(@Param('id') id: string) {
+    return this.userProfileService.findOne(id);
   }
 
-  @Patch(':id')
-  @UseGuards(...AuthGuards)
+  @ApiOperation({ summary: 'Return user profile' })
+  @Get('my_profile')
+  @UseInterceptors(new ResponseDataInterceptor(new UserProfileResponseDTO()))
+  findProfileByUser(@GetUser() user: User) {
+    return this.userProfileService.findProfileByOwner(user);
+  }
+
+  @ApiOperation({ summary: 'Update user profile' })
+  @Patch()
   @UsePipes(ValidationPipe)
   update(
-    @Param('id') id: string,
     @Body() updateUserProfileDto: UpdateUserProfileDto,
     @GetUser() user: User,
   ) {
-    return this.userProfileService.update(id, updateUserProfileDto, user);
+    return this.userProfileService.update(updateUserProfileDto, user);
   }
 }

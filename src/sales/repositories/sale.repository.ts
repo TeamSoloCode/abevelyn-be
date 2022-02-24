@@ -11,13 +11,15 @@ import { SaleType } from 'src/common/entity-enum';
 
 @EntityRepository(Sale)
 export class SaleRepository extends Repository<Sale> {
-  async getAvailableOrderSales(): Promise<Sale[]> {
+  async getAvailableSaleByType(saleType?: SaleType): Promise<Sale[]> {
+    const conditionByType = saleType ? { saleType } : {};
+
     return await this.find({
       join: {
         alias: 'sale',
       },
       where: {
-        saleType: SaleType.ORDER,
+        ...conditionByType,
         startedDate: LessThanOrEqual(
           moment().utc().format(DEFAULT_DATETIME_FORMAT),
         ),

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderRepository } from './repositories/order.repository';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
+import { UserProfileRepository } from 'src/user-profile/repositories/user-profile.respository';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SaleRepository } from 'src/sales/repositories/sale.repository';
       OrderRepository,
       CartItemRepository,
       SaleRepository,
+      UserProfileRepository,
     ]),
   ],
   controllers: [OrdersController],
