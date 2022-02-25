@@ -7,6 +7,7 @@ import { OrderRepository } from './repositories/order.repository';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { UserProfileRepository } from 'src/user-profile/repositories/user-profile.respository';
+import { CartRepository } from 'src/carts/repositories/cart.repository';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserProfileRepository } from 'src/user-profile/repositories/user-profil
       CartItemRepository,
       SaleRepository,
       UserProfileRepository,
+      CartRepository,
     ]),
   ],
   controllers: [OrdersController],

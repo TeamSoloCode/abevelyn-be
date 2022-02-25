@@ -23,6 +23,8 @@ export enum SaleUnit {
 
 export enum OrderStatus {
   PENDING = 'pending',
+  PAID = 'paid',
+  SHIPPING = 'shipping',
   CANCELED = 'cancel',
   REJECTED = 'rejected',
   REFUNDED = 'refunded',

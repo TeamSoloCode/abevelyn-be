@@ -1,21 +1,22 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class CreateUserProfileDto {
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'User image url or image name on database',
   })
-  @IsOptional()
   @IsString()
   picture?: string;
 
-  @ApiPropertyOptional({ description: 'User first name' })
-  @IsOptional()
+  @ApiProperty({ description: 'User first name' })
   @IsString()
   firstName?: string;
 
-  @ApiPropertyOptional({ description: 'User last name' })
-  @IsOptional()
+  @ApiProperty({ description: 'User last name' })
   @IsString()
   lastName?: string;
+
+  @ApiProperty({ description: 'User phone number' })
+  @IsString()
+  phone?: string;
 }

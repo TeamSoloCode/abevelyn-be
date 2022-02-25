@@ -42,7 +42,6 @@ export class ProductDataResponseDto extends CommonDataResponse<
   @Expose({ groups: [UserRoles.ADMIN] })
   descriptionInVietnamese?: string;
 
-  @Exclude()
   price: number;
 
   size: AdminSizeResponseDto;

@@ -39,6 +39,7 @@ import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pi
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
 
 @ApiTags('Products APIs')
 @Controller('products')
@@ -48,7 +49,14 @@ export class ProductsController {
 
   @Post()
   @UseGuards(...AuthGuards, AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
+  @UseInterceptors(
+    new ResponseMessageInterceptor<ProductDataResponseDto>({
+      201: (data) => {
+        return `Create Product '${data.name}' successful!`;
+      },
+    }),
+    new ResponseDataInterceptor(new ProductDataResponseDto()),
+  )
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileInterceptor('image', {
@@ -98,7 +106,14 @@ export class ProductsController {
 
   @Patch('/:id')
   @UseGuards(...AuthGuards, AdminRoleGuard)
-  @UseInterceptors(new ResponseDataInterceptor(new ProductDataResponseDto()))
+  @UseInterceptors(
+    new ResponseMessageInterceptor<ProductDataResponseDto>({
+      200: (data) => {
+        return `Update Product '${data.name}' successful!`;
+      },
+    }),
+    new ResponseDataInterceptor(new ProductDataResponseDto()),
+  )
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileFieldsInterceptor(

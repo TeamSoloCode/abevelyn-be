@@ -70,11 +70,9 @@ export class UserProfileService extends CommonService<UserProfile> {
       throw new NotFoundException(ExceptionCode.USER_PROFILE.NOT_FOUND);
     }
 
-    const { firstName, lastName, picture } = updateUserProfileDto;
+    const { firstName, lastName, picture, phone } = updateUserProfileDto;
 
-    profile.firstName = firstName;
-    profile.lastName = lastName;
-    profile.picture = picture;
+    Object.assign(profile, { firstName, lastName, picture, phone });
 
     await this.userProfileRepository.save(profile);
     return await this.userProfileRepository.findOne(profile.uuid);

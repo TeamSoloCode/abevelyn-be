@@ -20,6 +20,12 @@ const ExceptionCode = {
       message: 'Please select at least 1 item to order',
     },
   },
+  CART: {
+    NO_ITEM_IN_CART: {
+      code: 'NO_ITEM_IN_CART',
+      message: 'Please add at least 1 item in your cart to order',
+    },
+  },
 };
 
 export default ExceptionCode;
