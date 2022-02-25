@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { map } from 'lodash';
 import { CommonService } from 'src/common/common-services.service';
+import { User } from 'src/users/entities/user.entity';
+import { In } from 'typeorm';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { Address } from './entities/address.entity';
@@ -15,25 +18,45 @@ export class AddressesService extends CommonService<Address> {
     super(addressRepository);
   }
 
-  create(createAddressDto: CreateAddressDto) {
+  async create(
+    owner: User,
+    createAddressDto: CreateAddressDto,
+  ): Promise<Address> {
     const {
       country,
       addressName,
       companyName,
       district,
-      isDefaultAddress,
+      isDefaultAddress = false,
       postCode,
       provinceOrState,
       street,
     } = createAddressDto;
 
-    const newAddress = new Address(street);
+    const addresses = await this.addressRepository.find({
+      where: { owner: { uuid: owner.uuid } },
+    });
+
+    const newAddress = new Address(owner, street);
+    if (addresses) {
+      if (addresses.length >= 1) {
+        newAddress.isDefaultAddress = isDefaultAddress;
+        if (isDefaultAddress) {
+          await this.addressRepository.update(
+            { uuid: In(map(addresses, 'uuid')) },
+            { isDefaultAddress: false },
+          );
+        }
+      } else {
+        newAddress.isDefaultAddress = true;
+      }
+    }
+
     Object.assign(newAddress, {
       country,
       addressName,
       companyName,
       district,
-      isDefaultAddress,
       postCode,
       provinceOrState,
       street,

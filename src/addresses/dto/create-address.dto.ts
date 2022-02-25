@@ -38,6 +38,7 @@ export class CreateAddressDto {
 
   @ApiPropertyOptional({
     description: "Set to 'true' if you want this is you default address",
+    default: false,
   })
   @IsOptional()
   @IsBoolean()

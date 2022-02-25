@@ -1,9 +1,11 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CommonService } from 'src/common/common-services.service';
 import { SaleType, UserRoles } from 'src/common/entity-enum';
@@ -12,7 +14,13 @@ import { Sale } from 'src/sales/entities/sale.entity';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { UserProfileRepository } from 'src/user-profile/repositories/user-profile.respository';
 import { User } from 'src/users/entities/user.entity';
-import { In, IsNull } from 'typeorm';
+import {
+  getConnection,
+  In,
+  IsNull,
+  Transaction,
+  TransactionRepository,
+} from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
@@ -33,6 +41,7 @@ export class OrdersService extends CommonService<Order> {
     super(orderRepository);
   }
 
+  @Transaction()
   async create(
     user: User,
     ordeSaleId?: string,
@@ -88,7 +97,8 @@ export class OrdersService extends CommonService<Order> {
     if (returnInfo) {
       return newOrder;
     }
-    return newOrder.save();
+
+    return this._executeCreateOrderTransaction(items, newOrder);
   }
 
   async findUserOrders(user: User): Promise<Order[]> {
@@ -144,5 +154,32 @@ export class OrdersService extends CommonService<Order> {
     }
 
     return order.save();
+  }
+
+  private async _executeCreateOrderTransaction(
+    cartItems: CartItem[],
+    newOrder: Order,
+  ) {
+    const connection = getConnection();
+    const queryRunner = connection.createQueryRunner();
+
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager
+        .getCustomRepository(CartItemRepository)
+        .updateCartItemOrder(cartItems, newOrder);
+
+      const createdOrder = await queryRunner.manager.save(newOrder);
+
+      await queryRunner.commitTransaction();
+
+      return createdOrder;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException(err);
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

@@ -139,19 +139,15 @@ export class CommonService<T> {
   }
 
   async findOne(id: string, owner?: User, relations?: string[]): Promise<T> {
-    try {
-      const ownerFind = owner ? { owner: { uuid: owner.uuid } } : {};
-      const data = await this.repository.findOne(
-        <any>{
-          uuid: id,
-          ...ownerFind,
-        },
-        { relations: relations },
-      );
-      if (!data) throw new NotFoundException();
-      return data;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message);
-    }
+    const ownerFind = owner ? { owner: { uuid: owner.uuid } } : {};
+    const data = await this.repository.findOne(
+      <any>{
+        uuid: id,
+        ...ownerFind,
+      },
+      { relations: relations },
+    );
+    if (!data) throw new NotFoundException();
+    return data;
   }
 }

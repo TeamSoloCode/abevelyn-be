@@ -6,10 +6,11 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('address')
 export class Address extends RootEntity {
-  constructor(street: string) {
+  constructor(owner: User, street: string) {
     super();
 
     this.street = street;
+    this.owner = owner;
   }
 
   @PrimaryGeneratedColumn('uuid')
@@ -41,7 +42,7 @@ export class Address extends RootEntity {
   companyName: string;
 
   @Column('bit', {
-    default: true,
+    default: false,
     transformer: {
       from: (v: Buffer) => {
         if (v instanceof Buffer) {

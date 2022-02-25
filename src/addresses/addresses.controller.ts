@@ -16,9 +16,14 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { User } from 'src/users/entities/user.entity';
+import { AuthGuards } from 'src/utils';
 import { AddressesService } from './addresses.service';
+import { AddressResponseDTO } from './dto/address-response.dto';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 
@@ -26,31 +31,45 @@ import { UpdateAddressDto } from './dto/update-address.dto';
 @ApiBearerAuth('access-token')
 @Controller('addresses')
 @UseInterceptors(new ApiResponseInterceptor())
+@UseGuards(...AuthGuards)
 export class AddressesController {
   constructor(private readonly addressesService: AddressesService) {}
 
   @ApiOperation({ summary: 'Create address' })
   @ApiBody({ type: CreateAddressDto })
   @Post()
-  create(@Body() createAddressDto: CreateAddressDto) {
-    return this.addressesService.create(createAddressDto);
+  @UseInterceptors(new ResponseDataInterceptor(new AddressResponseDTO()))
+  create(@Body() createAddressDto: CreateAddressDto, @GetUser() user: User) {
+    return this.addressesService.create(user, createAddressDto);
   }
 
   @ApiOperation({ summary: 'Get all address in the database (Admin only)' })
   @Get()
   @UseGuards(AdminRoleGuard)
+  @UseInterceptors(new ResponseDataInterceptor(new AddressResponseDTO()))
   findAll() {
-    return this.addressesService.findAll();
+    return this.addressesService.findAll(undefined, { relations: ['owner'] });
   }
 
-  @ApiOperation({ summary: 'To get address by uuid' })
+  @ApiOperation({ summary: 'Get address by uuid (Admin only)' })
   @ApiParam({
     name: 'id',
     description: 'The uuid of the address you want to get',
   })
   @Get(':id')
+  @UseGuards(AdminRoleGuard)
   findOne(@Param('id') id: string) {
     return this.addressesService.findOne(id);
+  }
+
+  @ApiOperation({ summary: 'Get address only by its owner' })
+  @ApiParam({
+    name: 'id',
+    description: 'The uuid of the address you want to get',
+  })
+  @Get('my_address/:id')
+  findAddressByUser(@Param('id') id: string, @GetUser() user: User) {
+    return this.addressesService.findOne(id, user);
   }
 
   @ApiOperation({ summary: 'To update address by uuid' })

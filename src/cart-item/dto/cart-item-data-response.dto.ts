@@ -1,13 +1,11 @@
-import { classToPlain, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { CartDataResponse } from 'src/carts/dto/cart-data-response.dto';
-import { Cart } from 'src/carts/entities/cart.entity';
 import CommonDataResponse from 'src/common/common-data-response.dto';
 import { LanguageCode, UserRoles } from 'src/common/entity-enum';
+import { OrderDataResponseDTO } from 'src/orders/dto/order-response.dto';
 import { Order } from 'src/orders/entities/order.entity';
 import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
-import { Product } from 'src/products/entities/product.entity';
 import { UserDataResponse } from 'src/users/dto/user-data-response.dto';
-import { User } from 'src/users/entities/user.entity';
 
 export class CartItemDataResponseDTO extends CommonDataResponse<
   Partial<CartItemDataResponseDTO>
@@ -20,7 +18,8 @@ export class CartItemDataResponseDTO extends CommonDataResponse<
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'cart')
   cart: CartDataResponse;
 
-  order: Order;
+  @Reflect.metadata(CommonDataResponse.DTO_KEY, 'order')
+  order: OrderDataResponseDTO;
 
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'user')
   owner: UserDataResponse;
