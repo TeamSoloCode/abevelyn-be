@@ -53,6 +53,7 @@ export class CartsService extends CommonService<Cart> {
         leftJoinAndSelect: {
           cartItems: 'cart.cartItems',
           owner: 'cart.owner',
+          product: 'cartItems.product',
         },
       },
     });
@@ -62,9 +63,7 @@ export class CartsService extends CommonService<Cart> {
       userCart = await this.cartRepository.save(newCart);
     }
 
-    return this.cartRepository.findOne({
-      where: { uuid: userCart.uuid },
-    });
+    return userCart;
   }
 
   async update(updateCartDto: UpdateCartDto, user: User): Promise<Cart> {
