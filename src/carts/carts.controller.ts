@@ -56,16 +56,14 @@ export class CartsController {
   }
 
   @ApiOperation({ summary: 'Add or Delete cart item from cart' })
-  @ApiParam({ name: 'id', description: 'The uuid of the cart' })
   @ApiBody({ type: UpdateCartDto })
-  @Patch(':id')
+  @Patch()
   @UsePipes(ValidationPipe)
   @UseInterceptors(new ResponseDataInterceptor(new CartDataResponse()))
   async update(
-    @Param('id') id: string,
     @Body() updateCartDto: UpdateCartDto,
     @GetUser() user: User,
   ): Promise<Cart> {
-    return await this.cartsService.update(id, updateCartDto, user);
+    return await this.cartsService.update(updateCartDto, user);
   }
 }

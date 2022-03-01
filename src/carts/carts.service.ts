@@ -67,13 +67,9 @@ export class CartsService extends CommonService<Cart> {
     });
   }
 
-  async update(
-    id: string,
-    updateCartDto: UpdateCartDto,
-    user: User,
-  ): Promise<Cart> {
+  async update(updateCartDto: UpdateCartDto, user: User): Promise<Cart> {
     const cart = await this.cartRepository.findOne({
-      where: { uuid: id, owner: { uuid: user.uuid } },
+      where: { owner: { uuid: user.uuid } },
     });
 
     if (!cart) {
