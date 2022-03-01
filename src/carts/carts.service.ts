@@ -40,17 +40,19 @@ export class CartsService extends CommonService<Cart> {
   async findUserCart(user: User) {
     let userCart = await this.cartRepository.findOne({
       relations: [
+        'owner',
         'cartItems',
         'cartItems.product',
         'cartItems.product.collections',
         'cartItems.product.sales',
         'cartItems.product.collections.sales',
       ],
-      where: 'cartItems.order.uuid IS NULL',
+      where: `cartItems.order.uuid IS NULL AND owner.uuid = '${user.uuid}'`,
       join: {
         alias: 'cart',
         leftJoinAndSelect: {
           cartItems: 'cart.cartItems',
+          owner: 'cart.owner',
         },
       },
     });
