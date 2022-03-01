@@ -10,6 +10,7 @@ import { CartRepository } from 'src/carts/repositories/cart.repository';
 import { CommonService } from 'src/common/common-services.service';
 import { SaleType, UserRoles } from 'src/common/entity-enum';
 import ExceptionCode from 'src/exception-code';
+import { ProductRepository } from 'src/products/repositories/product.repository';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { UserProfileRepository } from 'src/user-profile/repositories/user-profile.respository';
@@ -73,7 +74,7 @@ export class OrdersService extends CommonService<Order> {
     }
 
     const items = await this.cartItemRepository.find({
-      relations: ['owner', 'order'],
+      relations: ['owner', 'order', 'product'],
       where: {
         owner: { uuid: user.uuid },
         isSelected: true,
@@ -169,7 +170,7 @@ export class OrdersService extends CommonService<Order> {
     await queryRunner.startTransaction();
 
     try {
-      const [, , createdOrder] = await Promise.all([
+      const [, , , createdOrder] = await Promise.all([
         queryRunner.manager
           .getCustomRepository(CartRepository)
           .deleteSelectedItems(user),
@@ -177,6 +178,10 @@ export class OrdersService extends CommonService<Order> {
         queryRunner.manager
           .getCustomRepository(CartItemRepository)
           .updateCartItemOrder(cartItems, newOrder),
+
+        queryRunner.manager
+          .getCustomRepository(ProductRepository)
+          .reduceProductQuantityByItems(cartItems),
 
         queryRunner.manager.save(newOrder),
       ]);

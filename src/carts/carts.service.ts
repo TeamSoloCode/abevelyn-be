@@ -101,7 +101,7 @@ export class CartsService extends CommonService<Cart> {
         return cart;
       }
 
-      cart.removeCartItem(cartItem);
+      cartItem.remove();
     }
 
     await this.cartRepository.save(cart);

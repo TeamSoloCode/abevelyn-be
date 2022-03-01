@@ -32,11 +32,6 @@ export class Cart extends RootEntity {
     !isExists && this.cartItems.push(cartItem);
   };
 
-  @Exclude()
-  removeCartItem = (cartItem: CartItem) => {
-    this.cartItems = this.cartItems.filter((i) => i.uuid !== cartItem.uuid);
-  };
-
   getCartPrice = (orderSales: Sale[] = []): number => {
     let totalPrice = 0;
     this.cartItems.forEach((item) => {
