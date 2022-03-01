@@ -19,6 +19,7 @@ import { ProductRepository } from 'src/products/repositories/product.repository'
       SaleRepository,
       UserProfileRepository,
       CartRepository,
+      ProductRepository,
     ]),
   ],
   controllers: [OrdersController],

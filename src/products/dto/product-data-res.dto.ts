@@ -75,11 +75,11 @@ export class ProductDataResponseDto extends CommonDataResponse<
   getDescriptionByLanguage() {
     switch (this._language) {
       case LanguageCode.ENGLISH:
-        return this.name;
+        return this.description;
       case LanguageCode.FRENCH:
-        return this.nameInFrench;
+        return this.descriptionInFrench;
       case LanguageCode.VIETNAMESE:
-        return this.nameInVietnamese;
+        return this.descriptionInVietnamese;
     }
   }
 

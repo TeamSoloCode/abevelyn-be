@@ -1,5 +1,6 @@
 import {
   Injectable,
+  NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -34,6 +35,8 @@ export class OrdersService extends CommonService<Order> {
     private readonly userProfileRepository: UserProfileRepository,
     @InjectRepository(CartRepository)
     private readonly cartRepository: CartRepository,
+    @InjectRepository(ProductRepository)
+    private readonly productRepository: ProductRepository,
   ) {
     super(orderRepository);
   }
@@ -44,34 +47,11 @@ export class OrdersService extends CommonService<Order> {
     returnInfo: boolean = false,
   ): Promise<Order> {
     const isMyCartEmpty = await this.cartRepository.isMyCartEmpty(user);
-    if (isMyCartEmpty) {
+    if (!returnInfo && isMyCartEmpty) {
       throw new NotFoundException(ExceptionCode.CART.NO_ITEM_IN_CART);
     }
 
-    const userProfile = await this.userProfileRepository.findOne({
-      relations: ['owner', 'owner.addresses'],
-      where: {
-        owner: { uuid: user.uuid },
-      },
-    });
-
-    if (returnInfo) {
-      if (!userProfile) {
-        throw new NotFoundException(
-          ExceptionCode.USER_PROFILE.NEED_PROFILE_TO_PROCESS,
-        );
-      }
-
-      if (
-        userProfile?.owner?.addresses?.length == 0 ||
-        !userProfile?.phone ||
-        (!userProfile?.lastName && !userProfile?.firstName)
-      ) {
-        throw new NotFoundException(
-          ExceptionCode.USER_PROFILE.MISSING_INFO_TO_ORDER,
-        );
-      }
-    }
+    !returnInfo && (await this._checkUserProfile(user.uuid));
 
     const items = await this.cartItemRepository.find({
       relations: ['owner', 'order', 'product'],
@@ -85,6 +65,8 @@ export class OrdersService extends CommonService<Order> {
     if ((!items || items.length == 0) && !returnInfo) {
       throw new NotFoundException(ExceptionCode.CART_ITEM.NO_ITEM_SELECTED);
     }
+
+    !returnInfo && this._checkProductInStore(items);
 
     let orderSale: Sale = undefined;
 
@@ -129,7 +111,7 @@ export class OrdersService extends CommonService<Order> {
     updateOrderDto: UpdateOrderDto,
   ): Promise<Order> {
     const order = await this.orderRepository.findOne({
-      where: `order.owner.uuid = '${user.uuid}'`,
+      where: `order.owner.uuid = '${user.uuid}' AND order.uuid = '${orderId}'`,
       relations: ['owner'],
       join: {
         alias: 'order',
@@ -157,6 +139,45 @@ export class OrdersService extends CommonService<Order> {
     }
 
     return order.save();
+  }
+
+  private async _checkUserProfile(userId: string) {
+    const userProfile = await this.userProfileRepository.findOne({
+      relations: ['owner', 'owner.addresses'],
+      where: {
+        owner: { uuid: userId },
+      },
+    });
+
+    if (!userProfile) {
+      throw new NotFoundException(
+        ExceptionCode.USER_PROFILE.NEED_PROFILE_TO_PROCESS,
+      );
+    }
+
+    if (
+      userProfile?.owner?.addresses?.length == 0 ||
+      !userProfile?.phone ||
+      (!userProfile?.lastName && !userProfile?.firstName)
+    ) {
+      throw new NotFoundException(
+        ExceptionCode.USER_PROFILE.MISSING_INFO_TO_ORDER,
+      );
+    }
+  }
+
+  private _checkProductInStore(cartItems: CartItem[]) {
+    const notEnoughProduct = cartItems.find((item) => {
+      return item.product.quantity < item.quantity;
+    });
+
+    if (notEnoughProduct)
+      throw new NotAcceptableException({
+        ...ExceptionCode.CART_ITEM.ITEM_QTY_MORE_THAN_STORE_HAVE,
+        remain: notEnoughProduct.product.quantity,
+        order: notEnoughProduct.quantity,
+        itemId: notEnoughProduct.uuid,
+      });
   }
 
   private async _executeCreateOrderTransaction(

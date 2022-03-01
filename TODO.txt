@@ -1,1 +1,4 @@
-update product qty after order status => pending
+- update product qty after order status => pending
+
+update cart item when product out of stock
+prevent user order more than the store have

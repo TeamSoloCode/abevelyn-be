@@ -8,6 +8,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: 'root',
   database: 'abevelyn_dev',
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  subscribers: [__dirname + '/../**/*.subscriber.{js,ts}'],
   migrations: ['migration/*.js'],
   cli: {
     migrationsDir: 'migration',

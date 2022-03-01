@@ -19,6 +19,10 @@ const ExceptionCode = {
       code: 'NO_ITEM_SELECTED',
       message: 'Please select at least 1 item to order',
     },
+    ITEM_QTY_MORE_THAN_STORE_HAVE: {
+      code: 'ITEM_QTY_MORE_THAN_STORE_HAVE',
+      message: 'Item quantity more than product quantity',
+    },
   },
   CART: {
     NO_ITEM_IN_CART: {

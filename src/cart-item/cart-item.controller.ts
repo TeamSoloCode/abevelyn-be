@@ -64,8 +64,10 @@ export class CartItemController {
     return this.cartItemService.findOne(id, user);
   }
 
-  @ApiOperation({ summary: 'Update the cart item by id' })
-  @ApiParam({ name: 'id', description: 'the uuid of the cart item' })
+  @ApiOperation({
+    summary: 'Update the cart item by id, (quantity, selected flag)',
+  })
+  @ApiParam({ name: 'id', description: 'The uuid of the cart item' })
   @Patch(':id')
   @UsePipes(ValidationPipe)
   update(

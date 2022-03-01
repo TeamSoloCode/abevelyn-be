@@ -1,3 +1,7 @@
+import {
+  ForbiddenException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { IsUUID } from 'class-validator';
 import * as moment from 'moment';
 import { Cart } from 'src/carts/entities/cart.entity';
@@ -8,7 +12,13 @@ import { Product } from 'src/products/entities/product.entity';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { User } from 'src/users/entities/user.entity';
 import { CalculatePriceInfo } from 'src/utils';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class CartItem extends RootEntity {
@@ -54,6 +64,21 @@ export class CartItem extends RootEntity {
     },
   })
   isSelected: boolean;
+
+  @BeforeUpdate()
+  update() {
+    if (this.product.quantity < this.quantity) {
+      throw new ForbiddenException(
+        `Can order more than ${this.product.quantity}`,
+      );
+    }
+
+    if (this.quantity <= 0) {
+      throw new ForbiddenException(
+        'Cannot update item quantity to less than or equal 0',
+      );
+    }
+  }
 
   getCartItemPrice = (): number => {
     return this.product.getPrice

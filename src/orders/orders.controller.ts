@@ -91,7 +91,7 @@ export class OrdersController {
     return this.ordersService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Update order by id' })
+  @ApiOperation({ summary: 'Update order by id (Only be use by Admin)' })
   @ApiParam({ name: 'id', description: 'Any order id' })
   @Patch(':id')
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
