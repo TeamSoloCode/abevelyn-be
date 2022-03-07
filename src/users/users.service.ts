@@ -20,6 +20,7 @@ export class UsersService extends CommonService<User> {
 
   async loginWithGoogle(
     googleResponseDTO: GoogleLoginResponseDTO,
+    isAdmin: boolean = false,
   ): Promise<User> {
     const { email, accessToken, firstName, lastName, picture } =
       googleResponseDTO;
@@ -33,22 +34,26 @@ export class UsersService extends CommonService<User> {
       return this.userRepository.save(user);
     }
 
-    const newUser = new User();
-    newUser.signupType = SignInType.GOOGLE;
-    newUser.email = email;
-    newUser.username = email;
+    if (!isAdmin) {
+      const newUser = new User();
+      newUser.signupType = SignInType.GOOGLE;
+      newUser.email = email;
+      newUser.username = email;
 
-    const createdUser = await this.userRepository.save(newUser);
+      const createdUser = await this.userRepository.save(newUser);
 
-    const profile = await this.userProfileService.create(
-      { firstName, lastName, picture },
-      createdUser,
-    );
+      const profile = await this.userProfileService.create(
+        { firstName, lastName, picture },
+        createdUser,
+      );
 
-    createdUser.profile = profile;
-    await this.userRepository.save(createdUser);
+      createdUser.profile = profile;
+      await this.userRepository.save(createdUser);
 
-    return this.userRepository.findOne(createdUser.uuid);
+      return this.userRepository.findOne(createdUser.uuid);
+    }
+
+    return undefined;
   }
 
   async updateUserRoleById(id: string, updateUserRoleDTO: UpdateUserRoleDTO) {

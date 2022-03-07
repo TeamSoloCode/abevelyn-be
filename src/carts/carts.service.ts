@@ -47,7 +47,7 @@ export class CartsService extends CommonService<Cart> {
         'cartItems.product.sales',
         'cartItems.product.collections.sales',
       ],
-      where: `cartItems.order.uuid IS NULL AND owner.uuid = '${user.uuid}'`,
+      where: `cartItems.order.uuid IS NULL AND owner.uuid = '${user.uuid}' AND cartItems.deleted = FALSE`,
       join: {
         alias: 'cart',
         leftJoinAndSelect: {
@@ -100,7 +100,8 @@ export class CartsService extends CommonService<Cart> {
         return cart;
       }
 
-      cartItem.remove();
+      cartItem.deleted = true;
+      await cartItem.save();
     }
 
     await this.cartRepository.save(cart);

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CollectionsModule } from './collections/collections.module';
@@ -25,9 +26,13 @@ import { GoogleStrategy } from './auth/strategies/google.strategy';
 import { AddressesModule } from './addresses/addresses.module';
 import { SalesModule } from './sales/sales.module';
 import { PaymentModule } from './payment/payment.module';
+import { configurations } from '../config/configuration';
+import { GoogleAdminStrategy } from './auth/strategies/google-admin.strategy';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot(typeOrmConfig),
+    ConfigModule.forRoot({ load: [configurations], isGlobal: true }),
     CollectionsModule,
     ProductsModule,
     UsersModule,
@@ -39,7 +44,6 @@ import { PaymentModule } from './payment/payment.module';
     CouponsModule,
     OrdersModule,
     ReviewsModule,
-    TypeOrmModule.forRoot(typeOrmConfig),
     UserProfileModule,
     MaterialsModule,
     SizesModule,
@@ -52,6 +56,6 @@ import { PaymentModule } from './payment/payment.module';
     PaymentModule,
   ],
   controllers: [AppController],
-  providers: [AppService, GoogleStrategy],
+  providers: [AppService, GoogleStrategy, GoogleAdminStrategy],
 })
 export class AppModule {}

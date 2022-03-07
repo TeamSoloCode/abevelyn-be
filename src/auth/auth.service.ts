@@ -111,7 +111,10 @@ export class AuthService {
     }
   }
 
-  async googleLogin(req): Promise<{ accessToken: string; username: string }> {
+  async googleLogin(
+    req,
+    isAdmin: boolean = false,
+  ): Promise<{ accessToken: string; username: string }> {
     if (!req.user) {
       throw new UnauthorizedException('Cannot loggin with this account!');
     }
@@ -119,7 +122,11 @@ export class AuthService {
     let res = new GoogleLoginResponseDTO();
     res = <GoogleLoginResponseDTO>req.user;
 
-    const user = await this.userService.loginWithGoogle(res);
+    const user = await this.userService.loginWithGoogle(res, isAdmin);
+
+    if (!user && isAdmin) {
+      throw new UnauthorizedException();
+    }
 
     const payload: JwtPayload = {
       uuid: user.uuid,

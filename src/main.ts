@@ -6,23 +6,30 @@ import * as express from 'express';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
 import 'reflect-metadata';
+import { ConfigService } from '@nestjs/config';
+import { _envConstants, ENV_PATH_NAME, setEnvConstants } from './utils';
+import { IConfig } from 'config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  const config = app.get(ConfigService);
   app.use(cookieParser());
+
   // app.useGlobalPipes(
   //   new ValidationPipe({
   //     whitelist: true,
   //   }),
   // );
+
+  setEnvConstants(config.get<IConfig>(ENV_PATH_NAME));
+
   app.enableCors({
-    origin: ['http://localhost:8080'],
+    origin: config.get<IConfig>(ENV_PATH_NAME).BE.AllowOrigins,
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
 
-  const config = new DocumentBuilder()
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('Abevelyn API')
     .setDescription('The Abevelyn API description')
     .setVersion('1.0')
@@ -31,7 +38,7 @@ async function bootstrap() {
       'access-token',
     )
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
   // app.use('/uploads', express.static(join(process.cwd(), 'uploads')));

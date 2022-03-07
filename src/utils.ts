@@ -4,7 +4,6 @@ import { parse, extname, join } from 'path';
 import { Equal, In, LessThan, MoreThan, Not } from 'typeorm';
 import { v1 } from 'uuid';
 import { ColorDataResponseDto } from './colors/dto/color-data-res.dto';
-import { config } from 'dotenv';
 import { UserDataResponse } from './users/dto/user-data-response.dto';
 import { ProductDataResponseDto } from './products/dto/product-data-res.dto';
 import { MaterialResponseDto } from './materials/dto/material-data-response.dto';
@@ -15,9 +14,10 @@ import { CartDataResponse } from './carts/dto/cart-data-response.dto';
 import { CartItemDataResponseDTO } from './cart-item/dto/cart-item-data-response.dto';
 import { OrderDataResponseDTO } from './orders/dto/order-response.dto';
 import { SaleResponseDto } from './sales/dto/sale-response.dto';
-config();
+import { IConfig } from 'config/configuration';
 
 export const DEFAULT_DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const ENV_PATH_NAME = 'env';
 export const AuthGuards = [MatchStoredTokenGuard, AuthGuard()];
 
 export const DTOKeyPrototypeMapper = {
@@ -30,6 +30,11 @@ export const DTOKeyPrototypeMapper = {
   order: OrderDataResponseDTO.prototype,
   sale: SaleResponseDto.prototype,
 };
+
+export let _envConstants: IConfig | undefined = undefined;
+export function setEnvConstants(env: IConfig) {
+  _envConstants = env;
+}
 
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -74,8 +79,13 @@ export class ApiDataResponse<T> {
 
   @ApiProperty()
   code: string;
+
   @ApiProperty()
   data: T;
+
+  @ApiProperty()
+  count?: number;
+
   @ApiProperty()
   message: string;
 }

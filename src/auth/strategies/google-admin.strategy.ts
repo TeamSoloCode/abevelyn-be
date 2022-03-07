@@ -6,13 +6,16 @@ import { IConfig } from 'config/configuration';
 import { ENV_PATH_NAME } from 'src/utils';
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+export class GoogleAdminStrategy extends PassportStrategy(
+  Strategy,
+  'google-admin',
+) {
   constructor(private configService: ConfigService) {
     super({
       clientID: configService.get<IConfig>(ENV_PATH_NAME).Google.ClientID,
       clientSecret: configService.get<IConfig>(ENV_PATH_NAME).Google.Secret,
       callbackURL: `${configService.get<IConfig>(ENV_PATH_NAME).Client.Domain}${
-        configService.get<IConfig>(ENV_PATH_NAME).Google.CallbackURL
+        configService.get<IConfig>(ENV_PATH_NAME).Google.CallbackAdminURL
       }`,
       scope: ['email', 'profile'],
     });

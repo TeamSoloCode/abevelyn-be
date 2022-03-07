@@ -3,13 +3,15 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  Inject,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
+import { IConfig } from 'config/configuration';
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
-import { ApiDataResponse } from 'src/utils';
+import { ApiDataResponse, ENV_PATH_NAME, _envConstants } from 'src/utils';
 import CommonDataResponse from '../common-data-response.dto';
 import { LanguageCode, UserRoles } from '../entity-enum';
 
@@ -23,12 +25,9 @@ export class ResponseDataInterceptor<T> implements NestInterceptor<T> {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<T | T[]> {
     const request: Request = context.switchToHttp().getRequest();
-
-    // TODO: Put the url into env
-    const dataResponseRole = [
-      'http://localhost:8080',
-      'https://localhost:8080',
-    ].includes(request.headers.origin)
+    const dataResponseRole = _envConstants.BE.AllowOrigins.includes(
+      request.headers.origin,
+    )
       ? UserRoles.ADMIN
       : UserRoles.USER;
 

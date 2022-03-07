@@ -22,12 +22,23 @@ import { SignUpValidationPipe } from './pipes/signup.pipe';
 import { Response } from 'express';
 import { AdminRoleGuard } from './guards/admin-role.guard';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { AuthGuards } from 'src/utils';
+import { AuthGuards, ENV_PATH_NAME } from 'src/utils';
+import { ConfigService } from '@nestjs/config';
+import { IConfig } from 'config/configuration';
 
 @ApiTags('Auth APIs')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {
+    console.log(
+      'abcd',
+      configService.get(ENV_PATH_NAME),
+      process.env.ADMIN_DOMAIN,
+    );
+  }
 
   @Post('/signup')
   @UsePipes(ValidationPipe, SignUpValidationPipe)
@@ -57,7 +68,6 @@ export class AuthController {
 
   @Get('redirect')
   @UseGuards(AuthGuard('google'))
-  @Redirect('http://localhost:8080')
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
     const googleUser = await this.authService.googleLogin(req);
 
@@ -66,6 +76,32 @@ export class AuthController {
     res.cookie('token', accessToken);
     res.cookie('username', username);
     res.cookie('email', username);
+
+    res.redirect(
+      this.configService.get<IConfig>(ENV_PATH_NAME).Client.ClientDomain,
+    );
+    return;
+  }
+
+  @Get('google-admin')
+  @UseGuards(AuthGuard('google-admin'))
+  async googleAdminAuth(@Req() req) {}
+
+  @Get('redirect-admin')
+  @UseGuards(AuthGuard('google-admin'))
+  async googleAdminAuthRedirect(@Req() req, @Res() res: Response) {
+    const googleUser = await this.authService.googleLogin(req, true);
+
+    const { username, accessToken } = googleUser;
+
+    res.cookie('token', accessToken);
+    res.cookie('username', username);
+    res.cookie('email', username);
+
+    res.redirect(
+      this.configService.get<IConfig>(ENV_PATH_NAME).Client.AdminDomain,
+    );
+    return;
   }
 
   @Post('/logout')

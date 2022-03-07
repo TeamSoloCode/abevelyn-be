@@ -9,21 +9,37 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersService } from 'src/users/users.service';
 import { UserProfileService } from 'src/user-profile/user-profile.service';
 import { UserProfileRepository } from 'src/user-profile/repositories/user-profile.respository';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { IConfig } from 'config/configuration';
+import { ENV_PATH_NAME } from 'src/utils';
 
 @Module({
   imports: [
-    JwtModule.register({
-      // TODO: need to put this into enviroment variables
-      secret: 'mysecret41',
-      signOptions: {
-        expiresIn: 3600,
+    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          secret: configService.get<IConfig>(ENV_PATH_NAME).JWT.Secret,
+          signOptions: {
+            expiresIn:
+              configService.get<IConfig>(ENV_PATH_NAME).JWT.TokenExpiredTime,
+          },
+        };
       },
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     TypeOrmModule.forFeature([UserRepository, UserProfileRepository]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, UsersService, UserProfileService],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    UsersService,
+    UserProfileService,
+    ConfigService,
+  ],
   exports: [
     JwtStrategy,
     PassportModule,

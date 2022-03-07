@@ -1,4 +1,9 @@
-- update product qty after order status => pending
+support count property for the response data
+update product quantity when order status changed
 
-update cart item when product out of stock
-prevent user order more than the store have
+##############################################
+
+- update product qty after order status => pending
+- prevent user order more than the store have
+- support dynamic domain, origin for data response
+- support nestjs config
