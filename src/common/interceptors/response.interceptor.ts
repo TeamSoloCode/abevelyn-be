@@ -25,11 +25,10 @@ export class ResponseDataInterceptor<T> implements NestInterceptor<T> {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<T | T[]> {
     const request: Request = context.switchToHttp().getRequest();
-    const dataResponseRole = _envConstants.BE.AllowOrigins.includes(
-      request.headers.origin,
-    )
-      ? UserRoles.ADMIN
-      : UserRoles.USER;
+    const dataResponseRole =
+      _envConstants.Client.AdminDomain == request.headers.origin
+        ? UserRoles.ADMIN
+        : UserRoles.USER;
 
     const language =
       <LanguageCode>request.get('language') || LanguageCode.ENGLISH;

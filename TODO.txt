@@ -1,5 +1,10 @@
-support count property for the response data
 update product quantity when order status changed
+Order email template
+support count property for the response data
+Add payment module
+Track user when click on product
+Support ws for notification for order
+Add order page on admin
 
 ##############################################
 
