@@ -33,11 +33,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
   ) {
-    console.log(
-      'abcd',
-      configService.get(ENV_PATH_NAME),
-      process.env.ADMIN_DOMAIN,
-    );
+    console.log('Environment Variables', configService.get(ENV_PATH_NAME));
   }
 
   @Post('/signup')

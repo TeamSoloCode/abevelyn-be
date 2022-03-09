@@ -1,18 +1,26 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  IS_ALPHA,
+  MaxLength,
+} from 'class-validator';
 import { OrderStatus } from 'src/common/entity-enum';
 import { CreateOrderDto } from './create-order.dto';
 
 export class UpdateOrderDto extends PartialType(CreateOrderDto) {
-  @ApiProperty({ description: 'The reason user cancel the order' })
+  @ApiPropertyOptional({ description: 'The reason user cancel the order' })
   @IsOptional()
   @IsString()
+  @MaxLength(512)
   cancelReason?: string;
 
   @ApiProperty({ description: 'The reason admin reject the order' })
   @IsOptional()
   @IsString()
+  @MaxLength(512)
   rejectReason?: string;
 
   @ApiProperty({
@@ -20,6 +28,5 @@ export class UpdateOrderDto extends PartialType(CreateOrderDto) {
     enum: OrderStatus,
   })
   @IsEnum(Object.values(OrderStatus).filter((v) => typeof v == 'string'))
-  @IsOptional()
   orderStatus: OrderStatus;
 }

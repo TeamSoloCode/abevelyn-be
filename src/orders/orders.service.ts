@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
@@ -9,7 +10,7 @@ import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CartRepository } from 'src/carts/repositories/cart.repository';
 import { CommonService } from 'src/common/common-services.service';
-import { SaleType, UserRoles } from 'src/common/entity-enum';
+import { OrderStatus, SaleType, UserRoles } from 'src/common/entity-enum';
 import ExceptionCode from 'src/exception-code';
 import { ProductRepository } from 'src/products/repositories/product.repository';
 import { Sale } from 'src/sales/entities/sale.entity';
@@ -102,10 +103,14 @@ export class OrdersService extends CommonService<Order> {
   }
 
   async findUserOrderById(id: string): Promise<Order> {
-    return this.findOneAvailable({ cond: `uuid = '${id}'` });
+    const order = await this.findOneAvailable(
+      { cond: `order.uuid = '${id}'` },
+      { join: { alias: 'order' } },
+    );
+    return order;
   }
 
-  async updateUserOrder(
+  async updateOrderStatus(
     orderId: string,
     user: User,
     updateOrderDto: UpdateOrderDto,
@@ -124,21 +129,32 @@ export class OrdersService extends CommonService<Order> {
     if (!order) {
       throw new NotFoundException('Order not found!');
     }
-    const { cancelReason, rejectReason } = updateOrderDto;
+    const { cancelReason, rejectReason, orderStatus } = updateOrderDto;
+    const previousOrderStatus = order.status;
 
-    if (cancelReason && user.role !== UserRoles.USER) {
-      throw new UnauthorizedException('Only user can update cancel reason');
-    } else {
-      order.cancelReason = cancelReason;
+    switch (orderStatus) {
+      case OrderStatus.CANCELED:
+        if (user.uuid !== order.owner.uuid) {
+          throw new UnauthorizedException(
+            'Only owner of the order can update cancel reason',
+          );
+        } else {
+          order.cancelReason = cancelReason;
+        }
+        break;
+      case OrderStatus.REJECTED:
+        if (user.role === UserRoles.USER) {
+          throw new UnauthorizedException(
+            'Only admin can update reject reason',
+          );
+        } else {
+          order.rejectReason = rejectReason;
+        }
+        break;
     }
 
-    if (rejectReason && user.role === UserRoles.USER) {
-      throw new UnauthorizedException('Only admin can update reject reason');
-    } else {
-      order.rejectReason = rejectReason;
-    }
-
-    return order.save();
+    order.status = orderStatus;
+    return this._updateOrderStatusTransaction(order, previousOrderStatus);
   }
 
   private async _checkUserProfile(userId: string) {
@@ -202,7 +218,7 @@ export class OrdersService extends CommonService<Order> {
 
         queryRunner.manager
           .getCustomRepository(ProductRepository)
-          .reduceProductQuantityByItems(cartItems),
+          .updateProductQuantityByOrder(newOrder, newOrder.status),
 
         queryRunner.manager.save(newOrder),
       ]);
@@ -210,6 +226,35 @@ export class OrdersService extends CommonService<Order> {
       await queryRunner.commitTransaction();
 
       return createdOrder;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  private async _updateOrderStatusTransaction(
+    order: Order,
+    prevOrderStatus: OrderStatus,
+  ): Promise<Order> {
+    const connection = getConnection();
+    const queryRunner = connection.createQueryRunner();
+
+    await queryRunner.startTransaction();
+
+    try {
+      const [, updatedOrder] = await Promise.all([
+        queryRunner.manager
+          .getCustomRepository(ProductRepository)
+          .updateProductQuantityByOrder(order, prevOrderStatus),
+
+        queryRunner.manager.save(order),
+      ]);
+
+      await queryRunner.commitTransaction();
+
+      return updatedOrder;
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;

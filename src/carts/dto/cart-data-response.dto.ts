@@ -17,7 +17,7 @@ export class CartDataResponse extends CommonDataResponse<
   owner: User;
 
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'cartItem')
-  cartItems: CartItemDataResponseDTO[];
+  cartItems: CartItemDataResponseDTO[] = [];
 
   @Expose({ groups: [UserRoles.ADMIN] })
   updatedAt: Date;

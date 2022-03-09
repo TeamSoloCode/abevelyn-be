@@ -28,13 +28,15 @@ export class Cart extends RootEntity {
 
   @Exclude()
   addCartItem = (cartItem: CartItem) => {
-    const isExists = this.cartItems.find((i) => i.uuid === cartItem.uuid);
+    const isExists = (this.cartItems || []).find(
+      (i) => i.uuid === cartItem.uuid,
+    );
     !isExists && this.cartItems.push(cartItem);
   };
 
   getCartPrice = (orderSales: Sale[] = []): number => {
     let totalPrice = 0;
-    this.cartItems.forEach((item) => {
+    (this.cartItems || []).forEach((item) => {
       if (item.isSelected) {
         totalPrice += item.price;
       }

@@ -1,4 +1,4 @@
-update product quantity when order status changed
+
 Order email template
 support count property for the response data
 Add payment module
@@ -12,3 +12,4 @@ Add order page on admin
 - prevent user order more than the store have
 - support dynamic domain, origin for data response
 - support nestjs config
+- update product quantity when order status changed

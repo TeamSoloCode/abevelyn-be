@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -71,7 +72,7 @@ export class OrdersController {
   @Get('my_orders/:id')
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
   findUserOrderById(@Param('id') id: string) {
-    this.ordersService.findUserOrderById(id);
+    return this.ordersService.findUserOrderById(id);
   }
 
   @ApiOperation({ summary: 'Get all order (Only be use by Admin)' })
@@ -91,15 +92,15 @@ export class OrdersController {
     return this.ordersService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Update order by id (Only be use by Admin)' })
+  @ApiOperation({ summary: 'Update order STATUS by id' })
   @ApiParam({ name: 'id', description: 'Any order id' })
   @Patch(':id')
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
-  update(
+  updateOrderStatus(
     @Param('id') id: string,
     @GetUser() user: User,
-    @Body() updateOrderDto: UpdateOrderDto,
+    @Body(ValidationPipe) updateOrderDto: UpdateOrderDto,
   ) {
-    return this.ordersService.updateUserOrder(id, user, updateOrderDto);
+    return this.ordersService.updateOrderStatus(id, user, updateOrderDto);
   }
 }
