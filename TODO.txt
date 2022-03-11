@@ -1,4 +1,4 @@
-
+User only can update order cancel reason, Only admin can update order status
 Order email template
 support count property for the response data
 Add payment module

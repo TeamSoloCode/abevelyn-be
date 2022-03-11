@@ -22,7 +22,6 @@ export class ProductRepository extends Repository<Product> {
       switch (order.status) {
         case OrderStatus.PENDING:
         case OrderStatus.SHIPPING:
-        case OrderStatus.PAID:
         case OrderStatus.COMPLETED:
         case undefined:
           if (

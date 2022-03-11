@@ -1,3 +1,4 @@
+import { NotAcceptableException } from '@nestjs/common';
 import { IsUUID, Max, Min } from 'class-validator';
 import * as moment from 'moment';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
@@ -13,6 +14,7 @@ import { Sale } from 'src/sales/entities/sale.entity';
 import { Size } from 'src/sizes/entities/size.entity';
 import { CalculatePriceInfo } from 'src/utils';
 import {
+  BeforeUpdate,
   Column,
   Entity,
   JoinTable,
@@ -203,4 +205,11 @@ export class Product extends RootEntity {
   };
 
   priceInfo: CalculatePriceInfo;
+
+  @BeforeUpdate()
+  quantityValidation() {
+    if (this.quantity < 0) {
+      throw new NotAcceptableException(`Not enough '${this.name}' amount`);
+    }
+  }
 }

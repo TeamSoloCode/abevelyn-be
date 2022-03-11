@@ -27,6 +27,7 @@ import { User } from 'src/users/entities/user.entity';
 import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
 import { OrderDataResponseDTO } from './dto/order-response.dto';
 import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
+import { CancelOrderDto } from './dto/cancel-order.dto';
 
 @ApiTags('Order APIs')
 @ApiBearerAuth('access-token')
@@ -92,15 +93,27 @@ export class OrdersController {
     return this.ordersService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Update order STATUS by id' })
+  @ApiOperation({ summary: 'Update order STATUS by id (Only be use by Admin)' })
   @ApiParam({ name: 'id', description: 'Any order id' })
+  @UseGuards(AdminRoleGuard)
   @Patch(':id')
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
   updateOrderStatus(
     @Param('id') id: string,
-    @GetUser() user: User,
     @Body(ValidationPipe) updateOrderDto: UpdateOrderDto,
   ) {
-    return this.ordersService.updateOrderStatus(id, user, updateOrderDto);
+    return this.ordersService.updateOrderStatus(id, updateOrderDto);
+  }
+
+  @ApiOperation({ summary: 'User use this to cancel their order by order ID' })
+  @ApiParam({ name: 'id', description: 'Any order id' })
+  @Patch('cancel/:id')
+  @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
+  cancel(
+    @Param('id') id: string,
+    @GetUser() user: User,
+    @Body(ValidationPipe) { cancelReason }: CancelOrderDto,
+  ) {
+    return this.ordersService.cancelOrder(id, user, cancelReason);
   }
 }

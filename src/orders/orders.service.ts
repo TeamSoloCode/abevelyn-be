@@ -112,9 +112,30 @@ export class OrdersService extends CommonService<Order> {
 
   async updateOrderStatus(
     orderId: string,
-    user: User,
     updateOrderDto: UpdateOrderDto,
   ): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: `order.uuid = '${orderId}'`,
+      join: {
+        alias: 'order',
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found!');
+    }
+
+    const { cancelReason, rejectReason, orderStatus } = updateOrderDto;
+    const previousOrderStatus = order.status;
+
+    order.cancelReason = cancelReason;
+    order.rejectReason = rejectReason;
+    order.status = orderStatus;
+
+    return this._updateOrderStatusTransaction(order, previousOrderStatus);
+  }
+
+  async cancelOrder(orderId: string, user: User, cancelReason: string) {
     const order = await this.orderRepository.findOne({
       where: `order.owner.uuid = '${user.uuid}' AND order.uuid = '${orderId}'`,
       relations: ['owner'],
@@ -129,31 +150,21 @@ export class OrdersService extends CommonService<Order> {
     if (!order) {
       throw new NotFoundException('Order not found!');
     }
-    const { cancelReason, rejectReason, orderStatus } = updateOrderDto;
     const previousOrderStatus = order.status;
 
-    switch (orderStatus) {
-      case OrderStatus.CANCELED:
-        if (user.uuid !== order.owner.uuid) {
-          throw new UnauthorizedException(
-            'Only owner of the order can update cancel reason',
-          );
-        } else {
-          order.cancelReason = cancelReason;
-        }
-        break;
-      case OrderStatus.REJECTED:
-        if (user.role === UserRoles.USER) {
-          throw new UnauthorizedException(
-            'Only admin can update reject reason',
-          );
-        } else {
-          order.rejectReason = rejectReason;
-        }
-        break;
+    if (user.uuid !== order.owner.uuid) {
+      throw new UnauthorizedException(
+        'Only owner of the order can cancel this order',
+      );
     }
 
-    order.status = orderStatus;
+    if (order.status != OrderStatus.PENDING) {
+      throw new NotAcceptableException('Only pending order can be canceled');
+    }
+
+    order.cancelReason = cancelReason;
+    order.status = OrderStatus.CANCELED;
+
     return this._updateOrderStatusTransaction(order, previousOrderStatus);
   }
 
