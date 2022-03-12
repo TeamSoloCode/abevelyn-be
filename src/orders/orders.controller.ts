@@ -81,7 +81,9 @@ export class OrdersController {
   @UseGuards(AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
   findAll() {
-    return this.ordersService.findAll();
+    return this.ordersService.findAll(undefined, {
+      relations: ['owner', 'owner.profile'],
+    });
   }
 
   @ApiOperation({ summary: 'Get any order by id (Only be use by Admin)' })

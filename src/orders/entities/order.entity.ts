@@ -51,8 +51,8 @@ export class Order extends RootEntity {
   priceInfo = (): CalculatePriceInfo => {
     let totalPrice = 0;
 
-    this.cartItems.forEach((item) => {
-      if (item.isSelected) {
+    (this.cartItems || []).forEach((item) => {
+      if (item.isSelected || this.status) {
         totalPrice += item.price;
       }
     });

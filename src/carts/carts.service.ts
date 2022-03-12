@@ -2,10 +2,8 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as moment from 'moment';
 import { CartItemService } from 'src/cart-item/cart-item.service';
-import { CreateCartItemDto } from 'src/cart-item/dto/create-cart-item.dto';
 import { CartItemRepository } from 'src/cart-item/repositories/cart-item.repository';
 import { CommonService } from 'src/common/common-services.service';
-import { SaleType } from 'src/common/entity-enum';
 import { ProductRepository } from 'src/products/repositories/product.repository';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
 import { User } from 'src/users/entities/user.entity';
@@ -67,9 +65,7 @@ export class CartsService extends CommonService<Cart> {
   }
 
   async update(updateCartDto: UpdateCartDto, user: User): Promise<Cart> {
-    const cart = await this.cartRepository.findOne({
-      where: { owner: { uuid: user.uuid } },
-    });
+    const cart = await this.cartRepository.getUserCartWithoutOrderedItems(user);
 
     if (!cart) {
       throw new NotFoundException('Cart not found');
@@ -81,7 +77,10 @@ export class CartsService extends CommonService<Cart> {
 
     if (updateCartDto.action === 'add') {
       const existCartItem = cart.cartItems.find(
-        (item) => item.product.uuid === updateCartDto.productId,
+        (item) =>
+          item.product.uuid === updateCartDto.productId &&
+          !item.order &&
+          !item.deleted,
       );
 
       if (existCartItem) {
