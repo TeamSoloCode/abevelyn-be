@@ -36,25 +36,9 @@ export class CartsService extends CommonService<Cart> {
   }
 
   async findUserCart(user: User) {
-    let userCart = await this.cartRepository.findOne({
-      relations: [
-        'owner',
-        'cartItems',
-        'cartItems.product',
-        'cartItems.product.collections',
-        'cartItems.product.sales',
-        'cartItems.product.collections.sales',
-      ],
-      where: `cartItems.order.uuid IS NULL AND owner.uuid = '${user.uuid}' AND cartItems.deleted = FALSE`,
-      join: {
-        alias: 'cart',
-        leftJoinAndSelect: {
-          cartItems: 'cart.cartItems',
-          owner: 'cart.owner',
-          product: 'cartItems.product',
-        },
-      },
-    });
+    let userCart = await this.cartRepository.getUserCartWithoutOrderedItems(
+      user,
+    );
 
     if (!userCart) {
       const newCart = await this.create(user);

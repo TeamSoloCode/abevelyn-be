@@ -13,7 +13,7 @@ export class CartDataResponse extends CommonDataResponse<
   uuid: string;
   createdAt: Date;
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   owner: User;
 
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'cartItem')

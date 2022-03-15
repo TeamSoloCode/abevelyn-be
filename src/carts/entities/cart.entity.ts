@@ -8,7 +8,14 @@ import { Product } from 'src/products/entities/product.entity';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { User } from 'src/users/entities/user.entity';
 import { CalculatePriceInfo } from 'src/utils';
-import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as moment from 'moment';
 
 @Entity()
@@ -17,7 +24,8 @@ export class Cart extends RootEntity {
   @IsUUID()
   uuid: string;
 
-  @ManyToOne(() => User, (owner) => owner.carts)
+  @OneToOne(() => User, (owner) => owner.carts)
+  @JoinColumn()
   owner: User;
 
   @OneToMany(() => CartItem, (item) => item.cart, {

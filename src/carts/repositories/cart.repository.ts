@@ -7,12 +7,21 @@ export class CartRepository extends Repository<Cart> {
   async getUserCartWithoutOrderedItems(user: User): Promise<Cart> {
     const cart = await this.findOne({
       where: `cart.owner = '${user.uuid}' AND cartItems.order IS NULL`,
-      relations: ['cartItems', 'cartItems.order', 'cartItems.product'],
+      relations: [
+        'owner',
+        'cartItems',
+        'cartItems.order',
+        'cartItems.product',
+        'cartItems.product.collections',
+        'cartItems.product.sales',
+        'cartItems.product.collections.sales',
+      ],
       join: {
         alias: 'cart',
         leftJoinAndSelect: {
           cartItems: 'cart.cartItems',
           order: 'cartItems.order',
+          owner: 'cart.owner',
           product: 'cartItems.product',
         },
       },

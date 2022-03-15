@@ -150,8 +150,8 @@ export class User extends RootEntity {
    * -----------------------------------------------------
    */
 
-  @OneToMany(() => Cart, (cart) => cart.owner, { onDelete: 'SET NULL' })
-  carts: Cart[];
+  @OneToOne(() => Cart, (cart) => cart.owner, { onDelete: 'SET NULL' })
+  carts: Cart;
 
   @OneToMany(() => Review, (review) => review.owner, { onDelete: 'SET NULL' })
   reviews: Review[];
