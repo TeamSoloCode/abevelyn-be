@@ -2,9 +2,11 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment';
 import { CollectionRepository } from 'src/collections/repositories/collection.repository';
 import { CommonService } from 'src/common/common-services.service';
 import { SaleType } from 'src/common/entity-enum';
@@ -74,6 +76,10 @@ export class SalesService extends CommonService<Sale> {
     const sale = await this.saleRepository.findOne(id);
     if (!sale) {
       throw new NotFoundException('Sale not found!');
+    }
+
+    if (moment(sale.startedDate).isBefore(moment.utc())) {
+      throw new NotAcceptableException('Cannot update already started sale');
     }
 
     Object.assign(sale, updateSaleDto);

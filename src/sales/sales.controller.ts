@@ -24,9 +24,11 @@ import { SaleResponseDto } from './dto/sale-response.dto';
 import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiQuery,
   ApiTags,
+  PartialType,
 } from '@nestjs/swagger';
 import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
 import { AuthGuards } from 'src/utils';
@@ -87,6 +89,7 @@ export class SalesController {
 
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Update sale infomation (Admin Only)' })
+  @ApiBody({ type: UpdateSaleDto })
   @Patch(':id')
   @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(
@@ -97,7 +100,15 @@ export class SalesController {
     }),
     new ResponseDataInterceptor(new SaleResponseDto()),
   )
-  update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
+  update(
+    @Param('id') id: string,
+    @Body(
+      new ValidationPipe({
+        transformOptions: { excludeExtraneousValues: true },
+      }),
+    )
+    updateSaleDto: UpdateSaleDto,
+  ) {
     return this.salesService.update(id, updateSaleDto);
   }
 }

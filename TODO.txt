@@ -1,4 +1,4 @@
-Not allow admin to update sale after started date
+
 Create Product History table to reference selled product
 
 Order email template
@@ -18,3 +18,4 @@ Add lastUpdateUserID to Order entity to track updater
 - update product quantity when order status changed
 - User only can update order cancel reason, Only admin can update order status
 - Update add add delete items from user cart
+- Not allow admin to update sale after started date

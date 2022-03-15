@@ -1,9 +1,11 @@
 import { IsUUID } from 'class-validator';
+import * as moment from 'moment';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { SaleType, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Product } from 'src/products/entities/product.entity';
 import {
+  AfterLoad,
   Column,
   Entity,
   JoinTable,
@@ -76,4 +78,9 @@ export class Sale extends RootEntity {
   @ManyToMany(() => Collection, (col) => col.sales)
   @JoinTable()
   collections: Collection[];
+
+  @AfterLoad()
+  isEditable = (): boolean => {
+    return moment(this.startedDate).isAfter(moment.utc());
+  };
 }

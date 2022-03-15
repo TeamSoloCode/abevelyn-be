@@ -1,15 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
-  IsDate,
   IsDateString,
   IsEnum,
-  IsInt,
   IsNumber,
   IsOptional,
   IsString,
-  Max,
-  MaxLength,
   Min,
   MinLength,
 } from 'class-validator';
@@ -21,29 +17,37 @@ export class CreateSaleDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ description: 'The sale of value', minimum: 0.5 })
+  @ApiProperty({ description: 'The sale of value', minimum: 0.01 })
   @IsNumber()
-  @Min(0.5)
+  @Min(0.01)
   saleOff: number;
 
-  @IsDateString()
+  @IsString()
   startedDate: Date;
 
-  @IsDateString()
+  @IsString()
   expiredDate: Date;
 
   @ApiProperty({
-    description: 'The type of the sale saling for (product, collection, order)',
+    description: `The type of the sale saling for (${Object.values(
+      SaleType,
+    ).filter((v) => typeof v == 'string')})`,
     enum: SaleType,
   })
   @IsEnum(Object.values(SaleType).filter((v) => typeof v == 'string'))
   saleType: SaleType;
 
-  @ApiProperty({ description: 'The max sale client can get' })
+  @ApiPropertyOptional({ description: 'The max sale client can get' })
   @IsOptional()
   @IsNumber()
   maxOff: number;
 
+  @ApiProperty({
+    description: `The unit will be use (${Object.values(SaleUnit).filter(
+      (v) => typeof v == 'string',
+    )})`,
+    enum: SaleUnit,
+  })
   @IsOptional()
   @IsEnum(Object.values(SaleUnit).filter((v) => typeof v == 'string'))
   unit: SaleUnit;

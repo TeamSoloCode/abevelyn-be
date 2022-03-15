@@ -42,6 +42,9 @@ export class SaleResponseDto extends CommonDataResponse<
   @Expose({ groups: [UserRoles.ADMIN] })
   descriptionInVietnamese?: string;
 
+  @Expose({ name: 'editable', toPlainOnly: true })
+  isEditable = () => Boolean;
+
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'product')
   products: ProductDataResponseDto[];
 
