@@ -1,4 +1,6 @@
-Add product sale and collection to cart item for order to know which sale was applied
+Not allow admin to update sale after started date
+Create Product History table to reference selled product
+
 Order email template
 support count property for the response data
 Add payment module

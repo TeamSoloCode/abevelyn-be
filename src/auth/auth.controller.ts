@@ -36,6 +36,7 @@ export class AuthController {
     console.log('Environment Variables', configService.get(ENV_PATH_NAME));
   }
 
+  @ApiBody({ type: SignUpCredentialDto })
   @Post('/signup')
   @UsePipes(ValidationPipe, SignUpValidationPipe)
   async signup(@Body() signUpCredentials: SignUpCredentialDto) {
