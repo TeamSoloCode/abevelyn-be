@@ -28,7 +28,7 @@ import { SalesModule } from './sales/sales.module';
 import { PaymentModule } from './payment/payment.module';
 import { configurations } from '../config/configuration';
 import { GoogleAdminStrategy } from './auth/strategies/google-admin.strategy';
-import { ProductHistoryModule } from './product-history/product-history.module';
+import { OrderHistoryModule } from './order-history/order-history.module';
 
 @Module({
   imports: [
@@ -55,7 +55,7 @@ import { ProductHistoryModule } from './product-history/product-history.module';
     AddressesModule,
     SalesModule,
     PaymentModule,
-    ProductHistoryModule,
+    OrderHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, GoogleAdminStrategy],

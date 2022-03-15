@@ -26,7 +26,7 @@ export class CartRepository extends Repository<Cart> {
       relations: ['cartItems'],
       where: { owner: { uuid: owner.uuid } },
     });
-
+    if (!cart) return true;
     return cart.cartItems.length == 0;
   }
 

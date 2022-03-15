@@ -58,22 +58,23 @@ export class CartsService extends CommonService<Cart> {
 
     if (!userCart) {
       const newCart = await this.create(user);
-      userCart = await this.cartRepository.save(newCart);
+      await this.cartRepository.save(newCart);
+      userCart = await this.cartRepository.getUserCartWithoutOrderedItems(user);
     }
 
     return userCart;
   }
 
   async update(updateCartDto: UpdateCartDto, user: User): Promise<Cart> {
-    const cart = await this.cartRepository.getUserCartWithoutOrderedItems(user);
+    let cart = await this.cartRepository.getUserCartWithoutOrderedItems(user);
 
     if (!cart) {
-      throw new NotFoundException('Cart not found');
+      cart = await this.findUserCart(user);
     }
 
-    const product = await this.productRepository.findOne(
-      updateCartDto.productId,
-    );
+    const product = await this.productRepository.findOne({
+      where: { uuid: updateCartDto.productId, deleted: false, available: true },
+    });
 
     if (updateCartDto.action === 'add') {
       const existCartItem = cart.cartItems.find(
