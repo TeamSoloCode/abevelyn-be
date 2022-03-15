@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { Collection } from 'src/collections/entities/collection.entity';
 import { SaleType, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
+import { Order } from 'src/orders/entities/order.entity';
 import { Product } from 'src/products/entities/product.entity';
 import {
   AfterLoad,
@@ -10,6 +11,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -78,6 +80,9 @@ export class Sale extends RootEntity {
   @ManyToMany(() => Collection, (col) => col.sales)
   @JoinTable()
   collections: Collection[];
+
+  @OneToMany(() => Order, (order) => order.sale)
+  orders: Order[];
 
   @AfterLoad()
   isEditable = (): boolean => {

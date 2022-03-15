@@ -1,6 +1,8 @@
+User same API for create/update user profile
+Cannot set startedDate of Sale after current date
 
-Create Product History table to reference selled product
 
+Add more infomation for address as UI need
 Order email template
 support count property for the response data
 Add payment module
@@ -8,6 +10,7 @@ Track user when click on product
 Support ws for notification for order
 Add order page on admin
 Add lastUpdateUserID to Order entity to track updater
+
 
 ##############################################
 
@@ -19,3 +22,4 @@ Add lastUpdateUserID to Order entity to track updater
 - User only can update order cancel reason, Only admin can update order status
 - Update add add delete items from user cart
 - Not allow admin to update sale after started date
+- Create Order History

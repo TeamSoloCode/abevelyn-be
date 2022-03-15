@@ -4,6 +4,7 @@ import { round } from 'lodash';
 import { CartItem } from 'src/cart-item/entities/cart-item.entity';
 import { OrderStatus, SaleUnit } from 'src/common/entity-enum';
 import { RootEntity } from 'src/common/root-entity.entity';
+import { OrderHistory } from 'src/order-history/entities/order-history.entity';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { User } from 'src/users/entities/user.entity';
 import { CalculatePriceInfo } from 'src/utils';
@@ -43,9 +44,14 @@ export class Order extends RootEntity {
   @OneToMany(() => CartItem, (cartItem) => cartItem.order, { eager: true })
   cartItems: CartItem[];
 
+  @OneToOne((type) => OrderHistory, (orderHist) => orderHist.order)
+  @JoinColumn()
+  orderHistory: OrderHistory;
+
   @ManyToOne(() => User, (user) => user.orders)
   owner: User;
 
+  @ManyToOne(() => Sale, (sale) => sale.orders, { nullable: true })
   sale?: Sale;
 
   priceInfo = (): CalculatePriceInfo => {

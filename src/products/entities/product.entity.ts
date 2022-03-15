@@ -113,7 +113,6 @@ export class Product extends RootEntity {
   @ManyToOne((type) => Coupon, (coupon) => coupon.product, {
     nullable: true,
     onDelete: 'SET NULL',
-    eager: true,
   })
   coupon?: Coupon;
 

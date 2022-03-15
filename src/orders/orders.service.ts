@@ -12,6 +12,7 @@ import { CartRepository } from 'src/carts/repositories/cart.repository';
 import { CommonService } from 'src/common/common-services.service';
 import { OrderStatus, SaleType, UserRoles } from 'src/common/entity-enum';
 import ExceptionCode from 'src/exception-code';
+import { OrderHistoryRepository } from 'src/order-history/repositories/order-history.repository';
 import { ProductRepository } from 'src/products/repositories/product.repository';
 import { Sale } from 'src/sales/entities/sale.entity';
 import { SaleRepository } from 'src/sales/repositories/sale.repository';
@@ -36,8 +37,6 @@ export class OrdersService extends CommonService<Order> {
     private readonly userProfileRepository: UserProfileRepository,
     @InjectRepository(CartRepository)
     private readonly cartRepository: CartRepository,
-    @InjectRepository(ProductRepository)
-    private readonly productRepository: ProductRepository,
   ) {
     super(orderRepository);
   }
@@ -107,6 +106,7 @@ export class OrdersService extends CommonService<Order> {
       { cond: `order.uuid = '${id}'` },
       { join: { alias: 'order' } },
     );
+    // this.orderRepository.getOrderInformation(order.uuid);
     return order;
   }
 
@@ -234,7 +234,14 @@ export class OrdersService extends CommonService<Order> {
         queryRunner.manager.save(newOrder),
       ]);
 
-      await queryRunner.commitTransaction();
+      const orderDeepInfomation = await queryRunner.manager
+        .getCustomRepository(OrderRepository)
+        .getOrderInformation(createdOrder.uuid);
+
+      await queryRunner.manager
+        .getCustomRepository(OrderHistoryRepository)
+        .createHistoryBaseOnOrder(orderDeepInfomation),
+        await queryRunner.commitTransaction();
 
       return createdOrder;
     } catch (err) {

@@ -19,7 +19,15 @@ export class OrderHistory extends RootEntity {
     return this._order;
   }
 
+  set productAsJSON(orderJson: string) {
+    JSON.parse(orderJson);
+    this._order = orderJson;
+  }
+
   private _order: string;
+
+  @OneToOne((type) => Order, (order) => order.orderHistory)
+  order: Order;
 
   getOrderHistory = (): Order => {
     if (!this._order) return undefined;

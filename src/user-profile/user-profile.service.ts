@@ -33,12 +33,13 @@ export class UserProfileService extends CommonService<UserProfile> {
     if (profile) {
       throw new ConflictException('User profile already existed');
     }
-    const { firstName, picture, lastName } = createUserProfileDto;
+    const { firstName, picture, lastName, phone } = createUserProfileDto;
     const newProfile = new UserProfile(owner);
 
     newProfile.firstName = firstName;
     newProfile.lastName = lastName;
     newProfile.picture = picture;
+    newProfile.phone = phone;
 
     return this.userProfileRepository.save(newProfile);
   }
