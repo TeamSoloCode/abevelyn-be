@@ -6,6 +6,7 @@ import { OrderDataResponseDTO } from 'src/orders/dto/order-response.dto';
 import { Order } from 'src/orders/entities/order.entity';
 import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
 import { UserDataResponse } from 'src/users/dto/user-data-response.dto';
+import { CalculatePriceInfo } from 'src/utils';
 
 export class CartItemDataResponseDTO extends CommonDataResponse<
   Partial<CartItemDataResponseDTO>
@@ -29,8 +30,8 @@ export class CartItemDataResponseDTO extends CommonDataResponse<
   @Expose({ groups: [UserRoles.ADMIN] })
   updatedDate: Date;
 
-  @Expose({ name: 'price' })
-  getCartItemPrice = () => Number;
+  // @Expose({ name: 'priceInfo', toPlainOnly: true })
+  priceInfo: CalculatePriceInfo;
 
   public create(
     data: any,

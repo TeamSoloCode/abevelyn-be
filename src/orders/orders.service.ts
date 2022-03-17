@@ -104,9 +104,15 @@ export class OrdersService extends CommonService<Order> {
   async findUserOrderById(id: string): Promise<Order> {
     const order = await this.findOneAvailable(
       { cond: `order.uuid = '${id}'` },
-      { join: { alias: 'order' } },
+      { relations: ['sale'], join: { alias: 'order' } },
     );
-    // this.orderRepository.getOrderInformation(order.uuid);
+    if (!order) throw new NotFoundException('Order not found');
+    return order;
+  }
+
+  async findOrderById(id: string) {
+    const order = await this.findOne(id, undefined, { relations: ['sale'] });
+    if (!order) throw new NotFoundException('Order not found');
     return order;
   }
 
@@ -231,17 +237,29 @@ export class OrdersService extends CommonService<Order> {
           .getCustomRepository(ProductRepository)
           .updateProductQuantityByOrder(newOrder, newOrder.status),
 
-        queryRunner.manager.save(newOrder),
+        queryRunner.manager.getCustomRepository(OrderRepository).save(newOrder),
       ]);
 
+      /**
+       * Get back order with deep information to save as order history
+       */
       const orderDeepInfomation = await queryRunner.manager
         .getCustomRepository(OrderRepository)
         .getOrderInformation(createdOrder.uuid);
 
-      await queryRunner.manager
+      const orderHistory = await queryRunner.manager
         .getCustomRepository(OrderHistoryRepository)
-        .createHistoryBaseOnOrder(orderDeepInfomation),
-        await queryRunner.commitTransaction();
+        .createHistoryBaseOnOrder(orderDeepInfomation);
+
+      /**
+       * Add order history to order
+       */
+      createdOrder.orderHistory = orderHistory;
+      await queryRunner.manager
+        .getCustomRepository(OrderRepository)
+        .save(createdOrder);
+
+      await queryRunner.commitTransaction();
 
       return createdOrder;
     } catch (err) {

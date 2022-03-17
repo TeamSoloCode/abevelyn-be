@@ -46,7 +46,9 @@ export class Cart extends RootEntity {
     let totalPrice = 0;
     (this.cartItems || []).forEach((item) => {
       if (item.isSelected) {
-        totalPrice += item.price;
+        totalPrice +=
+          (<CalculatePriceInfo>item.priceInfo).calculatedPrice ??
+          item.priceInfo().calculatedPrice;
       }
     });
 

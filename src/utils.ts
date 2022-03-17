@@ -64,10 +64,10 @@ export const deleteUnusedImage = (
 };
 
 export class CalculatePriceInfo {
-  totalPrice: number;
-  totalSaleOffAsCurrency: number;
-  totalSaleOffAsPercentage: number;
-  calculatedPrice: number;
+  totalPrice?: number;
+  totalSaleOffAsCurrency?: number;
+  totalSaleOffAsPercentage?: number;
+  calculatedPrice?: number;
 }
 
 export class ApiDataResponse<T> {

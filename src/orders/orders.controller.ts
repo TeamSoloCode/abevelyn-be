@@ -92,7 +92,7 @@ export class OrdersController {
   @UseGuards(AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
   findOne(@Param('id') id: string) {
-    return this.ordersService.findOne(id);
+    return this.ordersService.findOrderById(id);
   }
 
   @ApiOperation({ summary: 'Update order STATUS by id (Only be use by Admin)' })

@@ -59,7 +59,9 @@ export class Order extends RootEntity {
 
     (this.cartItems || []).forEach((item) => {
       if (item.isSelected || this.status) {
-        totalPrice += item.price;
+        totalPrice +=
+          (<CalculatePriceInfo>item.priceInfo).calculatedPrice ??
+          item.priceInfo().calculatedPrice;
       }
     });
 

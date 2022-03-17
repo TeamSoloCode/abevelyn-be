@@ -1,3 +1,4 @@
+import { classToPlain } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { RootEntity } from 'src/common/root-entity.entity';
 import { Order } from 'src/orders/entities/order.entity';
@@ -7,7 +8,7 @@ import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 export class OrderHistory extends RootEntity {
   constructor(order: Order) {
     super();
-    this._order = JSON.stringify(order);
+    this._order = JSON.stringify(classToPlain(order));
   }
 
   @PrimaryGeneratedColumn('uuid')

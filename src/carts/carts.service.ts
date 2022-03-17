@@ -40,6 +40,21 @@ export class CartsService extends CommonService<Cart> {
       user,
     );
 
+    /**
+     * If cart has not non ordered items,
+     * then get that cart and filter all the ordered items
+     */
+    if (!userCart) {
+      userCart = await this.cartRepository.findOne({
+        where: { owner: { uuid: user.uuid } },
+      });
+      userCart?.cartItems && (userCart.cartItems = []);
+    }
+
+    /**
+     * Till this if user cart is still not already existed
+     * Then create new one for that user
+     */
     if (!userCart) {
       const newCart = await this.create(user);
       await this.cartRepository.save(newCart);

@@ -46,7 +46,7 @@ export class MaterialsService extends CommonService<Material> {
   }
 
   async fetchOneMaterial(id: string): Promise<Material> {
-    return this.findOne(id, undefined, ['products']);
+    return this.findOne(id, undefined, { relations: ['products'] });
   }
 
   async update(

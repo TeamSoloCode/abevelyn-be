@@ -18,7 +18,6 @@ export class OrderRepository extends Repository<Order> {
       join: {
         alias: 'order',
         leftJoinAndSelect: {
-          sale: 'order.sale',
           cartItems: 'order.cartItems',
           product: 'cartItems.product',
           productSale: 'product.sales',

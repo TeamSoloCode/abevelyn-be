@@ -58,7 +58,7 @@ export class UsersController {
   @UseGuards(...AuthGuards, AdminRoleGuard)
   @UseInterceptors(new ResponseDataInterceptor(new UserDataResponse()))
   getUserById(@Param('id') id: string) {
-    return this.usersService.findOne(id, undefined, ['profile']);
+    return this.usersService.findOne(id, undefined, { relations: ['profile'] });
   }
 
   @ApiOperation({ summary: 'Update user role (Only be used by Root)' })
@@ -84,6 +84,8 @@ export class UsersController {
   @UseGuards(...AuthGuards)
   @UseInterceptors(new ResponseDataInterceptor(new UserDataResponse()))
   findOne(@GetUser() user: User) {
-    return this.usersService.findOne(user.uuid, undefined, ['profile']);
+    return this.usersService.findOne(user.uuid, undefined, {
+      relations: ['profile'],
+    });
   }
 }
