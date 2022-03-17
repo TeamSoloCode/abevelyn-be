@@ -14,13 +14,13 @@ import { SizesService } from './sizes.service';
 import { CreateSizeDto } from './dto/create-size.dto';
 import { UpdateSizeDto } from './dto/update-size.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
 import {
   GetHeaderInfo,
   HeaderInfo,
-} from 'src/auth/decorators/get-language.decorator';
+} from '../auth/decorators/get-language.decorator';
 import { AdminSizeResponseDto } from './dto/admin-size-res.dto';
-import { ApiDataResponse, AuthGuards } from 'src/utils';
+import { ApiDataResponse, AuthGuards } from '../utils';
 
 @Controller('sizes')
 export class SizesController {

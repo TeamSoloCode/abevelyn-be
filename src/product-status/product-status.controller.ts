@@ -14,13 +14,13 @@ import { ProductStatusService } from './product-status.service';
 import { CreateProductStatusDto } from './dto/create-product-status.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ApiDataResponse, AuthGuards } from 'src/utils';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { ApiDataResponse, AuthGuards } from '../utils';
 import { AdminProductStatusResponseDto } from './dto/admin-product-status-res.dto';
 import {
   GetHeaderInfo,
   HeaderInfo,
-} from 'src/auth/decorators/get-language.decorator';
+} from '../auth/decorators/get-language.decorator';
 
 @Controller('product_status')
 export class ProductStatusController {

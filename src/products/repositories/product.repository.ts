@@ -1,6 +1,6 @@
-import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { OrderStatus } from 'src/common/entity-enum';
-import { Order } from 'src/orders/entities/order.entity';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import { OrderStatus } from '../../common/entity-enum';
+import { Order } from '../../orders/entities/order.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
 

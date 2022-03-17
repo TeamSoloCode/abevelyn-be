@@ -6,15 +6,15 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { SaleType } from 'src/common/entity-enum';
-import { SaleRepository } from 'src/sales/repositories/sale.repository';
+import { SaleType } from '../common/entity-enum';
+import { SaleRepository } from '../sales/repositories/sale.repository';
 import { In } from 'typeorm';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { Collection } from './entities/collection.entity';
 import { CollectionRepository } from './repositories/collection.repository';
 import { CommonService } from '../common/common-services.service';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
+import { FetchDataQuery } from '../common/fetch-data-query';
 import { validate } from 'class-validator';
 
 @Injectable()

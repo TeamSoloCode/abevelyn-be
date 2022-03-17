@@ -4,13 +4,13 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
+import { FetchDataQuery } from '../../common/fetch-data-query';
 import {
   generateConditions,
   generateConditionToSQLQuery,
   generateOrderFromObject,
   generateOrderToSQLQuery,
-} from 'src/utils';
+} from '../../utils';
 
 @Injectable()
 export class FetchDataQueryValidationPipe

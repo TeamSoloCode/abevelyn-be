@@ -6,10 +6,10 @@ import { SignUpCredentialDto } from './dto/signup-credential.dto';
 import { JwtPayload } from './jwt-payload.interface';
 import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../users/repositories/user.repository';
-import { User } from 'src/users/entities/user.entity';
-import { UserRoles } from 'src/common/entity-enum';
+import { User } from '../users/entities/user.entity';
+import { UserRoles } from '../common/entity-enum';
 import { GoogleLoginResponseDTO } from './dto/google-login-response.dto';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {

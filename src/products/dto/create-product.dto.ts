@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 
 import _ from 'lodash';
-import { isNumeric } from 'src/utils';
+import { isNumeric } from '../../utils';
 
 export class CreateProductDto {
   @MaxLength(512)

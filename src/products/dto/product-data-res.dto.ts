@@ -1,14 +1,13 @@
 import { classToPlain, Exclude, Expose, Transform } from 'class-transformer';
-import { Collection } from 'src/collections/entities/collection.entity';
-import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
-import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, UserRoles } from 'src/common/entity-enum';
-import { MaterialResponseDto } from 'src/materials/dto/material-data-response.dto';
-import { Material } from 'src/materials/entities/material.entity';
-import { AdminProductStatusResponseDto } from 'src/product-status/dto/admin-product-status-res.dto';
-import { SaleResponseDto } from 'src/sales/dto/sale-response.dto';
-import { AdminSizeResponseDto } from 'src/sizes/dto/admin-size-res.dto';
-import { CalculatePriceInfo, DTOKeyPrototypeMapper } from 'src/utils';
+import { Collection } from '../../collections/entities/collection.entity';
+import { ColorDataResponseDto } from '../../colors/dto/color-data-res.dto';
+import CommonDataResponse from '../../common/common-data-response.dto';
+import { LanguageCode, UserRoles } from '../../common/entity-enum';
+import { MaterialResponseDto } from '../../materials/dto/material-data-response.dto';
+import { AdminProductStatusResponseDto } from '../../product-status/dto/admin-product-status-res.dto';
+import { SaleResponseDto } from '../../sales/dto/sale-response.dto';
+import { AdminSizeResponseDto } from '../../sizes/dto/admin-size-res.dto';
+import { CalculatePriceInfo, DTOKeyPrototypeMapper } from '../../utils';
 
 export class ProductDataResponseDto extends CommonDataResponse<
   Partial<ProductDataResponseDto>

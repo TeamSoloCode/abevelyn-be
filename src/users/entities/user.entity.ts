@@ -12,15 +12,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UserProfile } from 'src/user-profile/entities/user-profile.entity';
-import { SignInType, UserRoles } from 'src/common/entity-enum';
-import { Cart } from 'src/carts/entities/cart.entity';
-import { Review } from 'src/reviews/entities/review.entity';
-import { Feedback } from 'src/feedbacks/entities/feedback.entity';
-import { Order } from 'src/orders/entities/order.entity';
-import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { Address } from 'src/addresses/entities/address.entity';
-import { RootEntity } from 'src/common/root-entity.entity';
+import { UserProfile } from '../../user-profile/entities/user-profile.entity';
+import { SignInType, UserRoles } from '../../common/entity-enum';
+import { Cart } from '../../carts/entities/cart.entity';
+import { Review } from '../../reviews/entities/review.entity';
+import { Feedback } from '../../feedbacks/entities/feedback.entity';
+import { Order } from '../../orders/entities/order.entity';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import { Address } from '../../addresses/entities/address.entity';
+import { RootEntity } from '../../common/root-entity.entity';
 import { Expose } from 'class-transformer';
 
 @Entity('user')

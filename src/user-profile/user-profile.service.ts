@@ -5,9 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CommonService } from 'src/common/common-services.service';
-import ExceptionCode from 'src/exception-code';
-import { User } from 'src/users/entities/user.entity';
+import { CommonService } from '../common/common-services.service';
+import ExceptionCode from '../exception-code';
+import { User } from '../users/entities/user.entity';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 import { UserProfile } from './entities/user-profile.entity';

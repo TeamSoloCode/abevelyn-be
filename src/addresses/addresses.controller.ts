@@ -16,12 +16,12 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
-import { User } from 'src/users/entities/user.entity';
-import { AuthGuards } from 'src/utils';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
+import { User } from '../users/entities/user.entity';
+import { AuthGuards } from '../utils';
 import { AddressesService } from './addresses.service';
 import { AddressResponseDTO } from './dto/address-response.dto';
 import { CreateAddressDto } from './dto/create-address.dto';

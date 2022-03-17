@@ -1,6 +1,6 @@
 import { classToPlain, Exclude, Expose } from 'class-transformer';
-import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, SignInType, UserRoles } from 'src/common/entity-enum';
+import CommonDataResponse from '../../common/common-data-response.dto';
+import { LanguageCode, SignInType, UserRoles } from '../../common/entity-enum';
 import { User } from '../entities/user.entity';
 
 export class UserDataResponse extends CommonDataResponse<

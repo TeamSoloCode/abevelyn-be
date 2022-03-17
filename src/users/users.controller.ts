@@ -14,20 +14,20 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuards } from 'src/utils';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { AuthGuards } from '../utils';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { GetUser } from '../auth/decorators/get-user.decorator';
 import { User } from './entities/user.entity';
-import { RootRoleGuard } from 'src/auth/guards/root-role.guard';
+import { RootRoleGuard } from '../auth/guards/root-role.guard';
 import { UpdateUserRoleDTO } from './dto/update-user-role.dto';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
 import { UserDataResponse } from './dto/user-data-response.dto';
 
 @ApiTags('User APIs')

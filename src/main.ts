@@ -8,7 +8,7 @@ import { ValidationPipe } from '@nestjs/common';
 import 'reflect-metadata';
 import { ConfigService } from '@nestjs/config';
 import { _envConstants, ENV_PATH_NAME, setEnvConstants } from './utils';
-import { IConfig } from 'config/configuration';
+import { IConfig } from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

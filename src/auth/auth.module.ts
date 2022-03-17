@@ -4,14 +4,14 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from 'src/users/repositories/user.repository';
+import { UserRepository } from '../users/repositories/user.repository';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { UsersService } from 'src/users/users.service';
-import { UserProfileService } from 'src/user-profile/user-profile.service';
-import { UserProfileRepository } from 'src/user-profile/repositories/user-profile.respository';
+import { UsersService } from '../users/users.service';
+import { UserProfileService } from '../user-profile/user-profile.service';
+import { UserProfileRepository } from '../user-profile/repositories/user-profile.respository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { IConfig } from 'config/configuration';
-import { ENV_PATH_NAME } from 'src/utils';
+import { IConfig } from '../config/configuration';
+import { ENV_PATH_NAME } from '../utils';
 
 @Module({
   imports: [

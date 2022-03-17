@@ -6,12 +6,9 @@ import {
   serialize,
   Type,
 } from 'class-transformer';
-import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, UserRoles } from 'src/common/entity-enum';
-import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
-import { Product } from 'src/products/entities/product.entity';
-import { DTOKeyPrototypeMapper } from 'src/utils';
-import { Material } from '../entities/material.entity';
+import CommonDataResponse from '../../common/common-data-response.dto';
+import { LanguageCode, UserRoles } from '../../common/entity-enum';
+import { ProductDataResponseDto } from '../../products/dto/product-data-res.dto';
 
 export class MaterialResponseDto extends CommonDataResponse<
   Partial<MaterialResponseDto>

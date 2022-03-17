@@ -26,7 +26,7 @@ import { GoogleStrategy } from './auth/strategies/google.strategy';
 import { AddressesModule } from './addresses/addresses.module';
 import { SalesModule } from './sales/sales.module';
 import { PaymentModule } from './payment/payment.module';
-import { configurations } from '../config/configuration';
+import { configurations } from './config/configuration';
 import { GoogleAdminStrategy } from './auth/strategies/google-admin.strategy';
 import { OrderHistoryModule } from './order-history/order-history.module';
 

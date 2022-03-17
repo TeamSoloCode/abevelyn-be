@@ -1,8 +1,8 @@
 import { Expose, Transform } from 'class-transformer';
-import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, SaleUnit, UserRoles } from 'src/common/entity-enum';
-import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
-import { Product } from 'src/products/entities/product.entity';
+import CommonDataResponse from '../../common/common-data-response.dto';
+import { LanguageCode, SaleUnit, UserRoles } from '../../common/entity-enum';
+import { ProductDataResponseDto } from '../../products/dto/product-data-res.dto';
+import { Product } from '../../products/entities/product.entity';
 
 export class SaleResponseDto extends CommonDataResponse<
   Partial<SaleResponseDto>

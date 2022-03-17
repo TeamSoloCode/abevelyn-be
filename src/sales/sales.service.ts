@@ -7,11 +7,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as moment from 'moment';
-import { CollectionRepository } from 'src/collections/repositories/collection.repository';
-import { CommonService } from 'src/common/common-services.service';
-import { SaleType } from 'src/common/entity-enum';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
-import { ProductRepository } from 'src/products/repositories/product.repository';
+import { CollectionRepository } from '../collections/repositories/collection.repository';
+import { CommonService } from '../common/common-services.service';
+import { SaleType } from '../common/entity-enum';
+import { FetchDataQuery } from '../common/fetch-data-query';
+import { ProductRepository } from '../products/repositories/product.repository';
 import { In } from 'typeorm';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';

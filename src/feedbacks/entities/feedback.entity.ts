@@ -1,6 +1,6 @@
 import { IsUUID, Max } from 'class-validator';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { User } from 'src/users/entities/user.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { User } from '../../users/entities/user.entity';
 import {
   BaseEntity,
   Column,

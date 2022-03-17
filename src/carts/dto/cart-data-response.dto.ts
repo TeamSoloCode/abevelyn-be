@@ -1,11 +1,10 @@
 import { classToPlain, Exclude, Expose } from 'class-transformer';
-import { CartItemDataResponseDTO } from 'src/cart-item/dto/cart-item-data-response.dto';
-import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, UserRoles } from 'src/common/entity-enum';
-import { Sale } from 'src/sales/entities/sale.entity';
-import { User } from 'src/users/entities/user.entity';
-import { CalculatePriceInfo } from 'src/utils';
+import { CartItemDataResponseDTO } from '../../cart-item/dto/cart-item-data-response.dto';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import CommonDataResponse from '../../common/common-data-response.dto';
+import { LanguageCode, UserRoles } from '../../common/entity-enum';
+import { Sale } from '../../sales/entities/sale.entity';
+import { User } from '../../users/entities/user.entity';
 
 export class CartDataResponse extends CommonDataResponse<
   Partial<CartDataResponse>

@@ -16,15 +16,15 @@ import {
 import { MaterialsService } from './materials.service';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
 import { MaterialResponseDto } from './dto/material-data-response.dto';
 import { Material } from './entities/material.entity';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
-import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
+import { FetchDataQuery } from '../common/fetch-data-query';
+import { FetchDataQueryValidationPipe } from '../auth/pipes/fetch-data-query.pipe';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
-import { AuthGuards } from 'src/utils';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
+import { AuthGuards } from '../utils';
 
 @Controller('materials')
 @UseInterceptors(new ApiResponseInterceptor())

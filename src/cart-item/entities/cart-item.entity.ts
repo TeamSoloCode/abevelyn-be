@@ -1,12 +1,11 @@
 import { ForbiddenException } from '@nestjs/common';
 import { IsUUID } from 'class-validator';
-import { Cart } from 'src/carts/entities/cart.entity';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { Order } from 'src/orders/entities/order.entity';
-import { OrderHistory } from 'src/order-history/entities/order-history.entity';
-import { Product } from 'src/products/entities/product.entity';
-import { User } from 'src/users/entities/user.entity';
-import { CalculatePriceInfo } from 'src/utils';
+import { Cart } from '../../carts/entities/cart.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { Order } from '../../orders/entities/order.entity';
+import { Product } from '../../products/entities/product.entity';
+import { User } from '../../users/entities/user.entity';
+import { CalculatePriceInfo } from '../../utils';
 import {
   BeforeUpdate,
   Column,

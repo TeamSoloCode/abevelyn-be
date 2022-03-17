@@ -7,7 +7,7 @@ import {
   IS_ALPHA,
   MaxLength,
 } from 'class-validator';
-import { OrderStatus } from 'src/common/entity-enum';
+import { OrderStatus } from '../../common/entity-enum';
 import { CreateOrderDto } from './create-order.dto';
 
 export class UpdateOrderDto extends PartialType(CreateOrderDto) {

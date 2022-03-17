@@ -1,4 +1,4 @@
-import { ENV_PATH_NAME } from 'src/utils';
+import { ENV_PATH_NAME } from '../utils';
 
 export interface IConfig {
   Client: {

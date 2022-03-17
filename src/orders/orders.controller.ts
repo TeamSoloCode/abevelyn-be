@@ -13,20 +13,20 @@ import {
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuards } from 'src/utils';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { User } from 'src/users/entities/user.entity';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { AuthGuards } from '../utils';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+import { User } from '../users/entities/user.entity';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
 import { OrderDataResponseDTO } from './dto/order-response.dto';
-import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
+import { ResponseMessageInterceptor } from '../common/interceptors/response-message.interceptor';
 import { CancelOrderDto } from './dto/cancel-order.dto';
 
 @ApiTags('Order APIs')

@@ -1,5 +1,5 @@
 import { map } from 'lodash';
-import { Order } from 'src/orders/entities/order.entity';
+import { Order } from '../../orders/entities/order.entity';
 import { EntityRepository, In, Repository } from 'typeorm';
 import { CartItem } from '../entities/cart-item.entity';
 

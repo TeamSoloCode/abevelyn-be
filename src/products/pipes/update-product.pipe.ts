@@ -4,8 +4,8 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
-import { isNumeric } from 'src/utils';
+import { FetchDataQuery } from '../../common/fetch-data-query';
+import { isNumeric } from '../../utils';
 import { UpdateProductDto } from '../dto/update-product.dto';
 
 @Injectable()

@@ -8,7 +8,7 @@ import {
   Delete,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
 import { CouponsService } from './coupons.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';

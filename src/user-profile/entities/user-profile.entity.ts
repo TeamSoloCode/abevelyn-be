@@ -1,7 +1,7 @@
 import { IsUUID } from 'class-validator';
-import { Address } from 'src/addresses/entities/address.entity';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Address } from '../../addresses/entities/address.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { User } from '../../users/entities/user.entity';
 import {
   Column,
   Entity,

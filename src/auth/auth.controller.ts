@@ -11,8 +11,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserRoles } from 'src/common/entity-enum';
-import { User } from 'src/users/entities/user.entity';
+import { UserRoles } from '../common/entity-enum';
+import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { GetUser } from './decorators/get-user.decorator';
 import { SignInCredentialDto } from './dto/signin-credential.dto';
@@ -22,9 +22,9 @@ import { SignUpValidationPipe } from './pipes/signup.pipe';
 import { Response } from 'express';
 import { AdminRoleGuard } from './guards/admin-role.guard';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { AuthGuards, ENV_PATH_NAME } from 'src/utils';
+import { AuthGuards, ENV_PATH_NAME } from '../utils';
 import { ConfigService } from '@nestjs/config';
-import { IConfig } from 'config/configuration';
+import { IConfig } from '../config/configuration';
 
 @ApiTags('Auth APIs')
 @Controller('auth')

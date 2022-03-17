@@ -1,7 +1,7 @@
 import { IsUUID } from 'class-validator';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { UserProfile } from 'src/user-profile/entities/user-profile.entity';
-import { User } from 'src/users/entities/user.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { UserProfile } from '../../user-profile/entities/user-profile.entity';
+import { User } from '../../users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('address')

@@ -21,15 +21,15 @@ import { AuthGuard } from '@nestjs/passport';
 import {
   GetHeaderInfo,
   HeaderInfo,
-} from 'src/auth/decorators/get-language.decorator';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { LanguageCode } from 'src/common/entity-enum';
-import { ApiDataResponse, AuthGuards } from 'src/utils';
+} from '../auth/decorators/get-language.decorator';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { LanguageCode } from '../common/entity-enum';
+import { ApiDataResponse, AuthGuards } from '../utils';
 import { ColorsService } from './colors.service';
 import { ColorDataResponseDto } from './dto/color-data-res.dto';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
 import { Color } from './entities/color.entity';
 import { Response } from 'express';
 import {
@@ -41,7 +41,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
 @ApiTags('Color APIs')
 @ApiHeader({ name: 'language', enum: LanguageCode })
 @Controller('colors')

@@ -18,8 +18,8 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ApiDataResponse, AuthGuards } from 'src/utils';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { ApiDataResponse, AuthGuards } from '../utils';
 import { Product } from './entities/product.entity';
 import { ProductDataResponseDto } from './dto/product-data-res.dto';
 import { diskStorage, Express } from 'multer';
@@ -29,17 +29,17 @@ import { deleteUnusedImage, editFileName, imageFileFilter } from '../utils';
 import {
   GetHeaderInfo,
   HeaderInfo,
-} from 'src/auth/decorators/get-language.decorator';
+} from '../auth/decorators/get-language.decorator';
 import {
   FileFieldsInterceptor,
   FileInterceptor,
 } from '@nestjs/platform-express';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
-import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { FetchDataQuery } from '../common/fetch-data-query';
+import { FetchDataQueryValidationPipe } from '../auth/pipes/fetch-data-query.pipe';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
-import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
+import { ResponseMessageInterceptor } from '../common/interceptors/response-message.interceptor';
 
 @ApiTags('Products APIs')
 @Controller('products')

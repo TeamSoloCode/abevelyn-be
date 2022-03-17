@@ -5,7 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRoles } from 'src/common/entity-enum';
+import { UserRoles } from '../../common/entity-enum';
 import { AuthService } from '../auth.service';
 
 @Injectable()

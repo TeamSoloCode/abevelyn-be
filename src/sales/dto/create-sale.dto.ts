@@ -9,7 +9,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { SaleType, SaleUnit } from 'src/common/entity-enum';
+import { SaleType, SaleUnit } from '../../common/entity-enum';
 
 export class CreateSaleDto {
   @ApiProperty({ description: 'The event name of the sale' })

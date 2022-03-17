@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { map } from 'lodash';
-import { CommonService } from 'src/common/common-services.service';
-import { User } from 'src/users/entities/user.entity';
+import { CommonService } from '../common/common-services.service';
+import { User } from '../users/entities/user.entity';
 import { In } from 'typeorm';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';

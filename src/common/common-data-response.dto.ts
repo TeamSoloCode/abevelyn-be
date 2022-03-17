@@ -1,5 +1,5 @@
 import { classToPlain, Expose } from 'class-transformer';
-import { DTOKeyPrototypeMapper } from 'src/utils';
+import { DTOKeyPrototypeMapper } from '../utils';
 import { LanguageCode, UserRoles } from './entity-enum';
 
 export default abstract class CommonDataResponse<T> {

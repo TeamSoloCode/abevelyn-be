@@ -1,4 +1,4 @@
-import { LanguageCode } from 'src/common/entity-enum';
+import { LanguageCode } from '../../common/entity-enum';
 import { ProductStatus } from '../entities/product-status.entity';
 
 export class AdminProductStatusResponseDto {

@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { LanguageCode } from 'src/common/entity-enum';
+import { LanguageCode } from '../../common/entity-enum';
 import { User } from '../../users/entities/user.entity';
 
 export class HeaderInfo {

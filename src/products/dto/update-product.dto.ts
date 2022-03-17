@@ -8,7 +8,7 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
-import { isNumeric } from 'src/utils';
+import { isNumeric } from '../../utils';
 import { CreateProductDto } from './create-product.dto';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {

@@ -1,4 +1,4 @@
-import { Order } from 'src/orders/entities/order.entity';
+import { Order } from '../../orders/entities/order.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { OrderHistory } from '../entities/order-history.entity';
 

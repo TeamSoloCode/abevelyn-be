@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { Coupon } from 'src/coupons/entities/coupon.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { Coupon } from '../../coupons/entities/coupon.entity';
 import {
   Column,
   Entity,
@@ -10,8 +10,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Product } from 'src/products/entities/product.entity';
-import { Sale } from 'src/sales/entities/sale.entity';
+import { Product } from '../../products/entities/product.entity';
+import { Sale } from '../../sales/entities/sale.entity';
 
 @Entity('collection')
 export class Collection extends RootEntity {

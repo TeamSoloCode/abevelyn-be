@@ -4,8 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CommonService } from 'src/common/common-services.service';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
+import { CommonService } from '../common/common-services.service';
+import { FetchDataQuery } from '../common/fetch-data-query';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
 import { Material } from './entities/material.entity';

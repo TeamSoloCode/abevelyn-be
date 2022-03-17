@@ -1,8 +1,8 @@
-import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, OrderStatus, UserRoles } from 'src/common/entity-enum';
-import { SaleResponseDto } from 'src/sales/dto/sale-response.dto';
-import { User } from 'src/users/entities/user.entity';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import CommonDataResponse from '../../common/common-data-response.dto';
+import { LanguageCode, OrderStatus, UserRoles } from '../../common/entity-enum';
+import { SaleResponseDto } from '../../sales/dto/sale-response.dto';
+import { User } from '../../users/entities/user.entity';
 
 export class OrderDataResponseDTO extends CommonDataResponse<
   Partial<OrderDataResponseDTO>

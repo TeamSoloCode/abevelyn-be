@@ -8,8 +8,8 @@ import {
   TransformClassToPlain,
   Type,
 } from 'class-transformer';
-import CommonDataResponse from 'src/common/common-data-response.dto';
-import { LanguageCode, UserRoles } from 'src/common/entity-enum';
+import CommonDataResponse from '../../common/common-data-response.dto';
+import { LanguageCode, UserRoles } from '../../common/entity-enum';
 import { Color } from '../entities/color.entity';
 
 export class ColorDataResponseDto extends CommonDataResponse<

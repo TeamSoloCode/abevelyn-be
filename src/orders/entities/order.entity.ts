@@ -1,13 +1,13 @@
 import { Exclude } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { round } from 'lodash';
-import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { OrderStatus, SaleUnit } from 'src/common/entity-enum';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { OrderHistory } from 'src/order-history/entities/order-history.entity';
-import { Sale } from 'src/sales/entities/sale.entity';
-import { User } from 'src/users/entities/user.entity';
-import { CalculatePriceInfo } from 'src/utils';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import { OrderStatus, SaleUnit } from '../../common/entity-enum';
+import { RootEntity } from '../../common/root-entity.entity';
+import { OrderHistory } from '../../order-history/entities/order-history.entity';
+import { Sale } from '../../sales/entities/sale.entity';
+import { User } from '../../users/entities/user.entity';
+import { CalculatePriceInfo } from '../../utils';
 import {
   Column,
   Entity,

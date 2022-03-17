@@ -15,13 +15,13 @@ import {
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
-import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
+import { FetchDataQueryValidationPipe } from '../auth/pipes/fetch-data-query.pipe';
+import { FetchDataQuery } from '../common/fetch-data-query';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
 import { SaleResponseDto } from './dto/sale-response.dto';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -30,9 +30,9 @@ import {
   ApiTags,
   PartialType,
 } from '@nestjs/swagger';
-import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
-import { AuthGuards } from 'src/utils';
-import { SaleType } from 'src/common/entity-enum';
+import { ResponseMessageInterceptor } from '../common/interceptors/response-message.interceptor';
+import { AuthGuards } from '../utils';
+import { SaleType } from '../common/entity-enum';
 
 @ApiTags('Sale APIs')
 @Controller('sales')

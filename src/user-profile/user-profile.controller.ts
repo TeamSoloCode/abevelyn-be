@@ -16,16 +16,16 @@ import { UserProfileService } from './user-profile.service';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { User } from 'src/users/entities/user.entity';
-import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+import { User } from '../users/entities/user.entity';
+import { FetchDataQueryValidationPipe } from '../auth/pipes/fetch-data-query.pipe';
+import { FetchDataQuery } from '../common/fetch-data-query';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
 import { UserProfileResponseDTO } from './dto/profile-response.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
-import { AuthGuards } from 'src/utils';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
+import { AuthGuards } from '../utils';
 
 @ApiTags('User Profile APIs')
 @ApiBearerAuth('access-token')

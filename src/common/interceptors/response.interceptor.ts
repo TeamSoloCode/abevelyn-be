@@ -7,11 +7,11 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
-import { IConfig } from 'config/configuration';
+import { IConfig } from '../../config/configuration';
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiDataResponse, ENV_PATH_NAME, _envConstants } from 'src/utils';
+import { ApiDataResponse, ENV_PATH_NAME, _envConstants } from '../../utils';
 import CommonDataResponse from '../common-data-response.dto';
 import { LanguageCode, UserRoles } from '../entity-enum';
 

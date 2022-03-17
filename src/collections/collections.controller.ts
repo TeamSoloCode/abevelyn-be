@@ -14,12 +14,12 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AdminRoleGuard } from 'src/auth/guards/admin-role.guard';
-import { FetchDataQueryValidationPipe } from 'src/auth/pipes/fetch-data-query.pipe';
-import { FetchDataQuery } from 'src/common/fetch-data-query';
-import { ApiResponseInterceptor } from 'src/common/interceptors/api-response.interceptor';
-import { ResponseDataInterceptor } from 'src/common/interceptors/response.interceptor';
-import { AuthGuards, editFileName, imageFileFilter } from 'src/utils';
+import { AdminRoleGuard } from '../auth/guards/admin-role.guard';
+import { FetchDataQueryValidationPipe } from '../auth/pipes/fetch-data-query.pipe';
+import { FetchDataQuery } from '../common/fetch-data-query';
+import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
+import { ResponseDataInterceptor } from '../common/interceptors/response.interceptor';
+import { AuthGuards, editFileName, imageFileFilter } from '../utils';
 import { CollectionsService } from './collections.service';
 import { CollectionResponseDto } from './dto/collection-data-res.dto';
 import { CreateCollectionDto } from './dto/create-collection.dto';
@@ -27,7 +27,7 @@ import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { Collection } from './entities/collection.entity';
 import { MultipartTransformPipe } from './pipes/dto-collection-transform';
 import { diskStorage, Express } from 'multer';
-import { ResponseMessageInterceptor } from 'src/common/interceptors/response-message.interceptor';
+import { ResponseMessageInterceptor } from '../common/interceptors/response-message.interceptor';
 
 @Controller('collections')
 @UseInterceptors(new ApiResponseInterceptor())

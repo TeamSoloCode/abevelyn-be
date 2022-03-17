@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SizesService } from './sizes.service';
 import { SizesController } from './sizes.controller';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SizeRepository } from './repositories/size.repository';
 

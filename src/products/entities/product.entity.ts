@@ -1,18 +1,18 @@
 import { NotAcceptableException } from '@nestjs/common';
 import { IsUUID, Max, Min } from 'class-validator';
 import * as moment from 'moment';
-import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { Collection } from 'src/collections/entities/collection.entity';
-import { Color } from 'src/colors/entities/color.entity';
-import { SaleType, SaleUnit } from 'src/common/entity-enum';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { Coupon } from 'src/coupons/entities/coupon.entity';
-import { Material } from 'src/materials/entities/material.entity';
-import { ProductStatus } from 'src/product-status/entities/product-status.entity';
-import { Review } from 'src/reviews/entities/review.entity';
-import { Sale } from 'src/sales/entities/sale.entity';
-import { Size } from 'src/sizes/entities/size.entity';
-import { CalculatePriceInfo } from 'src/utils';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import { Collection } from '../../collections/entities/collection.entity';
+import { Color } from '../../colors/entities/color.entity';
+import { SaleType, SaleUnit } from '../../common/entity-enum';
+import { RootEntity } from '../../common/root-entity.entity';
+import { Coupon } from '../../coupons/entities/coupon.entity';
+import { Material } from '../../materials/entities/material.entity';
+import { ProductStatus } from '../../product-status/entities/product-status.entity';
+import { Review } from '../../reviews/entities/review.entity';
+import { Sale } from '../../sales/entities/sale.entity';
+import { Size } from '../../sizes/entities/size.entity';
+import { CalculatePriceInfo } from '../../utils';
 import {
   BeforeUpdate,
   Column,

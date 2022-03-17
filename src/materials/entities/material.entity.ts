@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { Product } from 'src/products/entities/product.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { Product } from '../../products/entities/product.entity';
 import {
   Column,
   Entity,

@@ -1,7 +1,7 @@
 import { classToPlain } from 'class-transformer';
 import { IsUUID } from 'class-validator';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { Order } from 'src/orders/entities/order.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { Order } from '../../orders/entities/order.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

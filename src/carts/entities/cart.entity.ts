@@ -1,13 +1,10 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsUUID } from 'class-validator';
-import { CartItem } from 'src/cart-item/entities/cart-item.entity';
-import { SaleType, SaleUnit } from 'src/common/entity-enum';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { Order } from 'src/orders/entities/order.entity';
-import { Product } from 'src/products/entities/product.entity';
-import { Sale } from 'src/sales/entities/sale.entity';
-import { User } from 'src/users/entities/user.entity';
-import { CalculatePriceInfo } from 'src/utils';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import { RootEntity } from '../../common/root-entity.entity';
+import { Sale } from '../../sales/entities/sale.entity';
+import { User } from '../../users/entities/user.entity';
+import { CalculatePriceInfo } from '../../utils';
 import {
   Entity,
   JoinColumn,

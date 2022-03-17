@@ -9,8 +9,7 @@ import { Request, Response } from 'express';
 import { get, set } from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ColorDataResponseDto } from 'src/colors/dto/color-data-res.dto';
-import { ApiDataResponse } from 'src/utils';
+import { ApiDataResponse } from '../../utils';
 import CommonDataResponse from '../common-data-response.dto';
 import { LanguageCode, UserRoles } from '../entity-enum';
 

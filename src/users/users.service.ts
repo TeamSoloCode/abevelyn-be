@@ -2,10 +2,10 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './repositories/user.repository';
 import { User } from './entities/user.entity';
-import { GoogleLoginResponseDTO } from 'src/auth/dto/google-login-response.dto';
-import { SignInType } from 'src/common/entity-enum';
-import { UserProfileService } from 'src/user-profile/user-profile.service';
-import { CommonService } from 'src/common/common-services.service';
+import { GoogleLoginResponseDTO } from '../auth/dto/google-login-response.dto';
+import { SignInType } from '../common/entity-enum';
+import { UserProfileService } from '../user-profile/user-profile.service';
+import { CommonService } from '../common/common-services.service';
 import { UpdateUserRoleDTO } from './dto/update-user-role.dto';
 
 @Injectable()

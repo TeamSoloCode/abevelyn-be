@@ -5,9 +5,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { SignInCredentialDto } from 'src/auth/dto/signin-credential.dto';
-import { SignUpCredentialDto } from 'src/auth/dto/signup-credential.dto';
-import { SignInType, UserRoles } from 'src/common/entity-enum';
+import { SignInCredentialDto } from '../../auth/dto/signin-credential.dto';
+import { SignUpCredentialDto } from '../../auth/dto/signup-credential.dto';
+import { SignInType, UserRoles } from '../../common/entity-enum';
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 

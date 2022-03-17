@@ -6,8 +6,8 @@ import {
   LessThanOrEqual,
 } from 'typeorm';
 import { Sale } from '../entities/sale.entity';
-import { DEFAULT_DATETIME_FORMAT } from 'src/utils';
-import { SaleType } from 'src/common/entity-enum';
+import { DEFAULT_DATETIME_FORMAT } from '../../utils';
+import { SaleType } from '../../common/entity-enum';
 
 @EntityRepository(Sale)
 export class SaleRepository extends Repository<Sale> {

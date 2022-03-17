@@ -1,10 +1,10 @@
 import { IsUUID } from 'class-validator';
 import * as moment from 'moment';
-import { Collection } from 'src/collections/entities/collection.entity';
-import { SaleType, SaleUnit } from 'src/common/entity-enum';
-import { RootEntity } from 'src/common/root-entity.entity';
-import { Order } from 'src/orders/entities/order.entity';
-import { Product } from 'src/products/entities/product.entity';
+import { Collection } from '../../collections/entities/collection.entity';
+import { SaleType, SaleUnit } from '../../common/entity-enum';
+import { RootEntity } from '../../common/root-entity.entity';
+import { Order } from '../../orders/entities/order.entity';
+import { Product } from '../../products/entities/product.entity';
 import {
   AfterLoad,
   Column,

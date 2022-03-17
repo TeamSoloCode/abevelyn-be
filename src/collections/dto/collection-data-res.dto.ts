@@ -1,7 +1,7 @@
-import { LanguageCode, UserRoles } from 'src/common/entity-enum';
-import CommonDataResponse from 'src/common/common-data-response.dto';
+import { LanguageCode, UserRoles } from '../../common/entity-enum';
+import CommonDataResponse from '../../common/common-data-response.dto';
 import { Expose } from 'class-transformer';
-import { ProductDataResponseDto } from 'src/products/dto/product-data-res.dto';
+import { ProductDataResponseDto } from '../../products/dto/product-data-res.dto';
 
 export class CollectionResponseDto extends CommonDataResponse<
   Partial<CollectionResponseDto>
