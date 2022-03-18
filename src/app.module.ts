@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CollectionsModule } from './collections/collections.module';
@@ -13,7 +14,6 @@ import { CartsModule } from './carts/carts.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { OrdersModule } from './orders/orders.module';
 import { ReviewsModule } from './reviews/reviews.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { MaterialsModule } from './materials/materials.module';
@@ -29,11 +29,14 @@ import { PaymentModule } from './payment/payment.module';
 import { configurations } from './config/configuration';
 import { GoogleAdminStrategy } from './auth/strategies/google-admin.strategy';
 import { OrderHistoryModule } from './order-history/order-history.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
     ConfigModule.forRoot({ load: [configurations], isGlobal: true }),
+    DatabaseModule,
+
     CollectionsModule,
     ProductsModule,
     UsersModule,

@@ -5,7 +5,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CartItem } from '../cart-item/entities/cart-item.entity';
 import { CartItemRepository } from '../cart-item/repositories/cart-item.repository';
 import { CartRepository } from '../carts/repositories/cart.repository';
@@ -23,6 +22,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
 import { OrderRepository } from './repositories/order.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class OrdersService extends CommonService<Order> {

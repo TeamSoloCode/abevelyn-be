@@ -7,7 +7,6 @@ import { ColorDataResponseDto } from './colors/dto/color-data-res.dto';
 import { UserDataResponse } from './users/dto/user-data-response.dto';
 import { ProductDataResponseDto } from './products/dto/product-data-res.dto';
 import { MaterialResponseDto } from './materials/dto/material-data-response.dto';
-import { ApiProperty } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { MatchStoredTokenGuard } from './auth/guards/match-token.guard';
 import { CartDataResponse } from './carts/dto/cart-data-response.dto';
@@ -15,6 +14,7 @@ import { CartItemDataResponseDTO } from './cart-item/dto/cart-item-data-response
 import { OrderDataResponseDTO } from './orders/dto/order-response.dto';
 import { SaleResponseDto } from './sales/dto/sale-response.dto';
 import { IConfig } from './config/configuration';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const DEFAULT_DATETIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 export const ENV_PATH_NAME = 'env';
