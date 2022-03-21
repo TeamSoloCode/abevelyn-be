@@ -63,7 +63,7 @@ export class CartItem extends RootEntity {
   update() {
     if (this.product.quantity < this.quantity) {
       throw new ForbiddenException(
-        `Can order more than ${this.product.quantity}`,
+        `Cannot order more than ${this.product.quantity}`,
       );
     }
 

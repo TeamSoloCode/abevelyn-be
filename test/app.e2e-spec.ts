@@ -12,6 +12,7 @@ import { Cart } from '../src/carts/entities/cart.entity';
 import { CartItem } from '../src/cart-item/entities/cart-item.entity';
 import { Order } from '../src/orders/entities/order.entity';
 import { OrderStatus } from '../src/common/entity-enum';
+import assert from 'assert';
 
 const root_url = 'http://localhost:3000';
 let token: string = '';
@@ -83,12 +84,14 @@ describe('AppController (e2e)', () => {
     let myCart: Cart;
     let orderInfo: Order;
 
-    it('Check fetching order with quantity greater than 0', async () => {
-      const productsRes = await request(httpServer)
+    it('Check fetching product with quantity greater than 0', async () => {
+      selectedProduct = await request(httpServer)
         .get(`/products/${selectedProductId}`)
-        .expect(200);
-
-      selectedProduct = productsRes.body.data;
+        .expect(200)
+        .then((res) => {
+          const product: Product = res.body.data;
+          return product;
+        });
 
       expect(selectedProduct).not.toBeUndefined();
       expect(selectedProduct.quantity > 0).toBeTruthy();
@@ -137,7 +140,9 @@ describe('AppController (e2e)', () => {
           quantity: amount,
           isSelected: true,
         })
-        .expect(200)
+        .expect((res) => {
+          expect([res.statusCode, res.body.message]).toBe([200, undefined]);
+        })
         .then((res) => {
           const item: CartItem = res.body.data;
           return item;

@@ -17,7 +17,7 @@ import { ResponseDataInterceptor } from '../common/interceptors/response.interce
 import { OrderHistDataResponseDTO } from './dto/order-history-response.dto';
 import { ApiResponseInterceptor } from '../common/interceptors/api-response.interceptor';
 import { GetUser } from '../auth/decorators/get-user.decorator';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @ApiTags('Order History APIs')
 @ApiBearerAuth('access-token')
