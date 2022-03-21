@@ -29,6 +29,7 @@ export class ProductRepository extends Repository<Product> {
               OrderStatus.CANCELED,
               OrderStatus.REFUNDED,
               OrderStatus.REJECTED,
+              undefined,
             ].includes(prevOrderStatus)
           ) {
             product.quantity -= item.quantity;
