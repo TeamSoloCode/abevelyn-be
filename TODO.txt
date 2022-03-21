@@ -1,6 +1,6 @@
-User same API for create/update user profile
+User use same API for create/update user profile
 Cannot set startedDate of Sale after current date
-
+Can login with Google Admin account
 
 Add more infomation for address as UI need
 Order email template

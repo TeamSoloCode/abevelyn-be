@@ -1,14 +1,23 @@
-import { classToPlain } from 'class-transformer';
+import { classToPlain, Exclude } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { RootEntity } from '../../common/root-entity.entity';
 import { Order } from '../../orders/entities/order.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  AfterLoad,
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { OrderStatus } from '../../common/entity-enum';
 
 @Entity()
 export class OrderHistory extends RootEntity {
   constructor(order: Order) {
     super();
-    this._order = JSON.stringify(classToPlain(order));
+    if (order) {
+      this.orderHist = JSON.stringify(classToPlain(order));
+    }
   }
 
   @PrimaryGeneratedColumn('uuid')
@@ -16,22 +25,22 @@ export class OrderHistory extends RootEntity {
   uuid: string;
 
   @Column('json', { name: 'orderAsJSON' })
-  get productAsJSON(): string {
-    return this._order;
-  }
+  orderHist: string;
 
-  set productAsJSON(orderJson: string) {
-    JSON.parse(orderJson);
-    this._order = orderJson;
-  }
-
-  private _order: string;
+  currentStatus: OrderStatus;
+  cancelReason: string;
+  rejectReason: string;
 
   @OneToOne((type) => Order, (order) => order.orderHistory)
   order: Order;
 
-  getOrderHistory = (): Order => {
-    if (!this._order) return undefined;
-    return JSON.parse(this._order);
-  };
+  @AfterLoad()
+  updateCurrentStatus() {
+    if (this.order) {
+      this.currentStatus = this.order.status;
+      this.updatedAt = this.order.updatedAt;
+      this.cancelReason = this.order.cancelReason;
+      this.rejectReason = this.order.rejectReason;
+    }
+  }
 }
