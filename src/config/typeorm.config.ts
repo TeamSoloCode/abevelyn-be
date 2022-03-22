@@ -1,12 +1,15 @@
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-export const typeOrmConfig: TypeOrmModuleOptions = {
+export const typeOrmConfig = (
+  configService: ConfigService,
+): TypeOrmModuleOptions => ({
   type: 'mysql',
   host: 'localhost',
   port: 3306,
   username: 'root',
   password: 'root',
-  database: 'abevelyn_dev',
+  database: 'abevelyn_dev1',
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   subscribers: [__dirname + '/../**/*.subscriber.{js,ts}'],
   migrations: ['migration/*.js'],
@@ -14,5 +17,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     migrationsDir: 'migration',
   },
   synchronize: true,
+  keepConnectionAlive: true,
   logging: ['error', 'query'],
-};
+});

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -30,13 +30,12 @@ import { configurations } from './config/configuration';
 import { GoogleAdminStrategy } from './auth/strategies/google-admin.strategy';
 import { OrderHistoryModule } from './order-history/order-history.module';
 import { DatabaseModule } from './database/database.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig),
     ConfigModule.forRoot({ load: [configurations], isGlobal: true }),
     DatabaseModule,
-
     CollectionsModule,
     ProductsModule,
     UsersModule,

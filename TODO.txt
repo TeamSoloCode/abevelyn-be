@@ -1,6 +1,4 @@
-User use same API for create/update user profile
 Cannot set startedDate of Sale after current date
-Can login with Google Admin account
 
 Add more infomation for address as UI need
 Order email template
@@ -23,3 +21,4 @@ Add lastUpdateUserID to Order entity to track updater
 - Update add add delete items from user cart
 - Not allow admin to update sale after started date
 - Create Order History
+- User use same API for create/update user profile

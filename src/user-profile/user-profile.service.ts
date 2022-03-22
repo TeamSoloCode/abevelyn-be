@@ -23,17 +23,18 @@ export class UserProfileService extends CommonService<UserProfile> {
   }
 
   async create(
-    createUserProfileDto: CreateUserProfileDto,
+    updateUserProfileDto: UpdateUserProfileDto,
     owner: User,
   ): Promise<UserProfile> {
     const profile = await this.userProfileRepository.findOne({
       relations: ['owner'],
       where: { owner: { uuid: owner.uuid } },
     });
+
     if (profile) {
       throw new ConflictException('User profile already existed');
     }
-    const { firstName, picture, lastName, phone } = createUserProfileDto;
+    const { firstName, picture, lastName, phone } = updateUserProfileDto;
     const newProfile = new UserProfile(owner);
 
     newProfile.firstName = firstName;
@@ -68,7 +69,7 @@ export class UserProfileService extends CommonService<UserProfile> {
     });
 
     if (!profile) {
-      throw new NotFoundException(ExceptionCode.USER_PROFILE.NOT_FOUND);
+      return this.create(updateUserProfileDto, owner);
     }
 
     const { firstName, lastName, picture, phone } = updateUserProfileDto;
