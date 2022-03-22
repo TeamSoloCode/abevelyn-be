@@ -90,7 +90,7 @@ export class OrdersService extends CommonService<Order> {
     return this.findAvailable(
       { cond: `order.owner.uuid = '${user.uuid}'` },
       {
-        relations: ['owner'],
+        relations: ['owner', 'orderHist'],
         join: {
           alias: 'order',
           leftJoinAndSelect: {
@@ -254,7 +254,7 @@ export class OrdersService extends CommonService<Order> {
       /**
        * Add order history to order
        */
-      createdOrder.orderHistory = orderHistory;
+      createdOrder.orderHist = orderHistory;
       await queryRunner.manager
         .getCustomRepository(OrderRepository)
         .save(createdOrder);

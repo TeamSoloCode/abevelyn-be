@@ -83,8 +83,9 @@ export class SalesController {
   @ApiOperation({ summary: 'Fetch a sale by id' })
   @Get(':id')
   @UseInterceptors(new ResponseDataInterceptor(new SaleResponseDto()))
-  findOne(@Param('id') id: string) {
-    return this.salesService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const sale = await this.salesService.findOne(id);
+    return sale;
   }
 
   @ApiBearerAuth('access-token')

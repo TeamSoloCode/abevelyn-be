@@ -31,7 +31,7 @@ export class OrderHistory extends RootEntity {
   cancelReason: string;
   rejectReason: string;
 
-  @OneToOne((type) => Order, (order) => order.orderHistory)
+  @OneToOne((type) => Order, (order) => order.orderHist)
   order: Order;
 
   @AfterLoad()

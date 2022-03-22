@@ -82,7 +82,14 @@ export class OrdersController {
   @UseInterceptors(new ResponseDataInterceptor(new OrderDataResponseDTO()))
   findAll() {
     return this.ordersService.findAll(undefined, {
-      relations: ['owner', 'owner.profile'],
+      relations: ['orderHist'],
+      join: {
+        alias: 'order',
+        leftJoinAndSelect: {
+          owner: 'order.owner',
+          profile: 'owner.profile',
+        },
+      },
     });
   }
 

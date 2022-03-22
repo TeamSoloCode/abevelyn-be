@@ -46,13 +46,17 @@ export class Order extends RootEntity {
 
   @OneToOne((type) => OrderHistory, (orderHist) => orderHist.order)
   @JoinColumn()
-  orderHistory: OrderHistory;
+  orderHist: OrderHistory;
 
   @ManyToOne(() => User, (user) => user.orders)
   owner: User;
 
   @ManyToOne(() => Sale, (sale) => sale.orders, { nullable: true })
   sale?: Sale;
+
+  getOrderHist = () => {
+    return this.orderHist?.orderHist;
+  };
 
   priceInfo = (): CalculatePriceInfo => {
     let totalPrice = 0;

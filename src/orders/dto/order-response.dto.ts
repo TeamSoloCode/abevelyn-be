@@ -1,3 +1,5 @@
+import { Exclude, Expose } from 'class-transformer';
+import { OrderHistory } from '../../order-history/entities/order-history.entity';
 import { CartItem } from '../../cart-item/entities/cart-item.entity';
 import CommonDataResponse from '../../common/common-data-response.dto';
 import { LanguageCode, OrderStatus, UserRoles } from '../../common/entity-enum';
@@ -12,6 +14,12 @@ export class OrderDataResponseDTO extends CommonDataResponse<
   rejectReason: string;
 
   status: OrderStatus;
+
+  @Exclude({ toPlainOnly: true })
+  orderHist: OrderHistory;
+
+  @Expose({ name: 'orderHist' })
+  getOrderHist = () => OrderHistory;
 
   @Reflect.metadata(CommonDataResponse.DTO_KEY, 'cartItem')
   cartItems: CartItem[];
