@@ -31,6 +31,7 @@ import { GoogleAdminStrategy } from './auth/strategies/google-admin.strategy';
 import { OrderHistoryModule } from './order-history/order-history.module';
 import { DatabaseModule } from './database/database.module';
 import { JwtModule } from '@nestjs/jwt';
+import { PagesModule } from './pages/pages.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { JwtModule } from '@nestjs/jwt';
     SalesModule,
     PaymentModule,
     OrderHistoryModule,
+    PagesModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, GoogleAdminStrategy],

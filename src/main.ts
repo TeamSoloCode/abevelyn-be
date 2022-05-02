@@ -23,7 +23,8 @@ async function bootstrap() {
   setEnvConstants(config.get<IConfig>(ENV_PATH_NAME));
 
   app.enableCors({
-    origin: config.get<IConfig>(ENV_PATH_NAME).BE.AllowOrigins,
+    // origin: config.get<IConfig>(ENV_PATH_NAME).BE.AllowOrigins,
+    origin: '*',
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });

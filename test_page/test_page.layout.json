@@ -1,0 +1,25 @@
+{
+    "content": {
+        "type": "container",
+        "backgroundColor": "red",
+        "child": {
+            "type": "column",
+            "children": [
+                {
+                    "type": "button",
+                    "onClick": "testFunction()",
+                    "text": "Test Button From JSON"
+                },
+                {
+                    "type": "container",
+                    "backgroundColor": "yellow",
+                    "child": {
+                        "type": "button",
+                        "onClick": "setContextData({abcd: Date.now()})",
+                        "text": "Call setContextData: {{ abcd }}"
+                    }
+                }
+            ]
+        }
+    }
+}
