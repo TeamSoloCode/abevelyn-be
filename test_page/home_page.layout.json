@@ -1,0 +1,17 @@
+{
+    "appBar": {
+      "title": {
+        "type": "text",
+        "text": "Home Page {{abcd}}"
+      }
+    },
+    "content": {
+      "type": "container",
+      "backgroundColor": "red",
+      "child": {
+        "type": "text",
+        "text": "Home Page content"
+      }
+    }
+  }
+  

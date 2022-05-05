@@ -1,25 +1,40 @@
 {
-    "content": {
-        "type": "container",
-        "backgroundColor": "red",
-        "child": {
-            "type": "column",
-            "children": [
-                {
-                    "type": "button",
-                    "onClick": "testFunction()",
-                    "text": "Test Button From JSON"
-                },
-                {
-                    "type": "container",
-                    "backgroundColor": "yellow",
-                    "child": {
-                        "type": "button",
-                        "onClick": "setContextData({abcd: Date.now()})",
-                        "text": "Call setContextData: {{ abcd }}"
-                    }
-                }
-            ]
-        }
+  "appBar": {
+    "title": {
+      "type": "text",
+      "text": "Home Page {{abcd}}"
+    },
+    "1content": {
+      "type": "button",
+      "text": "Custom Appbar 1 {{abcd}}"
     }
+  },
+  "content": {
+    "type": "container",
+    "backgroundColor": "red",
+    "child": {
+      "type": "column",
+      "children": [
+        {
+          "type": "button",
+          "onClick": "goToHomePage()",
+          "text": "Go To Home Page"
+        },
+        {
+          "type": "button",
+          "onClick": "testFunction()",
+          "text": "Test Button From JSON"
+        },
+        {
+          "type": "container",
+          "backgroundColor": "yellow",
+          "child": {
+            "type": "button",
+            "onClick": "setContextData({abcd: Date.now(), nest: { nest1: 'nest1 data' }})",
+            "text": "Call setContextData: {{abcd}} , {{nest.nest1}}"
+          }
+        }
+      ]
+    }
+  }
 }

@@ -22,11 +22,11 @@ export class PagesService extends CommonService<PageRepository> {
       return { code };
     }
     const code = fs.readFileSync(
-      join(process.cwd(), `./test_page/test_page.code.js`),
+      join(process.cwd(), `./test_page/${path}.code.js`),
       'utf8',
     );
     const layout = fs.readFileSync(
-      join(process.cwd(), './test_page/test_page.layout.json'),
+      join(process.cwd(), `./test_page/${path}.layout.json`),
       'utf8',
     );
 
