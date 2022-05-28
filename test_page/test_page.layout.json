@@ -26,12 +26,17 @@
           "text": "Test Button From JSON"
         },
         {
+          "type": "text",
+          "text": "Text Component abcd: {{abcd}}"
+        },
+
+        {
           "type": "container",
           "backgroundColor": "yellow",
           "child": {
             "type": "button",
-            "onClick": "setContextData({abcd: Date.now(), nest: { nest1: 'nest1 data' }})",
-            "text": "Call setContextData: {{abcd}} , {{nest.nest1}}"
+            "onClick": "setPageData({abcd: Date.now(), nest: { nest1: 'nest1 data' }})",
+            "text": "Call setPageData : {{abcd}} , {{nest.nest1}}"
           }
         }
       ]

@@ -6,11 +6,27 @@
       }
     },
     "content": {
+
+      
       "type": "container",
       "backgroundColor": "red",
-      "child": {
-        "type": "text",
-        "text": "Home Page content"
+      "child":  {
+        "type": "column",
+        "children": [
+          {
+            "type": "text",
+            "text": "Home Page content "
+          },
+          {
+            "type": "text",
+            "text": "pageArguments : {{passedData}}"
+          },
+          {
+            "type": "button",
+            "onClick": "setHomePageData()",
+            "text": "setHomePageData: {{abcd}} / {{homePageData}}"
+          }
+        ]
       }
     }
   }

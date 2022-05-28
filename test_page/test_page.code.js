@@ -9,24 +9,15 @@ React.useEffect(() => {
 }, [testState]);
 
 React.useEffect(() => {
-  logger.log(`Context data ${_contextData.abcd}`);
-}, [_contextData]);
-
-React.useEffect(() => {
   logger.log(`Context previous data ${_prevContextData?.abcd}`);
 }, [_prevContextData]);
 
-React.useEffect(() => {
-  return () => {
-    logger.log('Unmount test_page code');
-  };
-}, []);
-
-context.testFunction = () => {
-  setTestState(`Updated react hook state ${Date.now()}`);
-  context.setContextData({ test: Date.now() });
-};
-
-context.goToHomePage = () => {
-  context.navigateTo('home_page');
-};
+exportPageContext({
+  goToHomePage: () => {
+    navigateTo('home_page', { passedData: 'data-from-test_page' });
+  },
+  testFunction: () => {
+    setTestState(`Updated react hook state ${Date.now()}`);
+    setPageData({ test: Date.now() });
+  },
+});
