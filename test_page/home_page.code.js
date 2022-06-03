@@ -4,6 +4,9 @@ React.useEffect(() => {
   }, 2000);
 
   setPageData({ passedData: getPageArguments().passedData });
+  (async () => {
+    logger.log(`Get testCookie: ${await getCookies('testCookie')}`);
+  })();
   return () => {
     clearInterval(intervalID);
   };

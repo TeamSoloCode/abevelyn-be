@@ -2,14 +2,11 @@
     "appBar": {
       "title": {
         "type": "text",
-        "text": "Home Page {{abcd}}"
+        "text": "Home Page {{ passedData }}"
       }
     },
     "content": {
-
-      
       "type": "container",
-      "backgroundColor": "red",
       "child":  {
         "type": "column",
         "children": [

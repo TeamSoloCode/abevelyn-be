@@ -2,7 +2,7 @@
   "appBar": {
     "title": {
       "type": "text",
-      "text": "Home Page {{abcd}}"
+      "text": "Test Page {{abcd}}"
     },
     "1content": {
       "type": "button",
@@ -27,7 +27,7 @@
         },
         {
           "type": "text",
-          "text": "Text Component abcd: {{abcd}}"
+          "text": "Text Component abcd: {{ abcd }}"
         },
 
         {
@@ -36,7 +36,7 @@
           "child": {
             "type": "button",
             "onClick": "setPageData({abcd: Date.now(), nest: { nest1: 'nest1 data' }})",
-            "text": "Call setPageData : {{abcd}} , {{nest.nest1}}"
+            "text": "Call setPageData : {{ abcd }} , {{nest.nest1}}"
           }
         }
       ]

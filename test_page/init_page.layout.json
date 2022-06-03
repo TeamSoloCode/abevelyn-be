@@ -1,0 +1,18 @@
+{
+    "bottomNav": {
+      "selectedItemColor": "green",
+      "items": [
+        {
+          "label": "Test Page",
+          "icon": "home",
+          "path": "test_page"
+        },
+        {
+          "label": "Home",
+          "icon": "school",
+          "path": "home_page"
+        }
+      ]
+    }
+  }
+  
