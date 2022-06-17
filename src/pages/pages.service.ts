@@ -30,7 +30,7 @@ export class PagesService extends CommonService<PageRepository> {
       'utf8',
     );
 
-    return { code, layout };
+    return { code, layout: JSON.parse(layout) };
   }
 
   update(id: number, updatePageDto: UpdatePageDto) {

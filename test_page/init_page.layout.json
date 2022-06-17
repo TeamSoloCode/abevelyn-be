@@ -1,18 +1,20 @@
 {
-    "bottomNav": {
-      "selectedItemColor": "green",
-      "items": [
-        {
-          "label": "Test Page",
-          "icon": "home",
-          "path": "test_page"
-        },
-        {
-          "label": "Home",
-          "icon": "school",
-          "path": "home_page"
-        }
-      ]
-    }
+  "bottomNav": {
+    "selectedItemColor": "green",
+    "navType": "shifting",
+    "items": [
+      {
+        "label": "Test Page",
+        "icon": "home",
+        "path": "test_page",
+        "backgroundColor": "#90ee90"
+      },
+      {
+        "label": "Home",
+        "icon": "school",
+        "path": "home_page",
+        "backgroundColor": "#87ceeb"
+      }
+    ]
   }
-  
+}

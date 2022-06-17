@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { PagesService } from './pages.service';
 import { CreatePageDto } from './dto/create-page.dto';
@@ -26,7 +27,8 @@ export class PagesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string, @Request() req: Request) {
+    console.log(JSON.stringify(req.headers));
     return this.pagesService.testGetPageByPath(id);
   }
 

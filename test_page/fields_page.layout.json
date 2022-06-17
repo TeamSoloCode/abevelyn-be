@@ -1,0 +1,25 @@
+{
+  "content": {
+    "type": "container",
+    "backgroundColor": "whitesmoke",
+    "child": {
+      "type": "scroll_view",
+      "children": [
+        {
+          "type": "column",
+          "children": [
+            {
+              "type": "field",
+              "fieldType": "text",
+              "name": "textFieldValue"
+            },
+            {
+              "type": "text",
+              "text": "{{ data }}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

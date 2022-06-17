@@ -18,5 +18,5 @@ export const typeOrmConfig = (
   },
   synchronize: true,
   keepConnectionAlive: true,
-  logging: ['error', 'query'],
+  // logging: ['error', 'query'],
 });

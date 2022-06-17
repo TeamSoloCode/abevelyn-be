@@ -1,45 +1,136 @@
 {
   "appBar": {
-    "title": {
+    "actions": [
+      {
+        "onClick": ""
+      }
+    ],
+    "content": {
       "type": "text",
       "text": "Test Page {{abcd}}"
     },
-    "1content": {
+    "custom": {
       "type": "button",
       "text": "Custom Appbar 1 {{abcd}}"
     }
   },
   "content": {
-    "type": "container",
-    "backgroundColor": "red",
-    "child": {
-      "type": "column",
-      "children": [
-        {
-          "type": "button",
-          "onClick": "goToHomePage()",
-          "text": "Go To Home Page"
-        },
-        {
-          "type": "button",
-          "onClick": "testFunction()",
-          "text": "Test Button From JSON"
-        },
-        {
-          "type": "text",
-          "text": "Text Component abcd: {{ abcd }}"
-        },
+    "type": "scroll_view",
+    "children": [
+      {
+        "type": "container",
+        "backgroundColor": "#ffa500",
+        "child": {
+          "type": "column",
+          "children": [
+            {
+              "type": "text",
+              "color": "#primaryColor",
+              "text": "Is Mobile: {{ _tIsMobile }}, Is Web: {{_tIsWeb}}"
+            },
+            {
+              "type": "button",
+              "onClick": "goToHomePage()",
+              "text": "Go To Home Page"
+            },
+            {
+              "type": "button",
+              "buttonType": "text_button",
+              "onClick": "goFieldTestPage()",
+              "text": "Go to Fields test page"
+            },
+            {
+              "type": "button",
+              "onClick": "testFunction()",
+              "text": "Test Button From JSON"
+            },
+            {
+              "type": "text",
+              "color": "#primaryColor",
+              "text": "base color #primaryColor: {{ abcd }}"
+            },
+            {
+              "type": "text",
+              "color": "#primaryColor",
+              "className": "text-error",
+              "text": "text-error, primaryColor: #primaryColor"
+            },
+            {
+              "type": "text",
+              "color": "{{ dynamicColor }}",
+              "text": "color: dynamicColor"
+            },
+            {
+              "type": "text",
+              "color": "#primaryColor",
+              "className": ["text-error", "text-error--small"],
+              "text": "[text-error, text-error--small]: {{ abcd }}"
+            },
+            {
+              "type": "text",
+              "color": "#primaryColor",
+              "className": [{ "text-error": "{{ text-error }}" }],
+              "text": "[{text-error: {{ text-error }}}]"
+            },
 
-        {
-          "type": "container",
-          "backgroundColor": "yellow",
-          "child": {
-            "type": "button",
-            "onClick": "setPageData({abcd: Date.now(), nest: { nest1: 'nest1 data' }})",
-            "text": "Call setPageData : {{ abcd }} , {{nest.nest1}}"
-          }
+            {
+              "type": "container",
+              "backgroundColor": "#ffff00",
+              "child": {
+                "type": "button",
+                "onClick": "updatePageState()",
+                "text": "Call setPageData : {{ abcd }} , {{nest.nest1}}"
+              }
+            },
+            {
+              "type": "container",
+              "backgroundColor": "mediumpurple",
+              "child": {
+                "type": "button",
+                "onClick": "changeTheme()",
+                "text": "Toggle Change Theme"
+              }
+            },
+            {
+              "type": "column",
+              "children": [
+                {
+                  "type": "button",
+                  "onClick": "getTestingData()",
+                  "text": "Fetch data from server"
+                },
+                {
+                  "type": "text",
+                  "color": "#primaryColor",
+                  "text": "{{apiData}}"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "backgroundColor": "#ffff00",
+              "hidden": true,
+              "child": {
+                "type": "text",
+                "color": "#primaryColor",
+                "className": [{ "text-error": "{{ text-error }}" }],
+                "text": "Hidden Container"
+              }
+            },
+            {
+              "type": "container",
+              "backgroundColor": "#ffff00",
+              "hidden": "{{text-error}}",
+              "child": {
+                "type": "text",
+                "color": "#primaryColor",
+                "className": [{ "text-error": "{{ text-error }}" }],
+                "text": "Dynamic Hidden Container: {{text-error}}"
+              }
+            }
+          ]
         }
-      ]
-    }
+      }
+    ]
   }
 }

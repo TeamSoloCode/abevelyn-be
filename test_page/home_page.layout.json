@@ -1,6 +1,6 @@
 {
     "appBar": {
-      "title": {
+      "content": {
         "type": "text",
         "text": "Home Page {{ passedData }}"
       }
