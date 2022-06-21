@@ -41,6 +41,12 @@
             },
             {
               "type": "button",
+              "buttonType": "text_button",
+              "onClick": "goTo('test_api')",
+              "text": "Go to Test API page"
+            },
+            {
+              "type": "button",
               "onClick": "testFunction()",
               "text": "Test Button From JSON"
             },
@@ -53,7 +59,7 @@
               "type": "text",
               "color": "#primaryColor",
               "className": "text-error",
-              "text": "text-error, primaryColor: #primaryColor"
+              "text": "className=text-error | color=#primaryColor"
             },
             {
               "type": "text",
@@ -68,6 +74,7 @@
             },
             {
               "type": "text",
+              "key": "{{ abcd }}",
               "color": "#primaryColor",
               "className": [{ "text-error": "{{ text-error }}" }],
               "text": "[{text-error: {{ text-error }}}]"

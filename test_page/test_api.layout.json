@@ -1,0 +1,38 @@
+{
+  "content": {
+    "type": "container",
+    "child": {
+      "type": "scroll_view",
+      "children": [
+        {
+          "type": "container",
+          "backgroundColor": "orange",
+          "child": {
+            "type": "column",
+            "children": [
+              {
+                "type": "button",
+                "onClick": "invalidURL()",
+                "text": "Fetch with invalid URL"
+              },
+              {
+                "type": "button",
+                "onClick": "fetchErrorFromBE()",
+                "text": "Fetch got error from BE"
+              },
+              {
+                "type": "button",
+                "onClick": "fetchSuccess()",
+                "text": "Fetch Success"
+              },
+              {
+                "type": "text",
+                "text": "{{ data }}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -10,4 +10,7 @@ exportPageContext({
   onTextChange: (value) => {
     setPageData({ textValue: value });
   },
+  resetAllText: () => {
+    setPageData({ textFieldValue: '' });
+  },
 });

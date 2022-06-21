@@ -15,7 +15,7 @@ React.useEffect(() => {
 }, [testState]);
 
 React.useEffect(() => {
-  logger.log(`Page previous data ${JSON.stringify(prevPageData)}`);
+  // logger.log(`Page previous data ${JSON.stringify(prevPageData)}`);
 }, [prevPageData]);
 
 const getTestingData = React.useCallback(async () => {
@@ -31,6 +31,10 @@ const getTestingData = React.useCallback(async () => {
 }, [setPageData]);
 
 exportPageContext({
+  dataFromExportPageContext: 'CONTANST OR SOMETHING',
+  goTo: (route) => {
+    navigateTo(route);
+  },
   getTestingData,
   goToHomePage: () => {
     navigateTo('home_page', { passedData: 'data-from-test_page' });

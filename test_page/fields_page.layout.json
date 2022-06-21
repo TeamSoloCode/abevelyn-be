@@ -14,6 +14,16 @@
               "name": "textFieldValue"
             },
             {
+              "type": "field",
+              "fieldType": "text",
+              "name": "textFieldValue"
+            },
+            {
+              "type": "button",
+              "onClick": "resetAllText()",
+              "text": "Reset"
+            },
+            {
               "type": "text",
               "text": "{{ data }}"
             }
