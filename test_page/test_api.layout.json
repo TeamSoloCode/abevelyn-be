@@ -26,6 +26,11 @@
                 "text": "Fetch Success"
               },
               {
+                "type": "button",
+                "onClick": "multiFetch()",
+                "text": "Fetch Multiple API"
+              },
+              {
                 "type": "text",
                 "text": "{{ data }}"
               }
