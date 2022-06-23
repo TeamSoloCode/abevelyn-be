@@ -19,6 +19,11 @@
               "name": "textFieldValue"
             },
             {
+              "type": "field",
+              "fieldType": "select",
+              "name": "gender"
+            },
+            {
               "type": "button",
               "onClick": "resetAllText()",
               "text": "Reset"

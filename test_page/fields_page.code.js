@@ -1,3 +1,5 @@
+useInitState({ textFieldValue: 'init text value' });
+
 React.useEffect(() => {
   if (!_.isEqual(pageData?.data, prevPageData?.data)) {
     setPageData({ data: JSON.stringify(pageData) });
@@ -8,7 +10,7 @@ React.useEffect(() => {}, [pageData?.textFieldValue]);
 
 exportPageContext({
   onTextChange: (value) => {
-    setPageData({ textValue: value });
+    setPageData({ textFieldValue: value });
   },
   resetAllText: () => {
     setPageData({ textFieldValue: '' });
