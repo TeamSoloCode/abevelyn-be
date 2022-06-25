@@ -1,4 +1,8 @@
-useInitState({ textFieldValue: 'init text value' });
+useInitState({
+  textFieldValue: 'init text value',
+  genderItems: ['male_1', 'female_2', 'gay_3'],
+  gender: 'gay_3',
+});
 
 React.useEffect(() => {
   if (!_.isEqual(pageData?.data, prevPageData?.data)) {
@@ -13,6 +17,6 @@ exportPageContext({
     setPageData({ textFieldValue: value });
   },
   resetAllText: () => {
-    setPageData({ textFieldValue: '' });
+    setPageData({ textFieldValue: '', gender: null });
   },
 });

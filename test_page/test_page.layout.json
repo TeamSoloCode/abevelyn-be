@@ -29,21 +29,27 @@
               "text": "Is Mobile: {{ _tIsMobile }}, Is Web: {{_tIsWeb}}"
             },
             {
-              "type": "button",
-              "onClick": "goToHomePage()",
-              "text": "Go To Home Page"
-            },
-            {
-              "type": "button",
-              "buttonType": "text_button",
-              "onClick": "goFieldTestPage()",
-              "text": "Go to Fields test page"
-            },
-            {
-              "type": "button",
-              "buttonType": "text_button",
-              "onClick": "goTo('test_api')",
-              "text": "Go to Test API page"
+              "type": "row",
+              "mainAxisAlignment": "center",
+              "children": [
+                {
+                  "type": "button",
+                  "onClick": "goToHomePage()",
+                  "text": "Go To Home Page"
+                },
+                {
+                  "type": "button",
+                  "buttonType": "text_button",
+                  "onClick": "goFieldTestPage()",
+                  "text": "Go to Fields test page"
+                },
+                {
+                  "type": "button",
+                  "buttonType": "text_button",
+                  "onClick": "goTo('test_api')",
+                  "text": "Go to Test API page"
+                }
+              ]
             },
             {
               "type": "button",

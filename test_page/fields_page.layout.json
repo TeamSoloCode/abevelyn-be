@@ -9,19 +9,32 @@
           "type": "column",
           "children": [
             {
-              "type": "field",
-              "fieldType": "text",
-              "name": "textFieldValue"
-            },
-            {
-              "type": "field",
-              "fieldType": "text",
-              "name": "textFieldValue"
+              "type": "row",
+              "mainAxisAlignment": "center",
+              "children": [
+                {
+                  "type": "field",
+                  "fieldType": "text",
+                  "name": "textFieldValue"
+                },
+                {
+                  "type": "field",
+                  "fieldType": "text",
+                  "name": "textFieldValue"
+                }
+              ]
             },
             {
               "type": "field",
               "fieldType": "select",
-              "name": "gender"
+              "name": "gender",
+              "items": "genderItems"
+            },
+            {
+              "type": "field",
+              "fieldType": "select",
+              "name": "gender",
+              "items": "genderItems"
             },
             {
               "type": "button",
