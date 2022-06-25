@@ -26,6 +26,11 @@ export class PagesController {
     return this.pagesService.findAll();
   }
 
+  @Get('client-config')
+  getClientConfig() {
+    return this.pagesService.getClientConfig();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string, @Request() req: Request) {
     console.log(JSON.stringify(req.headers));

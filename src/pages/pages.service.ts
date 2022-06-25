@@ -33,6 +33,15 @@ export class PagesService extends CommonService<PageRepository> {
     return { code, layout: JSON.parse(layout) };
   }
 
+  getClientConfig() {
+    const config = fs.readFileSync(
+      join(process.cwd(), `./test_page/client-config.json`),
+      'utf8',
+    );
+
+    return config;
+  }
+
   update(id: number, updatePageDto: UpdatePageDto) {
     return `This action updates a #${id} page`;
   }
