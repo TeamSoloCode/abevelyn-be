@@ -16,4 +16,7 @@ exportPageContext({
   setHomePageData: () => {
     setPageData({ homePageData: Date.now() });
   },
+  gotoFields: () => {
+    navigateTo('fields_page');
+  },
 });
