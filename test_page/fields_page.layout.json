@@ -6,46 +6,62 @@
       "type": "scroll_view",
       "children": [
         {
-          "type": "column",
-          "children": [
-            {
-              "type": "column",
-              "mainAxisAlignment": "center",
-              "children": [
-                {
-                  "type": "field",
-                  "fieldType": "text",
-                  "name": "textFieldValue"
-                },
-                {
-                  "type": "field",
-                  "fieldType": "text",
-                  "name": "textFieldValue"
-                }
-              ]
-            },
-            {
-              "type": "field",
-              "fieldType": "select",
-              "name": "gender",
-              "items": "genderItems"
-            },
-            {
-              "type": "field",
-              "fieldType": "select",
-              "name": "gender",
-              "items": "genderItems"
-            },
-            {
-              "type": "button",
-              "onClick": "resetAllText()",
-              "text": "Reset"
-            },
-            {
-              "type": "text",
-              "text": "{{ data }}"
-            }
-          ]
+          "type": "form",
+          "name": "testForm",
+          "child": {
+            "type": "column",
+            "children": [
+              {
+                "type": "column",
+                "mainAxisAlignment": "center",
+                "children": [
+                  {
+                    "type": "field",
+                    "fieldType": "text",
+                    "name": "textFieldValue"
+                  },
+                  {
+                    "type": "field",
+                    "fieldType": "text",
+                    "name": "textFieldValue"
+                  }
+                ]
+              },
+              {
+                "type": "field",
+                "fieldType": "select",
+                "name": "gender",
+                "items": "genderItems"
+              },
+              {
+                "type": "field",
+                "fieldType": "select",
+                "name": "gender",
+                "items": "genderItems"
+              },
+              {
+                "type": "row",
+                "mainAxisAlignment": "center",
+                "children": [
+                  {
+                    "type": "button",
+                    "onClick": "submit()",
+                    "text": "Submit"
+                  },
+                  {
+                    "type": "button",
+                    "onClick": "resetAllText()",
+                    "text": "Reset"
+                  }
+                ]
+              },
+
+              {
+                "type": "text",
+                "text": "{{ data }}"
+              }
+            ]
+          }
         }
       ]
     }

@@ -19,4 +19,7 @@ exportPageContext({
   resetAllText: () => {
     setPageData({ textFieldValue: '', gender: null });
   },
+  submit: () => {
+    dispatchFormAction('testForm', 'submit');
+  },
 });
