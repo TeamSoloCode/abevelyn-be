@@ -31,6 +31,11 @@ export class PagesController {
     return this.pagesService.getClientConfig();
   }
 
+  @Get('theme')
+  getClientTheme() {
+    return this.pagesService.getClientTheme();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string, @Request() req: Request) {
     console.log(JSON.stringify(req.headers));

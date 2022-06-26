@@ -42,6 +42,15 @@ export class PagesService extends CommonService<PageRepository> {
     return config;
   }
 
+  getClientTheme() {
+    const theme = fs.readFileSync(
+      join(process.cwd(), `./test_page/client_theme.json`),
+      'utf8',
+    );
+
+    return theme;
+  }
+
   update(id: number, updatePageDto: UpdatePageDto) {
     return `This action updates a #${id} page`;
   }

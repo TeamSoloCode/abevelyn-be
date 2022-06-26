@@ -9,7 +9,7 @@
           "type": "column",
           "children": [
             {
-              "type": "row",
+              "type": "column",
               "mainAxisAlignment": "center",
               "children": [
                 {

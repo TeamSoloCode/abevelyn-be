@@ -1,5 +1,7 @@
 {
   "initialPage": "init_page",
+  "themePath": "pages/theme",
+  "pageAPI": "http://localhost:3000",
   "routes": [
     { "name": "Home Page", "path": "home_page" },
     { "name": "Fields Page", "path": "fields_page" },
