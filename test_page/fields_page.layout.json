@@ -23,7 +23,7 @@
                   {
                     "type": "field",
                     "fieldType": "text",
-                    "name": "textFieldValue"
+                    "name": "textFieldValue1"
                   }
                 ]
               },
@@ -36,7 +36,7 @@
               {
                 "type": "field",
                 "fieldType": "select",
-                "name": "gender",
+                "name": "gender1",
                 "items": "genderItems"
               },
               {

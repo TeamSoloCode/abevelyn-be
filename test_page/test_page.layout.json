@@ -29,7 +29,7 @@
               "text": "Is Mobile: {{ _tIsMobile }}, Is Web: {{_tIsWeb}}"
             },
             {
-              "type": "row",
+              "type": "column",
               "mainAxisAlignment": "center",
               "children": [
                 {
