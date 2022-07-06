@@ -17,7 +17,13 @@ exportPageContext({
     setPageData({ textFieldValue: value });
   },
   resetAllText: () => {
-    setPageData({ textFieldValue: '', gender: null });
+    setPageData({
+      textFieldValue: '',
+      gender: null,
+      textFieldValue1: '',
+      gender1: null,
+    });
+    // dispatchFormAction('testForm', 'reset');
   },
   submit: () => {
     dispatchFormAction('testForm', 'submit');
