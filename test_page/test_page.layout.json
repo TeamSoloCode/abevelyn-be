@@ -46,6 +46,12 @@
                 {
                   "type": "button",
                   "buttonType": "text_button",
+                  "onClick": "goToPermissionTestPage()",
+                  "text": "Go to Permission Page"
+                },
+                {
+                  "type": "button",
+                  "buttonType": "text_button",
                   "onClick": "goTo('test_api')",
                   "text": "Go to Test API page"
                 }

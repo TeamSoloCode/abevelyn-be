@@ -1,0 +1,34 @@
+{
+  "content": {
+    "type": "container",
+    "child": {
+      "type": "scroll_view",
+      "children": [
+        {
+          "type": "container",
+          "backgroundColor": "orange",
+          "child": {
+            "type": "column",
+            "children": [
+              {
+                "type": "button",
+                "onClick": "askForLocationPermission()",
+                "text": "Ask Location Permission"
+              },
+              {
+                "type": "button",
+                "onClick": "checkLocationPermissionStatus()",
+                "text": "Check Location Permission Status"
+              },
+              {
+                "type": "button",
+                "onClick": "requestPermission('camera')",
+                "text": "Ask Camera Permission | Not in manifest"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

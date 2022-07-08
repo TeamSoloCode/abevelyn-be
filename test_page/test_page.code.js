@@ -42,6 +42,9 @@ exportPageContext({
   goFieldTestPage: () => {
     navigateTo('fields_page', { passedData: 'data-from-test_page' });
   },
+  goToPermissionTestPage: () => {
+    navigateTo('permission_page');
+  },
   testFunction: () => {
     setTestState(`${Date.now()}`);
     setPageData({ test: Date.now() });
