@@ -7,6 +7,7 @@
     { "name": "Fields Page", "path": "fields_page" },
     { "name": "Test Page", "path": "test_page" },
     { "name": "Test API", "path": "test_api" },
-    { "name": "Permission Test", "path": "permission_page" }
+    { "name": "Permission Test", "path": "permission_page" },
+    { "name": "Test Block Widget", "path": "test_block_page" }
   ]
 }

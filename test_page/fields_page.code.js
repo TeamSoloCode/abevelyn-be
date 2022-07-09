@@ -23,9 +23,10 @@ exportPageContext({
       textFieldValue1: '',
       gender1: null,
     });
-    // dispatchFormAction('testForm', 'reset');
+    resetForm('testForm');
   },
-  submit: () => {
-    dispatchFormAction('testForm', 'submit');
+  submit: async () => {
+    const isValid = await validateForm('testForm');
+    console.log(`isValid testForm ${isValid}`);
   },
 });

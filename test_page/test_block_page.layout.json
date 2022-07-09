@@ -1,0 +1,27 @@
+{
+  "content": {
+    "type": "container",
+    "child": {
+      "type": "scroll_view",
+      "children": [
+        {
+          "type": "container",
+          "backgroundColor": "orange",
+          "child": {
+            "type": "column",
+            "children": [
+              {
+                "type": "text",
+                "text": "Test block widget"
+              },
+              {
+                "type": "block",
+                "path": "test_api"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
