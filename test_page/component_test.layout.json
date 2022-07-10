@@ -1,0 +1,32 @@
+{
+  "content": {
+    "type": "container",
+    "backgroundColor": "lightgreen",
+    "child": {
+      "type": "column",
+      "children": [
+        {
+          "type": "text",
+          "color": "black",
+          "text": "This is Component Text with t_block {{ test_data }}"
+        },
+        {
+          "type": "text",
+          "text": "{{ test_data }}"
+        },
+        {
+          "type": "button",
+          "buttonType": "text_button",
+          "text": "Components function",
+          "onClick": "updateDataFunction()"
+        },
+        {
+          "type": "button",
+          "buttonType": "text_button",
+          "text": "Parents function",
+          "onClick": "$changeData"
+        }
+      ]
+    }
+  }
+}
