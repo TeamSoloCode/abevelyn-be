@@ -1,30 +1,38 @@
 {
   "content": {
     "type": "container",
-    "backgroundColor": "lightgreen",
+    "height": 200,
+    "maxHeight": 500,
+    "backgroundColor": "{{ props.backgroundParentSet }}",
     "child": {
       "type": "column",
       "children": [
         {
           "type": "text",
           "color": "black",
-          "text": "This is Component Text with t_block {{ test_data }}"
+          "text": "Component state 123: {{ test_data }}"
         },
         {
           "type": "text",
-          "text": "{{ test_data }}"
+          "text": "Parent state: {{ props.parentState }}"
         },
         {
-          "type": "button",
-          "buttonType": "text_button",
-          "text": "Components function",
-          "onClick": "updateDataFunction()"
-        },
-        {
-          "type": "button",
-          "buttonType": "text_button",
-          "text": "Parents function",
-          "onClick": "$changeData"
+          "type": "row",
+          "mainAxisAlignment": "center",
+          "children": [
+            {
+              "type": "button",
+              "buttonType": "text_button",
+              "text": "Components function",
+              "onClick": "updateDataFunction()"
+            },
+            {
+              "type": "button",
+              "buttonType": "text_button",
+              "text": "Parents function",
+              "onClick": "updateParentData()"
+            }
+          ]
         }
       ]
     }

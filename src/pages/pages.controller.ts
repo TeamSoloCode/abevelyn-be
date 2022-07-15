@@ -38,7 +38,7 @@ export class PagesController {
 
   @Get(':id')
   findOne(@Param('id') id: string, @Request() req: Request) {
-    console.log(JSON.stringify(req.headers));
+    console.log(Date.now(), id);
     return this.pagesService.testGetPageByPath(id);
   }
 

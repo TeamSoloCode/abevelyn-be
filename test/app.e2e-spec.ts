@@ -18,12 +18,6 @@ const root_url = 'http://localhost:3000';
 let token: string = '';
 let userName: string = '';
 
-describe('abcd', () => {
-  it('testing test', () => {
-    expect(2 + 2).toBe(4);
-  });
-});
-
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let dbConnection: Connection;
