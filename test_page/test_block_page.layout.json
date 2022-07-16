@@ -1,82 +1,117 @@
 {
   "content": {
-    "type": "container",
-    "child": {
-      "type": "scroll_view",
-      "children": [
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "yellow",
-            "parentState": "test_data"
-          }
-        },
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "peachpuff",
-            "parentState": "test_data"
-          }
-        },
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "yellow",
-            "parentState": "test_data"
-          }
-        },
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "peachpuff",
-            "parentState": "test_data"
-          }
-        },
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "yellow",
-            "parentState": "test_data"
-          }
-        },
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "yellow",
-            "parentState": "test_data"
-          }
-        },
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "peachpuff",
-            "parentState": "test_data"
-          }
-        },
-        {
-          "type": "component",
-          "path": "component_test",
-          "componentProps": {
-            "changeData": "functionUsedInComponent",
-            "backgroundParentSet": "yellow",
-            "parentState": "test_data"
-          }
+    "type": "column",
+    "children": [
+      {
+        "type": "expanded",
+        "flex": 1,
+        "child": {
+          "type": "column",
+          "mainAxisAlignment": "center",
+          "children": [
+            {
+              "type": "text",
+              "text": "Parent State: {{ test_data }}"
+            },
+            {
+              "type": "button",
+              "buttonType": "text_button",
+              "text": "Parent Function",
+              "onClick": "functionUsedInComponent()"
+            }
+          ]
         }
-      ]
-    }
+      },
+      {
+        "type": "expanded",
+        "flex": 6,
+        "child": {
+          "type": "scroll_view",
+          "children": [
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "test_data"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "test_data"
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }
