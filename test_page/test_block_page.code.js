@@ -1,5 +1,8 @@
 exportPageContext({
   functionUsedInComponent: () => {
-    setPageData({ test_data: 'test_block_' + Date.now() });
+    setPageData({ parentState: 'test_block_' + Date.now() });
+  },
+  notRelatedUpdateState: () => {
+    setPageData({ notRelated: 'notRelated_' + Date.now() });
   },
 });

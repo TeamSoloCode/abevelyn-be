@@ -11,30 +11,42 @@
           "children": [
             {
               "type": "text",
-              "text": "Parent State: {{ test_data }}"
+              "text": "Parent State: {{ parentState }}"
             },
             {
-              "type": "button",
-              "buttonType": "text_button",
-              "text": "Parent Function",
-              "onClick": "functionUsedInComponent()"
+              "type": "row",
+              "mainAxisAlignment": "center",
+              "children": [
+                {
+                  "type": "button",
+                  "text": "Parent Function",
+                  "onClick": "functionUsedInComponent()"
+                },
+                {
+                  "type": "button",
+                  "text": "Not related State",
+                  "onClick": "notRelatedUpdateState()"
+                }
+              ]
             }
           ]
         }
       },
       {
         "type": "expanded",
-        "flex": 6,
+        "flex": 8,
         "child": {
           "type": "scroll_view",
+          "sliverListType": "fixed_extent_list",
+          "itemExtent": 200,
           "children": [
             {
               "type": "component",
               "path": "component_test",
               "componentProps": {
-                "changeData": "functionUsedInComponent",
+                "changeData": "{{functionUsedInComponent}}",
                 "backgroundParentSet": "yellow",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -43,7 +55,7 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "peachpuff",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -52,7 +64,7 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "yellow",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -61,7 +73,7 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "peachpuff",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -70,7 +82,7 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "yellow",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -79,7 +91,7 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "peachpuff",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -88,7 +100,7 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "yellow",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -97,7 +109,7 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "peachpuff",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
               }
             },
             {
@@ -106,7 +118,106 @@
               "componentProps": {
                 "changeData": "functionUsedInComponent",
                 "backgroundParentSet": "yellow",
-                "parentState": "test_data"
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "yellow",
+                "parentState": "{{ parentState }}"
+              }
+            },
+            {
+              "type": "component",
+              "path": "component_test",
+              "componentProps": {
+                "changeData": "functionUsedInComponent",
+                "backgroundParentSet": "peachpuff",
+                "parentState": "{{ parentState }}"
               }
             }
           ]

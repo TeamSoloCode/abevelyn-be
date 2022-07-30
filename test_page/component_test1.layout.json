@@ -1,0 +1,32 @@
+{
+  "content": {
+    "type": "container",
+    "backgroundColor": "{{ props.backgroundParentSet }}",
+    "child": {
+      "type": "column",
+      "children": [
+        {
+          "type": "text",
+          "buttonType": "text_button",
+          "text": "Grandchildren",
+          "color": "black"
+        },
+        {
+          "type": "text",
+          "buttonType": "text_button",
+          "text": "{{ componentState }}",
+          "color": "black"
+        },
+        {
+          "type": "button",
+          "text": "Grandchildren()",
+          "onClick": "updateDataFunction()"
+        },
+        {
+          "type": "button",
+          "text": "Do nothing button"
+        }
+      ]
+    }
+  }
+}

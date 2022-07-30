@@ -2,6 +2,7 @@
   "content": {
     "type": "container",
     "height": 200,
+    "margin": [1, 3],
     "maxHeight": 500,
     "backgroundColor": "{{ props.backgroundParentSet }}",
     "child": {
@@ -10,7 +11,7 @@
         {
           "type": "text",
           "color": "black",
-          "text": "Component state 123: {{ test_data }}"
+          "text": "Component state: {{ componentState }}"
         },
         {
           "type": "text",
@@ -31,6 +32,54 @@
               "buttonType": "text_button",
               "text": "Parents function",
               "onClick": "updateParentData()"
+            }
+          ]
+        },
+        {
+          "type": "row",
+          "mainAxisAlignment": "center",
+          "children": [
+            {
+              "type": "expanded",
+              "child": {
+                "type": "container",
+                "height": 100,
+                "child": {
+                  "type": "component",
+                  "path": "component_test1",
+                  "componentProps": {
+                    "backgroundParentSet": "skyblue"
+                  }
+                }
+              }
+            },
+            {
+              "type": "expanded",
+              "child": {
+                "type": "container",
+                "height": 100,
+                "child": {
+                  "type": "component",
+                  "path": "component_test1",
+                  "componentProps": {
+                    "backgroundParentSet": "aliceblue"
+                  }
+                }
+              }
+            },
+            {
+              "type": "expanded",
+              "child": {
+                "type": "container",
+                "height": 100,
+                "child": {
+                  "type": "component",
+                  "path": "component_test1",
+                  "componentProps": {
+                    "backgroundParentSet": "lightgray"
+                  }
+                }
+              }
             }
           ]
         }

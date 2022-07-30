@@ -4,7 +4,7 @@ React.useEffect(() => {
 
 exportPageContext({
   updateDataFunction: () => {
-    setPageData({ test_data: 'component_test_' + Date.now() });
+    setPageData({ componentState: 'component_test_' + Date.now() });
   },
   updateParentData: () => {
     props.changeData();

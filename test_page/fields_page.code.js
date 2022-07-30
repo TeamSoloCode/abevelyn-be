@@ -5,12 +5,12 @@ useInitState({
 });
 
 React.useEffect(() => {
-  if (!_.isEqual(pageData?.data, prevPageData?.data)) {
-    setPageData({ data: JSON.stringify(pageData) });
+  if (!_.isEqual(getPageData()?.data, prevPageData?.data)) {
+    setPageData({ data: JSON.stringify(getPageData()) });
   }
-}, [pageData, setPageData]);
+}, [getPageData(), setPageData]);
 
-React.useEffect(() => {}, [pageData?.textFieldValue]);
+React.useEffect(() => {}, [getPageData()?.textFieldValue]);
 
 exportPageContext({
   onTextChange: (value) => {
